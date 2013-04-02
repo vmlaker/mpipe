@@ -1,0 +1,42 @@
+{% extends "basic/layout.html" %}
+
+{# put the sidebar before the body #}
+{% block sidebar1 %}{{ sidebar() }}{% endblock %}
+{% block sidebar2 %}{% endblock %}
+
+{% block extrahead %}
+{{ super() }}
+{%- if not embedded %}
+    <style type="text/css">
+      {% if pagename == 'index' or pagename == 'about' %}
+      .related { display: none; }
+      {% endif %}
+    </style>
+{%- endif %}
+{% endblock %}
+
+{% block rootrellink %}
+  <li><a href="{{ pathto('index') }}">MPipe home</a>&nbsp;|</li>
+  <li><a href="{{ pathto('docs') }}">Documentation</a> &raquo;</li>
+{% endblock %}
+
+{# Override footer if so desired. #}
+{% block footer %}
+  {{ super() }}
+{% endblock %}
+
+{% block header %}
+<div class="pageheader">
+  <ul>
+    <li><a href="{{ pathto('index') }}">Home</a></li>
+    <li><a href="{{ pathto('docs') }}">Docs</a></li>
+    <li><a href="{{ pathto('api') }}">API</a></li>
+    <li><a href="{{ pathto('about') }}">About</a></li>
+  </ul>
+  <div>
+    <a href="{{ pathto('index') }}">
+      <img src="_static/mpipe.png" alt="Da logo, man." />
+    </a>
+  </div>
+</div>
+{% endblock %}

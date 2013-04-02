@@ -1,0 +1,6 @@
+Contents of this directory:
+---------------------------
+create.py        -  builds the documentation
+Makefile         -  Sphinx makefile
+README           -  this README file
+source/          -  Sphinx documentation source code

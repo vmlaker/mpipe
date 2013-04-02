@@ -1,0 +1,33 @@
+{#
+    basic/searchbox.html
+    ~~~~~~~~~~~~~~~~~~~~
+    Sphinx sidebar template: quick search box.
+    :copyright: Copyright 2007-2011 by the Sphinx team, see AUTHORS.
+    :license: BSD, see LICENSE for details.
+#}
+{%- if pagename != "search" %}
+<div id="searchbox" style="display: none">
+  <h3>{{ _('API Search') }}</h3>
+  
+  <form class="search" action="{{ pathto('search') }}" method="get">
+<!--
+    <div class="search-input">
+      <input type="text" name="q" />
+    </div>
+    <div class="search-go">
+      <input type="submit" value="{{ _('Go') }}" />
+    </div>
+-->
+      <input class="search-input" type="text" name="q" />
+      <input class="search-go" type="submit" value="{{ _('Go') }}" />
+
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+  
+  <p class="searchtip">
+    {{ _('Search the MPipe module for classes and functions.') }}
+  </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+{%- endif %}
