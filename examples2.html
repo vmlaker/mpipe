@@ -1,0 +1,297 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Unordered worker/stage &mdash; Documentation</title>
+    <link rel="stylesheet" href="_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="Documentation" href="index.html" />
+    <link rel="up" title="Examples" href="examples.html" />
+    <link rel="next" title="MPipe API" href="api.html" />
+    <link rel="prev" title="Hello world" href="examples1.html" />
+ 
+    <style type="text/css">
+      
+    </style>
+
+  </head>
+  <body>
+<div class="pageheader">
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="docs.html">Docs</a></li>
+    <li><a href="api.html">API</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+  <div>
+    <a href="index.html">
+      <img src="_static/mpipe.png" alt="Da logo, man." />
+    </a>
+  </div>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api.html" title="MPipe API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="examples1.html" title="Hello world"
+             accesskey="P">previous</a> |</li>
+  <li><a href="index.html">MPipe home</a>&nbsp;|</li>
+  <li><a href="docs.html">Documentation</a> &raquo;</li>
+
+          <li><a href="examples.html" accesskey="U">Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>API Search</h3>
+  
+  <form class="search" action="search.html" method="get">
+<!--
+    <div class="search-input">
+      <input type="text" name="q" />
+    </div>
+    <div class="search-go">
+      <input type="submit" value="Go" />
+    </div>
+-->
+      <input class="search-input" type="text" name="q" />
+      <input class="search-go" type="submit" value="Go" />
+
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+  
+  <p class="searchtip">
+    Search the MPipe module for classes and functions.
+  </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="unordered-worker-stage">
+<span id="examples2"></span><span id="id1"></span><h1>Unordered worker/stage<a class="headerlink" href="#unordered-worker-stage" title="Permalink to this headline">¶</a></h1>
+<p>So far we&#8217;ve only used ordered workers/stages. If you don&#8217;t care for matching sequences of tasks with results, use unordered stages instead. Here&#8217;s an unordered version of the <a class="reference internal" href="examples1.html#pipeline-with-output"><em>pipeline with output example</em></a>:</p>
+<div class="source-click-above container">
+[<a class="reference external" href="unordered.py">source</a>]</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">mpipe</span> <span class="kn">import</span> <span class="n">UnorderedStage</span><span class="p">,</span> <span class="n">Pipeline</span>
+
+<span class="k">def</span> <span class="nf">increment</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">value</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="k">def</span> <span class="nf">double</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">value</span> <span class="o">*</span> <span class="mi">2</span>
+
+<span class="n">stage1</span> <span class="o">=</span> <span class="n">UnorderedStage</span><span class="p">(</span><span class="n">increment</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">stage2</span> <span class="o">=</span> <span class="n">UnorderedStage</span><span class="p">(</span><span class="n">double</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">stage1</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">stage2</span><span class="p">)</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">stage1</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+
+<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">pipe</span><span class="o">.</span><span class="n">results</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="source-click-below container">
+[<a class="reference external" href="unordered.py">source</a>]</div>
+<p>One thing to keep in mind: if your stage has only one worker, it makes no difference whether you use Ordered or Unordered objects &#8211; in either case the stage will behave as if it&#8217;s ordered. That&#8217;s why here we add an extra worker to each stage. The results, although all accounted for, appear out-of-order as expected:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">6</span>
+<span class="mi">10</span>
+<span class="mi">2</span>
+<span class="mi">12</span>
+<span class="mi">16</span>
+<span class="mi">20</span>
+<span class="mi">4</span>
+<span class="mi">8</span>
+<span class="mi">14</span>
+<span class="mi">18</span>
+</pre></div>
+</div>
+<p>Take a look at <a class="reference internal" href="concepts.html#ordered-vs-unordered"><em>Ordered vs. unordered stages</em></a> for further discussion about these two different approaches to stage design.</p>
+</div>
+<div class="section" id="multiple-workers-per-stage">
+<span id="id3"></span><h1>Multiple workers per stage<a class="headerlink" href="#multiple-workers-per-stage" title="Permalink to this headline">¶</a></h1>
+<p>The previous example used two workers per stage, if only to illustrate the concept of unordered stages. A more realistic reason for dedicating additional workers to a stage is to gain processing speed (on multi-core or multi-CPU computer.)</p>
+<p>Consider a stream of five tasks feeding a single-stage pipeline running two workers:</p>
+<img alt="_images/multiwork.png" class="align-center" src="_images/multiwork.png" />
+<p>Let&#8217;s assume the tasks arrive together in a batch, in quick succession, one right after another. If each one takes a full second of dedicated CPU time to complete, then on an SMP computer (assuming full system utilization) this workflow will take three seconds wall-clock time to complete: one second for the first two tasks done in parallel, another for the next two, and finally one more second for the last task, run by just one worker. Total CPU load will be 1.67, computed as:</p>
+<blockquote>
+<div>166.67% total = 100% cpu * 5 tasks / 3 seconds</div></blockquote>
+<p>Since we don&#8217;t have any useful functionality (er, keeping in tradition with previous examples) let&#8217;s create a silly function that takes a measurable amount of time to complete. Here&#8217;s a program that prints the number of null-ops (Python <tt class="docutils literal"><span class="pre">pass</span></tt> statement) needed to spin &#8211; or busy wait &#8211; the CPU for one second:</p>
+<div class="source-click-above container">
+[<a class="reference external" href="count_nullops.py">source</a>]</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="k">def</span> <span class="nf">getNumNullops</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">max_sample</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return number of do-nothing loop iterations.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">amount</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">2</span><span class="o">**</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)]:</span>  <span class="c"># 1,2,4,8,...</span>
+        <span class="n">begin</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">amount</span><span class="p">):</span> <span class="k">pass</span>
+        <span class="n">elapsed</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">begin</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">elapsed</span> <span class="o">&gt;</span> <span class="n">max_sample</span><span class="p">:</span>
+            <span class="k">break</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">amount</span><span class="o">/</span><span class="n">elapsed</span><span class="o">*</span><span class="n">duration</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">getNumNullops</span><span class="p">(</span><span class="mf">1.0</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="source-click-below container">
+[<a class="reference external" href="count_nullops.py">source</a>]</div>
+<p>And here is our pipeline implementation, a program that takes as command-line argument the number of null-ops:</p>
+<div class="source-click-above container">
+[<a class="reference external" href="multiwork.py">source</a>]</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">mpipe</span>
+
+<span class="k">def</span> <span class="nf">forloop</span><span class="p">(</span><span class="n">amount</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">amount</span><span class="p">):</span> <span class="k">pass</span>
+
+<span class="n">stage</span> <span class="o">=</span> <span class="n">mpipe</span><span class="o">.</span><span class="n">UnorderedStage</span><span class="p">(</span><span class="n">forloop</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">mpipe</span><span class="o">.</span><span class="n">Pipeline</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">foobar</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span> 
+    <span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="source-click-below container">
+[<a class="reference external" href="multiwork.py">source</a>]</div>
+<p>We can now run our scenario by passing the output of the first program as command-line argument to the second. A simple resource usage profile of the pipeline can be captured with something like this:</p>
+<div class="highlight-python"><pre>python test/count_nullops.py|xargs time python test/multiwork.py</pre>
+</div>
+<p>If interested, modify the pipeline by changing the number of workers and/or input tasks. Also, consider running it on different computers &#8211; with different processor resources &#8211; and compare results.</p>
+</div>
+<div class="section" id="handling-many-tasks">
+<h1>Handling many tasks<a class="headerlink" href="#handling-many-tasks" title="Permalink to this headline">¶</a></h1>
+<p>A pipeline can easily clog with too many inputs. If you run the code below, it appears that the program freezes, while actually it is slowly draining your system memory:</p>
+<div class="source-click-above container">
+[<a class="reference external" href="clog.py">source</a>]</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">mpipe</span> <span class="kn">import</span> <span class="n">UnorderedStage</span><span class="p">,</span> <span class="n">Pipeline</span>
+
+<span class="k">def</span> <span class="nf">increment</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">value</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="n">stage</span> <span class="o">=</span> <span class="n">UnorderedStage</span><span class="p">(</span><span class="n">increment</span><span class="p">)</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">maxint</span><span class="p">):</span>
+    <span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+
+<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">pipe</span><span class="o">.</span><span class="n">results</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="source-click-below container">
+[<a class="reference external" href="clog.py">source</a>]</div>
+<p>What&#8217;s going on here? Note that we first put all tasks on the pipeline, and then follow up by retrieving the results. Unfortunately, we never get to the retrieval part because we&#8217;re too busy adding a whole bunch of tasks to the pipeline (<tt class="docutils literal"><span class="pre">sys.maxint</span></tt> is a huge number.)</p>
+<p>You probably Ctl-c&#8217;d out of the program by now.</p>
+<p>Here&#8217;s what happened: feeding the pipeline just kept using up a bunch of system resources (socket buffers, to be precise) and slowing down the program. The program never got past the feed loop into the fetch-results loop.</p>
+<p>One solution is to feed the pipeline with tasks while, concurrently in another process retrieve the results. This way we balance consumption of system resources, allocating them on one end, while simultaneously releasing them at the other. In the version below, we create another pipeline to do just that:</p>
+<div class="source-click-above container">
+[<a class="reference external" href="drano.py">source</a>]</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">mpipe</span> <span class="kn">import</span> <span class="n">UnorderedStage</span><span class="p">,</span> <span class="n">Pipeline</span>
+
+<span class="k">def</span> <span class="nf">increment</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">value</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="n">stage</span> <span class="o">=</span> <span class="n">UnorderedStage</span><span class="p">(</span><span class="n">increment</span><span class="p">)</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">pull</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">pipe</span><span class="o">.</span><span class="n">results</span><span class="p">():</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+<span class="n">pipe2</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">UnorderedStage</span><span class="p">(</span><span class="n">pull</span><span class="p">))</span>
+<span class="n">pipe2</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">maxint</span><span class="p">):</span>
+    <span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+
+<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">pipe2</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="source-click-below container">
+[<a class="reference external" href="drano.py">source</a>]</div>
+<p>Note that we start doing the retrieval in the second pipeline by adding a single arbitrary task &#8211; in this case the value <tt class="xref docutils literal"><span class="pre">True</span></tt> &#8211; before putting any tasks on the first pipeline. In this way we are ready to release resources as soon as the first pipeline starts producing results.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api.html" title="MPipe API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="examples1.html" title="Hello world"
+             >previous</a> |</li>
+  <li><a href="index.html">MPipe home</a>&nbsp;|</li>
+  <li><a href="docs.html">Documentation</a> &raquo;</li>
+
+          <li><a href="examples.html" >Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+    <div class="footer">
+        &copy; Copyright 2013, Velimir Mlaker.
+      Last updated on Apr 01, 2013.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.8.
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,306 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>MPipe API &mdash; Documentation</title>
+    <link rel="stylesheet" href="_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="Documentation" href="index.html" />
+    <link rel="next" title="About MPipe" href="about.html" />
+    <link rel="prev" title="Unordered worker/stage" href="examples2.html" />
+ 
+    <style type="text/css">
+      
+    </style>
+
+  </head>
+  <body>
+<div class="pageheader">
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="docs.html">Docs</a></li>
+    <li><a href="#">API</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+  <div>
+    <a href="index.html">
+      <img src="_static/mpipe.png" alt="Da logo, man." />
+    </a>
+  </div>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="about.html" title="About MPipe"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="examples2.html" title="Unordered worker/stage"
+             accesskey="P">previous</a> |</li>
+  <li><a href="index.html">MPipe home</a>&nbsp;|</li>
+  <li><a href="docs.html">Documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>API Search</h3>
+  
+  <form class="search" action="search.html" method="get">
+<!--
+    <div class="search-input">
+      <input type="text" name="q" />
+    </div>
+    <div class="search-go">
+      <input type="submit" value="Go" />
+    </div>
+-->
+      <input class="search-input" type="text" name="q" />
+      <input class="search-go" type="submit" value="Go" />
+
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+  
+  <p class="searchtip">
+    Search the MPipe module for classes and functions.
+  </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-mpipe">
+<span id="name-api"></span><span id="api"></span><h1>MPipe API<a class="headerlink" href="#module-mpipe" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="mpipe.OrderedWorker">
+<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">OrderedWorker</tt><big>(</big><em>input_tube</em>, <em>output_tubes</em>, <em>num_workers</em><big>)</big><a class="headerlink" href="#mpipe.OrderedWorker" title="Permalink to this definition">¶</a></dt>
+<dd><p>An OrderedWorker object operates in a stage where the order 
+of output results always matches that of corresponding input tasks.</p>
+<p>A worker is linked to its two nearest neighbors &#8211; the previous 
+worker and the next &#8211; all workers in the stage thusly linked 
+in circular fashion. 
+Input tasks are fetched in this order, and before publishing it&#8217;s result, 
+a worker first waits for it&#8217;s previous neighbor to do the same.</p>
+<p>Create a worker with <em>input_tube</em> and an iterable of <em>output_tubes</em>.
+The worker reads a task from <em>input_tube</em> and writes the result to <em>output_tubes</em>.</p>
+<dl class="method">
+<dt id="mpipe.OrderedWorker.doTask">
+<tt class="descname">doTask</tt><big>(</big><em>task</em><big>)</big><a class="headerlink" href="#mpipe.OrderedWorker.doTask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implement this function in the subclass.
+The implementation can publish the output result in one of two ways: 
+1) either by calling <a class="reference internal" href="#mpipe.OrderedWorker.putResult" title="mpipe.OrderedWorker.putResult"><tt class="xref py py-meth docutils literal"><span class="pre">putResult()</span></tt></a> and returning <tt class="xref docutils literal"><span class="pre">None</span></tt> or
+2) by returning the result (other than <tt class="xref docutils literal"><span class="pre">None</span></tt>.)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mpipe.OrderedWorker.putResult">
+<tt class="descname">putResult</tt><big>(</big><em>result</em>, <em>count=0</em><big>)</big><a class="headerlink" href="#mpipe.OrderedWorker.putResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register the <em>result</em> by putting it on all the output tubes.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="mpipe.UnorderedWorker">
+<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">UnorderedWorker</tt><big>(</big><em>input_tube</em>, <em>output_tubes</em>, <em>num_workers</em><big>)</big><a class="headerlink" href="#mpipe.UnorderedWorker" title="Permalink to this definition">¶</a></dt>
+<dd><p>An UnorderedWorker object operates independently of other
+workers in the stage, publishing it&#8217;s result without coordinating
+with others. The order of output results may not match 
+that of corresponding input tasks.</p>
+<p>Create a worker with <em>input_tube</em> and an iterable of <em>output_tubes</em>.
+The worker reads a task from <em>input_tube</em> and writes the result to <em>output_tubes</em>.</p>
+<dl class="method">
+<dt id="mpipe.UnorderedWorker.doTask">
+<tt class="descname">doTask</tt><big>(</big><em>task</em><big>)</big><a class="headerlink" href="#mpipe.UnorderedWorker.doTask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implement this function in the subclass.
+The implementation can publish the output result in one of two ways: 
+1) either by calling <a class="reference internal" href="#mpipe.UnorderedWorker.putResult" title="mpipe.UnorderedWorker.putResult"><tt class="xref py py-meth docutils literal"><span class="pre">putResult()</span></tt></a> and returning <tt class="xref docutils literal"><span class="pre">None</span></tt> or
+2) by returning the result (other than <tt class="xref docutils literal"><span class="pre">None</span></tt>.)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mpipe.UnorderedWorker.putResult">
+<tt class="descname">putResult</tt><big>(</big><em>result</em>, <em>count=0</em><big>)</big><a class="headerlink" href="#mpipe.UnorderedWorker.putResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register the <em>result</em> by putting it on all the output tubes.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="mpipe.Stage">
+<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">Stage</tt><big>(</big><em>worker_class</em>, <em>size=1</em><big>)</big><a class="headerlink" href="#mpipe.Stage" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Stage is an assembly of workers of identical functionality.</p>
+<p>Create a stage of workers of given <em>worker_class</em> implementation, 
+with <em>size</em> indicating the number of workers within the stage.</p>
+<dl class="method">
+<dt id="mpipe.Stage.link">
+<tt class="descname">link</tt><big>(</big><em>next_stage</em><big>)</big><a class="headerlink" href="#mpipe.Stage.link" title="Permalink to this definition">¶</a></dt>
+<dd><p>Link to the given downstream stage object
+by adding it&#8217;s input tube to the list of this stage&#8217;s output tubes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mpipe.Stage.put">
+<tt class="descname">put</tt><big>(</big><em>task</em><big>)</big><a class="headerlink" href="#mpipe.Stage.put" title="Permalink to this definition">¶</a></dt>
+<dd><p>Put <em>task</em> on the stage&#8217;s input tube.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mpipe.Stage.get">
+<tt class="descname">get</tt><big>(</big><big>)</big><a class="headerlink" href="#mpipe.Stage.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve results from all the output tubes.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="mpipe.OrderedStage">
+<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">OrderedStage</tt><big>(</big><em>target</em>, <em>size=1</em><big>)</big><a class="headerlink" href="#mpipe.OrderedStage" title="Permalink to this definition">¶</a></dt>
+<dd><p>A specialized <a class="reference internal" href="#mpipe.Stage" title="mpipe.Stage"><tt class="xref py py-class docutils literal"><span class="pre">Stage</span></tt></a>, 
+internally creating <a class="reference internal" href="#mpipe.OrderedWorker" title="mpipe.OrderedWorker"><tt class="xref py py-class docutils literal"><span class="pre">OrderedWorker</span></tt></a> objects.</p>
+<p>Constructor takes a function implementing 
+<a class="reference internal" href="#mpipe.OrderedWorker.doTask" title="mpipe.OrderedWorker.doTask"><tt class="xref py py-meth docutils literal"><span class="pre">OrderedWorker.doTask()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="mpipe.UnorderedStage">
+<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">UnorderedStage</tt><big>(</big><em>target</em>, <em>size=1</em><big>)</big><a class="headerlink" href="#mpipe.UnorderedStage" title="Permalink to this definition">¶</a></dt>
+<dd><p>A specialized <a class="reference internal" href="#mpipe.Stage" title="mpipe.Stage"><tt class="xref py py-class docutils literal"><span class="pre">Stage</span></tt></a>, 
+internally creating <a class="reference internal" href="#mpipe.UnorderedWorker" title="mpipe.UnorderedWorker"><tt class="xref py py-class docutils literal"><span class="pre">UnorderedWorker</span></tt></a> objects.</p>
+<p>Constructor takes a function implementing
+<a class="reference internal" href="#mpipe.UnorderedWorker.doTask" title="mpipe.UnorderedWorker.doTask"><tt class="xref py py-meth docutils literal"><span class="pre">UnorderedWorker.doTask()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="mpipe.Pipeline">
+<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">Pipeline</tt><big>(</big><em>input_stage</em><big>)</big><a class="headerlink" href="#mpipe.Pipeline" title="Permalink to this definition">¶</a></dt>
+<dd><p>A pipeline of stages.</p>
+<p>Constructor takes the root upstream stage.</p>
+<dl class="method">
+<dt id="mpipe.Pipeline.put">
+<tt class="descname">put</tt><big>(</big><em>task</em><big>)</big><a class="headerlink" href="#mpipe.Pipeline.put" title="Permalink to this definition">¶</a></dt>
+<dd><p>Put <em>task</em> on the pipeline.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mpipe.Pipeline.get">
+<tt class="descname">get</tt><big>(</big><big>)</big><a class="headerlink" href="#mpipe.Pipeline.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return result from the pipeline.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mpipe.Pipeline.results">
+<tt class="descname">results</tt><big>(</big><big>)</big><a class="headerlink" href="#mpipe.Pipeline.results" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a generator to iterate over results from the pipeline.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="mpipe.TubeP">
+<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">TubeP</tt><a class="headerlink" href="#mpipe.TubeP" title="Permalink to this definition">¶</a></dt>
+<dd><p>A unidirectional communication channel 
+using <a class="reference external" href="http://docs.python.org/library/multiprocessing.html#multiprocessing.Connection" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">multiprocessing.Connection</span></tt></a> for underlying implementation.</p>
+<dl class="method">
+<dt id="mpipe.TubeP.put">
+<tt class="descname">put</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#mpipe.TubeP.put" title="Permalink to this definition">¶</a></dt>
+<dd><p>Put an item on the tube.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mpipe.TubeP.get">
+<tt class="descname">get</tt><big>(</big><big>)</big><a class="headerlink" href="#mpipe.TubeP.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the next available item from the tube.</p>
+<p>Blocks if tube is empty, until a producer for the tube puts an item on it.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="mpipe.TubeQ">
+<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">TubeQ</tt><a class="headerlink" href="#mpipe.TubeQ" title="Permalink to this definition">¶</a></dt>
+<dd><p>A unidirectional communication channel 
+using <a class="reference external" href="http://docs.python.org/library/multiprocessing.html#multiprocessing.Queue" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">multiprocessing.Queue</span></tt></a> for underlying implementation.</p>
+<dl class="method">
+<dt id="mpipe.TubeQ.put">
+<tt class="descname">put</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#mpipe.TubeQ.put" title="Permalink to this definition">¶</a></dt>
+<dd><p>Put an item on the tube.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mpipe.TubeQ.get">
+<tt class="descname">get</tt><big>(</big><big>)</big><a class="headerlink" href="#mpipe.TubeQ.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the next available item from the tube.</p>
+<p>Blocks if tube is empty, until a producer for the tube puts an item on it.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="about.html" title="About MPipe"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="examples2.html" title="Unordered worker/stage"
+             >previous</a> |</li>
+  <li><a href="index.html">MPipe home</a>&nbsp;|</li>
+  <li><a href="docs.html">Documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+  
+    <div class="footer">
+        &copy; Copyright 2013, Velimir Mlaker.
+      Last updated on Apr 01, 2013.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.8.
+    </div>
+
+  </body>
+</html>

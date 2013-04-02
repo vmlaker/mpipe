@@ -1,0 +1,201 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Pipeline concepts &mdash; Documentation</title>
+    <link rel="stylesheet" href="_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="Documentation" href="index.html" />
+    <link rel="next" title="Examples" href="examples.html" />
+    <link rel="prev" title="Unordered worker/stage" href="examples2.html" />
+ 
+    <style type="text/css">
+      
+    </style>
+
+  </head>
+  <body>
+<div class="pageheader">
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="docs.html">Docs</a></li>
+    <li><a href="api.html">API</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+  <div>
+    <a href="index.html">
+      <img src="_static/mpipe.png" alt="Da logo, man." />
+    </a>
+  </div>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="examples.html" title="Examples"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="examples2.html" title="Unordered worker/stage"
+             accesskey="P">previous</a> |</li>
+  <li><a href="index.html">MPipe home</a>&nbsp;|</li>
+  <li><a href="docs.html">Documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>API Search</h3>
+  
+  <form class="search" action="search.html" method="get">
+<!--
+    <div class="search-input">
+      <input type="text" name="q" />
+    </div>
+    <div class="search-go">
+      <input type="submit" value="Go" />
+    </div>
+-->
+      <input class="search-input" type="text" name="q" />
+      <input class="search-go" type="submit" value="Go" />
+
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+  
+  <p class="searchtip">
+    Search the MPipe module for classes and functions.
+  </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pipeline-concepts">
+<span id="concepts"></span><h1>Pipeline concepts<a class="headerlink" href="#pipeline-concepts" title="Permalink to this headline">¶</a></h1>
+<p>Pipelines are dynamic multi-processing workflows exhibiting some consistent patterns in their design:</p>
+<ol class="arabic simple">
+<li>a <em>worker</em> process operating on an input <em>task</em> and producing an output <em>result</em>,</li>
+<li>a <em>stage</em> composed of one or more identical workers concurrently processing a stream of tasks,</li>
+<li>a <em>pipeline</em> of stages linked together, output of the upstream stage fed as input into one or more downstream stages.</li>
+</ol>
+<p>A <em>pipeline</em> is then conceptually composed of <em>stages</em>, each stage being an assembly of a number of (identical) <em>worker</em> processes. Messages that flow down the pipeline, from stage to stage, are called <em>tasks</em> or <em>results</em>, depending on whether they&#8217;re viewed as input or output to a stage.</p>
+<div class="section" id="task-result">
+<span id="id1"></span><h2>Task, result<a class="headerlink" href="#task-result" title="Permalink to this headline">¶</a></h2>
+<p>The unit of data that passes through the workflow is called a <em>task</em> when it is the input to a pipeline/stage/worker, and a <em>result</em> when it&#8217;s the output thereof.</p>
+<img alt="_images/taskresult1.png" class="align-center" src="_images/taskresult1.png" />
+<p>Most often a data object is both, depending on the context &#8211; whether it&#8217;s viewed as the output of an upstream producer, or input to the downstream consumer. It can be any pickleable Python object: a standard Python data type like string or list, or a user-defined object. The only requirement is that it is picklable.</p>
+</div>
+<div class="section" id="worker">
+<h2>Worker<a class="headerlink" href="#worker" title="Permalink to this headline">¶</a></h2>
+<img alt="_images/worker1.png" class="align-center" src="_images/worker1.png" />
+<p>A worker is a basic unit of processing &#8211; it operates some activity on a task, and (usually) produces a result. The worker is where you implement some elemental functionality of your overall program.</p>
+<img alt="_images/worker2.png" class="align-center" src="_images/worker2.png" />
+<p>A worker exists in a <em>stage</em>, alone or with other functionally identical workers, depending on how much system resources you choose to devote to that stage (each worker running in a separate process.)</p>
+</div>
+<div class="section" id="stage">
+<h2>Stage<a class="headerlink" href="#stage" title="Permalink to this headline">¶</a></h2>
+<p>The stage is an assembly of workers. It accepts a stream of input tasks, delegates them to its workers, and usually produces a stream of output results (products of its internal workers.) You can think of the stage as a corral of functionally identical workers, with added synchronization used to delegate tasks and organize results among the individual worker processes. The activity of the stage is therefore defined by the workers therein.</p>
+<p>A stage can be linked to another stage to form a chain:</p>
+<img alt="_images/stage1.png" class="align-center" src="_images/stage1.png" />
+<p>It can even be linked to multiple downstream stages, splitting the workflow into parallel execution paths.</p>
+</div>
+<div class="section" id="pipeline">
+<h2>Pipeline<a class="headerlink" href="#pipeline" title="Permalink to this headline">¶</a></h2>
+<p>The pipeline is composed of linked stages forming a unidirectional workflow.</p>
+<img alt="_images/pipeline1.png" class="align-center" src="_images/pipeline1.png" />
+<p>Input tasks are fed into the most-upstream stage. Pipeline results, if any, are fetched from outputs of downstream stages.</p>
+</div>
+<div class="section" id="ordered-vs-unordered-stages">
+<span id="ordered-vs-unordered"></span><h2>Ordered vs. unordered stages<a class="headerlink" href="#ordered-vs-unordered-stages" title="Permalink to this headline">¶</a></h2>
+<p>A worker within a stage can operate in two different ways in relation to other workers: it can be arranged in a specific <em>order</em> with respect to its siblings, or unordered, functioning independently of other workers in the stage.</p>
+<p>An <strong>ordered stage</strong> preserves a sequence among its workers, each worker having a <em>previous</em> and <em>next</em> neighbor worker, all workers thusly arranged in a circular fashion. It guarantees that inputs will be processed in this sequence, the <em>previous</em> worker operating on the previous task, and likewise the <em>next</em> one working on the task immediately after. Just as stage inputs are processed in order, stage outputs become available in the same sequence: the <em>previous</em> worker&#8217;s result showing up before the current worker&#8217;s, and the <em>next</em> one&#8217;s result after. In case a worker completes processing ahead of its previous neighbor, it waits for it, adding the result to stage output right after its predecessor. In other words, <em>order of stage output results matches that of its input tasks.</em></p>
+<p>An <strong>unordered stage</strong> adheres to no such symmetry among its worker processes. Each worker starts processing the earliest available task, and as soon as it&#8217;s done, makes the result available as stage output.</p>
+<p>Choosing between the two depends on the nature of problem. Many signal processing applications require preserved order of inputs and outputs. On the other hand, certain file system tasks &#8211; like source code compiling &#8211; may safely ignore input/output sequences. And, naturally, if your stage operates just a single worker, it doesn&#8217;t matter which type you use: the output sequence will be ordered.</p>
+<p>Performance may vary between the two types. In an ordered stage, a worker may still be processing its task while its <em>next</em> neighbor has completed its own. The <em>next</em> worker&#8217;s result will not be available as stage output before its predecessor&#8217;s. Furthermore, the waiting worker will idly wait, unable to process a new incoming task.</p>
+</div>
+<div class="section" id="multiprocessing">
+<span id="id2"></span><h2>Multiprocessing<a class="headerlink" href="#multiprocessing" title="Permalink to this headline">¶</a></h2>
+<p>The gist of structuring your program as a pipeline is to maximize algorithm speed by utilizing additional processing facilities of multi-core and multi-CPU computers. Parallel processing manifests itself in a number of ways in the pipeline workflow:</p>
+<ol class="arabic simple">
+<li>Pipeline can have multiple stages in series.</li>
+</ol>
+<blockquote>
+<div>The program is divided into a sequence of sub-algorithms. This benefits situations where the combined algorithm takes longer than the arrival interval between tasks. The pipeline can begin handling the next input task before the previous is completed.</div></blockquote>
+<ol class="arabic simple" start="2">
+<li>Stage can contain multiple workers.</li>
+</ol>
+<blockquote>
+<div>If the input stream is even faster, such that computing time for a stage is longer that the interval between incoming tasks, additional workers at the stage can ameliorate a bottlenecked flow. Take a look at <a class="reference internal" href="examples2.html#multiple-workers-per-stage"><em>Multiple workers per stage</em></a> for an illustration of potential speedup using this strategy.</div></blockquote>
+<ol class="arabic simple" start="3">
+<li>Pipeline can fork into parallel stages.</li>
+</ol>
+<blockquote>
+<div>If the program workflow can be split into multiple independent execution paths, then parallel paths can be processed simultaneously.</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="examples.html" title="Examples"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="examples2.html" title="Unordered worker/stage"
+             >previous</a> |</li>
+  <li><a href="index.html">MPipe home</a>&nbsp;|</li>
+  <li><a href="docs.html">Documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+  
+    <div class="footer">
+        &copy; Copyright 2013, Velimir Mlaker.
+      Last updated on Apr 01, 2013.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.8.
+    </div>
+
+  </body>
+</html>

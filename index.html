@@ -1,1 +1,169 @@
-The MPipe page.
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome! &mdash; Documentation</title>
+    <link rel="stylesheet" href="_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="Documentation" href="#" />
+    <link rel="next" title="MPipe documentation contents" href="docs.html" />
+ 
+    <style type="text/css">
+      
+      .related { display: none; }
+      
+    </style>
+
+  </head>
+  <body>
+<div class="pageheader">
+  <ul>
+    <li><a href="#">Home</a></li>
+    <li><a href="docs.html">Docs</a></li>
+    <li><a href="api.html">API</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+  <div>
+    <a href="#">
+      <img src="_static/mpipe.png" alt="Da logo, man." />
+    </a>
+  </div>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="docs.html" title="MPipe documentation contents"
+             accesskey="N">next</a> |</li>
+  <li><a href="#">MPipe home</a>&nbsp;|</li>
+  <li><a href="docs.html">Documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>API Search</h3>
+  
+  <form class="search" action="search.html" method="get">
+<!--
+    <div class="search-input">
+      <input type="text" name="q" />
+    </div>
+    <div class="search-go">
+      <input type="submit" value="Go" />
+    </div>
+-->
+      <input class="search-input" type="text" name="q" />
+      <input class="search-go" type="submit" value="Go" />
+
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+  
+  <p class="searchtip">
+    Search the MPipe module for classes and functions.
+  </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="toctree-wrapper compound" id="index">
+</div>
+<div class="section" id="welcome">
+<h1>Welcome!<a class="headerlink" href="#welcome" title="Permalink to this headline">¶</a></h1>
+<p>MPipe is a Python library that lets you easily write multi-stage, multiprocess pipeline algorithms. Consider a two-stage pipeline that increments and doubles numbers, each stage concurrently running three workers. Something like this:</p>
+<img alt="_images/tiny.png" class="align-center" src="_images/tiny.png" />
+<p>Using the MPipe module you can program it in Python like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">mpipe</span> <span class="kn">import</span> <span class="n">OrderedStage</span><span class="p">,</span> <span class="n">Pipeline</span>
+
+<span class="k">def</span> <span class="nf">increment</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">value</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="k">def</span> <span class="nf">double</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">value</span> <span class="o">*</span> <span class="mi">2</span>
+
+<span class="n">stage1</span> <span class="o">=</span> <span class="n">OrderedStage</span><span class="p">(</span><span class="n">increment</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">stage2</span> <span class="o">=</span> <span class="n">OrderedStage</span><span class="p">(</span><span class="n">double</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">stage1</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">stage2</span><span class="p">)</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">stage1</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+
+<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">pipe</span><span class="o">.</span><span class="n">results</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The above code runs a total of seven processes: one for the main program and six for the two stages (each stage running three workers.)</p>
+<p>Start using MPipe now! Get the source code and install the module in the usual way:</p>
+<div class="highlight-python"><pre>git clone https://github.com/vmlaker/mpipe
+cd mpipe
+python setup.py install --user</pre>
+</div>
+<p>Next, check out <a class="reference internal" href="docs.html"><em>MPipe documentation contents</em></a> and get ready to start piping in Python!</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="docs.html" title="MPipe documentation contents"
+             >next</a> |</li>
+  <li><a href="#">MPipe home</a>&nbsp;|</li>
+  <li><a href="docs.html">Documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+  
+    <div class="footer">
+        &copy; Copyright 2013, Velimir Mlaker.
+      Last updated on Apr 01, 2013.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.8.
+    </div>
+
+  </body>
+</html>
