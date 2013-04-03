@@ -141,7 +141,6 @@
 <p>An <strong>ordered stage</strong> preserves a sequence among its workers, each worker having a <em>previous</em> and <em>next</em> neighbor worker, all workers thusly arranged in a circular fashion. It guarantees that inputs will be processed in this sequence, the <em>previous</em> worker operating on the previous task, and likewise the <em>next</em> one working on the task immediately after. Just as stage inputs are processed in order, stage outputs become available in the same sequence: the <em>previous</em> worker&#8217;s result showing up before the current worker&#8217;s, and the <em>next</em> one&#8217;s result after. In case a worker completes processing ahead of its previous neighbor, it waits for it, adding the result to stage output right after its predecessor. In other words, <em>order of stage output results matches that of its input tasks.</em></p>
 <p>An <strong>unordered stage</strong> adheres to no such symmetry among its worker processes. Each worker starts processing the earliest available task, and as soon as it&#8217;s done, makes the result available as stage output.</p>
 <p>Choosing between the two depends on the nature of problem. Many signal processing applications require preserved order of inputs and outputs. On the other hand, certain file system tasks &#8211; like source code compiling &#8211; may safely ignore input/output sequences. And, naturally, if your stage operates just a single worker, it doesn&#8217;t matter which type you use: the output sequence will be ordered.</p>
-<p>Performance may vary between the two types. In an ordered stage, a worker may still be processing its task while its <em>next</em> neighbor has completed its own. The <em>next</em> worker&#8217;s result will not be available as stage output before its predecessor&#8217;s. Furthermore, the waiting worker will idly wait, unable to process a new incoming task.</p>
 </div>
 <div class="section" id="multiprocessing">
 <span id="id2"></span><h2>Multiprocessing<a class="headerlink" href="#multiprocessing" title="Permalink to this headline">¶</a></h2>
@@ -193,7 +192,7 @@
   
     <div class="footer">
         &copy; Copyright 2013, Velimir Mlaker.
-      Last updated on Apr 01, 2013.
+      Last updated on Apr 02, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.8.
     </div>
 

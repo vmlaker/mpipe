@@ -71,7 +71,7 @@ An **unordered stage** adheres to no such symmetry among its worker processes. E
 
 Choosing between the two depends on the nature of problem. Many signal processing applications require preserved order of inputs and outputs. On the other hand, certain file system tasks -- like source code compiling -- may safely ignore input/output sequences. And, naturally, if your stage operates just a single worker, it doesn't matter which type you use: the output sequence will be ordered.
 
-Performance may vary between the two types. In an ordered stage, a worker may still be processing its task while its *next* neighbor has completed its own. The *next* worker's result will not be available as stage output before its predecessor's. Furthermore, the waiting worker will idly wait, unable to process a new incoming task.
+.. Performance may vary between the two types. In an ordered stage, a worker may still be processing a task while its *next* neighbor has already completed its own (downstream, i.e. "future") task. The *next* worker will have to wait idly, unable to process any new incoming task. This effect -- due to the dependency relationship of neighboring workers in an *unordered* stage -- is not an issue when using with *unordered* stage. 
 
 .. _multiprocessing:
 

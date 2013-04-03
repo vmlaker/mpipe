@@ -17,7 +17,7 @@ Welcome!
 .. image:: tiny.png
    :align: center
 
-Using the |NAME| module you can program it in Python like this:
+Using the |NAME| module, you would write it like this:
 
 .. literalinclude:: tiny.py
 
