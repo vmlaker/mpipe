@@ -104,7 +104,7 @@
 <span id="name-api"></span><span id="api"></span><h1>MPipe API<a class="headerlink" href="#module-mpipe" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="mpipe.OrderedWorker">
-<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">OrderedWorker</tt><big>(</big><em>input_tube</em>, <em>output_tubes</em>, <em>num_workers</em><big>)</big><a class="headerlink" href="#mpipe.OrderedWorker" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">OrderedWorker</tt><a class="headerlink" href="#mpipe.OrderedWorker" title="Permalink to this definition">¶</a></dt>
 <dd><p>An OrderedWorker object operates in a stage where the order 
 of output results always matches that of corresponding input tasks.</p>
 <p>A worker is linked to its two nearest neighbors &#8211; the previous 
@@ -112,8 +112,6 @@ worker and the next &#8211; all workers in the stage thusly linked
 in circular fashion. 
 Input tasks are fetched in this order, and before publishing it&#8217;s result, 
 a worker first waits for it&#8217;s previous neighbor to do the same.</p>
-<p>Create a worker with <em>input_tube</em> and an iterable of <em>output_tubes</em>.
-The worker reads a task from <em>input_tube</em> and writes the result to <em>output_tubes</em>.</p>
 <dl class="method">
 <dt id="mpipe.OrderedWorker.doTask">
 <tt class="descname">doTask</tt><big>(</big><em>task</em><big>)</big><a class="headerlink" href="#mpipe.OrderedWorker.doTask" title="Permalink to this definition">¶</a></dt>
@@ -133,13 +131,11 @@ The implementation can publish the output result in one of two ways:
 
 <dl class="class">
 <dt id="mpipe.UnorderedWorker">
-<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">UnorderedWorker</tt><big>(</big><em>input_tube</em>, <em>output_tubes</em>, <em>num_workers</em><big>)</big><a class="headerlink" href="#mpipe.UnorderedWorker" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">UnorderedWorker</tt><a class="headerlink" href="#mpipe.UnorderedWorker" title="Permalink to this definition">¶</a></dt>
 <dd><p>An UnorderedWorker object operates independently of other
 workers in the stage, publishing it&#8217;s result without coordinating
 with others. The order of output results may not match 
 that of corresponding input tasks.</p>
-<p>Create a worker with <em>input_tube</em> and an iterable of <em>output_tubes</em>.
-The worker reads a task from <em>input_tube</em> and writes the result to <em>output_tubes</em>.</p>
 <dl class="method">
 <dt id="mpipe.UnorderedWorker.doTask">
 <tt class="descname">doTask</tt><big>(</big><em>task</em><big>)</big><a class="headerlink" href="#mpipe.UnorderedWorker.doTask" title="Permalink to this definition">¶</a></dt>
@@ -178,7 +174,7 @@ by adding it&#8217;s input tube to the list of this stage&#8217;s output tubes.<
 
 <dl class="method">
 <dt id="mpipe.Stage.get">
-<tt class="descname">get</tt><big>(</big><big>)</big><a class="headerlink" href="#mpipe.Stage.get" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get</tt><big>(</big><em>timeout=None</em><big>)</big><a class="headerlink" href="#mpipe.Stage.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve results from all the output tubes.</p>
 </dd></dl>
 
@@ -215,7 +211,7 @@ internally creating <a class="reference internal" href="#mpipe.UnorderedWorker" 
 
 <dl class="method">
 <dt id="mpipe.Pipeline.get">
-<tt class="descname">get</tt><big>(</big><big>)</big><a class="headerlink" href="#mpipe.Pipeline.get" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get</tt><big>(</big><em>timeout=None</em><big>)</big><a class="headerlink" href="#mpipe.Pipeline.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return result from the pipeline.</p>
 </dd></dl>
 
@@ -240,7 +236,7 @@ using <a class="reference external" href="http://docs.python.org/library/multipr
 
 <dl class="method">
 <dt id="mpipe.TubeP.get">
-<tt class="descname">get</tt><big>(</big><big>)</big><a class="headerlink" href="#mpipe.TubeP.get" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get</tt><big>(</big><em>timeout=None</em><big>)</big><a class="headerlink" href="#mpipe.TubeP.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the next available item from the tube.</p>
 <p>Blocks if tube is empty, until a producer for the tube puts an item on it.</p>
 </dd></dl>
@@ -260,7 +256,7 @@ using <a class="reference external" href="http://docs.python.org/library/multipr
 
 <dl class="method">
 <dt id="mpipe.TubeQ.get">
-<tt class="descname">get</tt><big>(</big><big>)</big><a class="headerlink" href="#mpipe.TubeQ.get" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get</tt><big>(</big><em>timeout=None</em><big>)</big><a class="headerlink" href="#mpipe.TubeQ.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the next available item from the tube.</p>
 <p>Blocks if tube is empty, until a producer for the tube puts an item on it.</p>
 </dd></dl>
@@ -298,7 +294,7 @@ using <a class="reference external" href="http://docs.python.org/library/multipr
   
     <div class="footer">
         &copy; Copyright 2013, Velimir Mlaker.
-      Last updated on Apr 02, 2013.
+      Last updated on Apr 16, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.8.
     </div>
 
