@@ -4,6 +4,7 @@
    :hidden:
 
    docs
+   download
    concepts
    cookbook
    examples
@@ -24,10 +25,13 @@ Using the |NAME| module, you would write it like this:
 
 The above code runs a total of seven processes: one for the main program and six for the two stages (each stage running three workers.)
 
+Installation
+************
+
 Start using |NAME| now! Get the source code and install the module in the usual way:
 ::
 
-  git clone https://github.com/vmlaker/mpipe
+  git clone http://github.com/vmlaker/mpipe
   cd mpipe
   python setup.py install --user
 
