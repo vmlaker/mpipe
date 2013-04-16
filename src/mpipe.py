@@ -14,10 +14,17 @@ class TubeP:
         """Put an item on the tube."""
         self._conn2.send(data)
 
-    def get(self):
+    def get(self, timeout=None):
         """Return the next available item from the tube.
 
         Blocks if tube is empty, until a producer for the tube puts an item on it."""
+        if timeout:
+            # Todo: Consider locking the poll/recv block.
+            # Otherwise, this method is not thread safe.
+            if self._conn1.poll(timeout):
+                return (True, self._conn1.recv())
+            else:
+                return (False, None)
         return self._conn1.recv()
 
 class TubeQ:
@@ -31,10 +38,16 @@ class TubeQ:
         """Put an item on the tube."""
         self._queue.put(data)
 
-    def get(self):
+    def get(self, timeout=None):
         """Return the next available item from the tube.
 
         Blocks if tube is empty, until a producer for the tube puts an item on it."""
+        if timeout:
+            try:
+                result = self._queue.get(True, timeout)
+            except multiprocessing.Queue.Empty:
+                return(False, None)
+            return(True, result)
         return self._queue.get()
 
 
@@ -48,7 +61,10 @@ class OrderedWorker(multiprocessing.Process):
     Input tasks are fetched in this order, and before publishing it's result, 
     a worker first waits for it's previous neighbor to do the same."""
 
-    def __init__(
+    def __init__(self):
+        pass
+
+    def init2(
         self, 
         input_tube,    # Read task from the input tube.
         output_tubes,  # Send result on all the output tubes.
@@ -81,7 +97,8 @@ class OrderedWorker(multiprocessing.Process):
         # Create the workers.
         workers = []
         for ii in range(size):
-            worker = cls(
+            worker = cls()
+            worker.init2(
                 input_tube,
                 output_tubes,
                 size,
@@ -193,7 +210,10 @@ class UnorderedWorker(multiprocessing.Process):
     with others. The order of output results may not match 
     that of corresponding input tasks."""
 
-    def __init__(
+    def __init__(self):
+        pass
+
+    def init2(
         self, 
         input_tube,    # Read task from the input tube.
         output_tubes,  # Send result on all the output tubes.
@@ -218,7 +238,8 @@ class UnorderedWorker(multiprocessing.Process):
         # Create the workers.
         workers = []
         for ii in range(size):
-            worker = cls(
+            worker = cls()
+            worker.init2(
                 input_tube,
                 output_tubes,
                 size,
@@ -293,11 +314,19 @@ class Stage(object):
         """Put *task* on the stage's input tube."""
         self._input_tube.put((task,0))
 
-    def get(self):
+    def get(self, timeout=None):
         """Retrieve results from all the output tubes."""
+        valid = False
         result = None
         for tube in self._output_tubes:
-            result = tube.get()[0]
+            if timeout:
+                valid, result = tube.get(timeout)
+                if valid:
+                    result = result[0]
+            else:
+                result = tube.get()[0]
+        if timeout:
+            return valid, result
         return result
 
     def link(self, next_stage):
@@ -373,11 +402,11 @@ class Pipeline(object):
         """Put *task* on the pipeline."""
         self._input_stage.put(task)
 
-    def get(self):
+    def get(self, timeout=None):
         """Return result from the pipeline."""
         result = None
         for stage in self._output_stages:
-            result = stage.get()
+            result = stage.get(timeout)
         return result
 
     def results(self):
