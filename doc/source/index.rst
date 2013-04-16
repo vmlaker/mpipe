@@ -5,6 +5,7 @@
 
    docs
    concepts
+   cookbook
    examples
    api
    about
