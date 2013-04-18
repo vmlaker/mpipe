@@ -30,4 +30,10 @@
 .. autoclass:: mpipe.TubeQ
    :members: put, get
 
+----
+
+.. autoclass:: mpipe.FilterWorker
+
+.. autoclass:: mpipe.FilterStage
+
 .. The end.

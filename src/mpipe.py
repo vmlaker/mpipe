@@ -1,5 +1,6 @@
 """MPipe is a multiprocessing pipeline software framework in Python."""
 
+import sys
 import multiprocessing
 
 class TubeP:
@@ -424,5 +425,50 @@ class Pipeline(object):
             result = self.get()
             if result is None: break
             yield result
+
+
+class FilterWorker(OrderedWorker):
+    """FilterWorker filters input to a pipeline."""
+
+    def __init__(self, pipeline):
+        """Constructor takes a
+        :class:`~mpipe.Pipeline` object to be filtered."""
+        self._pipeline = pipeline  # The pipeline to filter.
+        self._count = 0  # Keep track of number of tasks in pipeline.
+
+    def doTask(self, task):
+        """Filter input to the pipeline: make sure it has no more
+        than two tasks in it."""
+
+        # At this point the count is 0, 1, or 2.
+        # Let's attempt to pull all (if any) results from the pipeline.
+        if self._count == 2:
+            valid, result = self._pipeline.get(sys.float_info.min)
+            self._count -= int(valid)
+            if valid:
+                valid, result = self._pipeline.get(sys.float_info.min)
+                self._count -= int(valid)
+        elif self._count == 1:
+            valid, result = self._pipeline.get(sys.float_info.min)
+            self._count -= int(valid)
+
+        # At this point the count is still 0, 1, or 2.
+        # Any pull attempt above may not have been successful.
+        
+        # If there is room for the task, put it on the pipeline.
+        if self._count in (0, 1):
+            self._pipeline.put(task)
+            self._count += 1
+
+        # At this point the count is 1 or 2.
+        # We're done, so propagate the task.
+        return task
+
+
+class FilterStage(Stage):
+    """Single worker stage running 
+    :class:`~mpipe.FilterWorker`."""
+    def __init__(self, pipeline):
+        super(FilterStage, self).__init__(FilterWorker, 1, pipeline=pipeline)
 
 # The end.
