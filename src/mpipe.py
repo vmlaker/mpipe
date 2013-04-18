@@ -91,13 +91,16 @@ class OrderedWorker(multiprocessing.Process):
         return TubeP
 
     @classmethod
-    def assemble(cls, input_tube, output_tubes, size):
-        """Create, assemble and start workers."""
+    def assemble(cls, args, input_tube, output_tubes, size):
+        """Create, assemble and start workers.
+        Workers are created of class *cls*, initialized with *args*, and given
+        task/result communication channels *input_tube* and *output_tubes*.
+        The number of workers created is according to *size* parameter."""
 
         # Create the workers.
         workers = []
         for ii in range(size):
-            worker = cls()
+            worker = cls(**args)
             worker.init2(
                 input_tube,
                 output_tubes,
@@ -232,13 +235,16 @@ class UnorderedWorker(multiprocessing.Process):
         return TubeQ
     
     @classmethod
-    def assemble(cls, input_tube, output_tubes, size):
-        """Create, assemble and start workers."""
+    def assemble(cls, args, input_tube, output_tubes, size):
+        """Create, assemble and start workers.
+        Workers are created of class *cls*, initialized with *args*, and given
+        task/result communication channels *input_tube* and *output_tubes*.
+        The number of workers created is according to *size* parameter."""
 
         # Create the workers.
         workers = []
         for ii in range(size):
-            worker = cls()
+            worker = cls(**args)
             worker.init2(
                 input_tube,
                 output_tubes,
@@ -301,10 +307,12 @@ class UnorderedWorker(multiprocessing.Process):
 class Stage(object):
     """The Stage is an assembly of workers of identical functionality."""
 
-    def __init__(self, worker_class, size=1):
+    def __init__(self, worker_class, size=1, **worker_args):
         """Create a stage of workers of given *worker_class* implementation, 
-        with *size* indicating the number of workers within the stage."""
+        with *size* indicating the number of workers within the stage.
+        Any worker initialization arguments are given in *worker_args*."""
         self._worker_class = worker_class
+        self._worker_args = worker_args
         self._size = size
         self._input_tube = self._worker_class.getTubeClass()()
         self._output_tubes = list()
@@ -356,6 +364,7 @@ class Stage(object):
             self._output_tubes.append(self._worker_class.getTubeClass()())
 
         self._worker_class.assemble(
+            self._worker_args,
             self._input_tube,
             self._output_tubes,
             self._size,
