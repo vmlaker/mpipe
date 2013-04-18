@@ -51,7 +51,7 @@ for entry in os.listdir(sys.argv[1]):
         out_fname = gold_fname[:-len(suffix):] + '.out'
         f = open(out_fname, 'w')
         for line in test_lines:
-            f.write(line)
+            f.write(line.decode())
         f.close
         
 # The end.
