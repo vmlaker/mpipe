@@ -7,13 +7,13 @@ def echo(value):
     return value
 
 pipe1 = Pipeline(OrderedStage(echo))
-pipe2 = Pipeline(FilterStage(pipe1))
+pipe2 = Pipeline(FilterStage((pipe1,), max_tasks=2))
 
 def pull(task):
-    for result in pipe2.results():
-        pass
+    for result in pipe2.results(): pass
 pipe3 = Pipeline(OrderedStage(pull))
 pipe3.put(True)
+pipe3.put(None)
 
 for number in range(10):
     pipe2.put(number)
@@ -21,4 +21,3 @@ for number in range(10):
 
 pipe1.put(None)
 pipe2.put(None)
-pipe3.put(None)
