@@ -1,0 +1,213 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Filtering &mdash; Documentation</title>
+    <link rel="stylesheet" href="_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="Documentation" href="index.html" />
+    <link rel="up" title="Examples" href="examples.html" />
+    <link rel="next" title="MPipe API" href="api.html" />
+    <link rel="prev" title="Unordered worker/stage" href="examples2.html" />
+ 
+    <style type="text/css">
+      
+    </style>
+
+  </head>
+  <body>
+<div class="pageheader">
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="docs.html">Docs</a></li>
+    <li><a href="api.html">API</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+  <div>
+    <a href="index.html">
+      <img src="_static/mpipe.png" alt="Da logo, man." />
+    </a>
+  </div>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api.html" title="MPipe API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="examples2.html" title="Unordered worker/stage"
+             accesskey="P">previous</a> |</li>
+  <li><a href="index.html">MPipe home</a>&nbsp;|</li>
+  <li><a href="docs.html">Documentation</a> &raquo;</li>
+
+          <li><a href="examples.html" accesskey="U">Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>API Search</h3>
+  
+  <form class="search" action="search.html" method="get">
+<!--
+    <div class="search-input">
+      <input type="text" name="q" />
+    </div>
+    <div class="search-go">
+      <input type="submit" value="Go" />
+    </div>
+-->
+      <input class="search-input" type="text" name="q" />
+      <input class="search-go" type="submit" value="Go" />
+
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+  
+  <p class="searchtip">
+    Search the MPipe module for classes and functions.
+  </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="filtering">
+<span id="examples3"></span><span id="id1"></span><h1>Filtering<a class="headerlink" href="#filtering" title="Permalink to this headline">¶</a></h1>
+<p>If a stage can&#8217;t process incoming tasks fast enough, we may have a bottleneck situation.
+Imagine a stream of tasks feeding a pipeline at the rate of 10 tasks per second.
+A single-worker stage that only processes 8 tasks per second inevitably bottlenecks the workflow:</p>
+<div class="source-click-above container">
+[<a class="reference external" href="bottleneck1.py">source</a>]</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">mpipe</span> <span class="kn">import</span> <span class="n">OrderedStage</span><span class="p">,</span> <span class="n">Pipeline</span>
+
+<span class="k">def</span> <span class="nf">echo</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.125</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+<span class="n">pipe1</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">OrderedStage</span><span class="p">(</span><span class="n">echo</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">pipe1</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.100</span><span class="p">)</span>
+
+<span class="n">pipe1</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="source-click-below container">
+[<a class="reference external" href="bottleneck1.py">source</a>]</div>
+<p>An easy way to fix this, of course, is to devote an additional worker to the stage:</p>
+<div class="source-click-above container">
+[<a class="reference external" href="bottleneck2.py">source</a>]</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">mpipe</span> <span class="kn">import</span> <span class="n">OrderedStage</span><span class="p">,</span> <span class="n">Pipeline</span>
+
+<span class="k">def</span> <span class="nf">echo</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.125</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+<span class="n">pipe1</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">OrderedStage</span><span class="p">(</span><span class="n">echo</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">pipe1</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.100</span><span class="p">)</span>
+
+<span class="n">pipe1</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="source-click-below container">
+[<a class="reference external" href="bottleneck2.py">source</a>]</div>
+<p>But what if, for whatever reason, our design limits us to a single worker stage?
+If adding workers is not an option, we can instead choose to filter inputs into the problematic stage by dropping excess tasks:</p>
+<div class="source-click-above container">
+[<a class="reference external" href="bottleneck3.py">source</a>]</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">mpipe</span> <span class="kn">import</span> <span class="n">OrderedStage</span><span class="p">,</span> <span class="n">FilterStage</span><span class="p">,</span> <span class="n">Pipeline</span>
+
+<span class="k">def</span> <span class="nf">echo</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.125</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+<span class="n">pipe1</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">OrderedStage</span><span class="p">(</span><span class="n">echo</span><span class="p">))</span>
+<span class="n">pipe2</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">FilterStage</span><span class="p">((</span><span class="n">pipe1</span><span class="p">,),</span> <span class="n">max_tasks</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">pipe2</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.100</span><span class="p">)</span>
+
+<span class="n">pipe1</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">pipe2</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="source-click-below container">
+[<a class="reference external" href="bottleneck3.py">source</a>]</div>
+<p>Compare run times of the three programs above. Also, note the missing (dropped) task in output of the last program.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api.html" title="MPipe API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="examples2.html" title="Unordered worker/stage"
+             >previous</a> |</li>
+  <li><a href="index.html">MPipe home</a>&nbsp;|</li>
+  <li><a href="docs.html">Documentation</a> &raquo;</li>
+
+          <li><a href="examples.html" >Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+  
+    <div class="footer">
+        &copy; Copyright 2013, Velimir Mlaker.
+      Last updated on Apr 24, 2013.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.8.
+    </div>
+
+  </body>
+</html>

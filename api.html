@@ -24,7 +24,7 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="top" title="Documentation" href="index.html" />
     <link rel="next" title="About MPipe" href="about.html" />
-    <link rel="prev" title="Unordered worker/stage" href="examples2.html" />
+    <link rel="prev" title="Filtering" href="examples3.html" />
  
     <style type="text/css">
       
@@ -59,7 +59,7 @@
           <a href="about.html" title="About MPipe"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="examples2.html" title="Unordered worker/stage"
+          <a href="examples3.html" title="Filtering"
              accesskey="P">previous</a> |</li>
   <li><a href="index.html">MPipe home</a>&nbsp;|</li>
   <li><a href="docs.html">Documentation</a> &raquo;</li>
@@ -155,10 +155,11 @@ The implementation can publish the output result in one of two ways:
 
 <dl class="class">
 <dt id="mpipe.Stage">
-<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">Stage</tt><big>(</big><em>worker_class</em>, <em>size=1</em><big>)</big><a class="headerlink" href="#mpipe.Stage" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">Stage</tt><big>(</big><em>worker_class</em>, <em>size=1</em>, <em>**worker_args</em><big>)</big><a class="headerlink" href="#mpipe.Stage" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Stage is an assembly of workers of identical functionality.</p>
 <p>Create a stage of workers of given <em>worker_class</em> implementation, 
-with <em>size</em> indicating the number of workers within the stage.</p>
+with <em>size</em> indicating the number of workers within the stage.
+Any worker initialization arguments are given in <em>worker_args</em>.</p>
 <dl class="method">
 <dt id="mpipe.Stage.link">
 <tt class="descname">link</tt><big>(</big><em>next_stage</em><big>)</big><a class="headerlink" href="#mpipe.Stage.link" title="Permalink to this definition">¶</a></dt>
@@ -263,6 +264,28 @@ using <a class="reference external" href="http://docs.python.org/library/multipr
 
 </dd></dl>
 
+<hr class="docutils" />
+<dl class="class">
+<dt id="mpipe.FilterWorker">
+<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">FilterWorker</tt><big>(</big><em>pipelines</em>, <em>max_tasks=1</em>, <em>drop_results=False</em><big>)</big><a class="headerlink" href="#mpipe.FilterWorker" title="Permalink to this definition">¶</a></dt>
+<dd><p>FilterWorker filters input to a pipeline.</p>
+<p>Constructor takes an iterable of
+<a class="reference internal" href="#mpipe.Pipeline" title="mpipe.Pipeline"><tt class="xref py py-class docutils literal"><span class="pre">Pipeline</span></tt></a> 
+objects to be filtered and a maximum number of tasks
+allowed in the stream of each pipeline. 
+By default, the filter stage propagates a tuple (task, results) 
+where results is a list of results from all pipelines, 
+unless <em>drop_results</em> is True, in which case it propagates
+only the task.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="mpipe.FilterStage">
+<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">FilterStage</tt><big>(</big><em>pipelines</em>, <em>max_tasks=1</em>, <em>drop_results=False</em><big>)</big><a class="headerlink" href="#mpipe.FilterStage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Single worker stage running 
+<a class="reference internal" href="#mpipe.FilterWorker" title="mpipe.FilterWorker"><tt class="xref py py-class docutils literal"><span class="pre">FilterWorker</span></tt></a>.</p>
+</dd></dl>
+
 </div>
 
 
@@ -284,7 +307,7 @@ using <a class="reference external" href="http://docs.python.org/library/multipr
           <a href="about.html" title="About MPipe"
              >next</a> |</li>
         <li class="right" >
-          <a href="examples2.html" title="Unordered worker/stage"
+          <a href="examples3.html" title="Filtering"
              >previous</a> |</li>
   <li><a href="index.html">MPipe home</a>&nbsp;|</li>
   <li><a href="docs.html">Documentation</a> &raquo;</li>
@@ -294,7 +317,7 @@ using <a class="reference external" href="http://docs.python.org/library/multipr
   
     <div class="footer">
         &copy; Copyright 2013, Velimir Mlaker.
-      Last updated on Apr 16, 2013.
+      Last updated on Apr 24, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.8.
     </div>
 
