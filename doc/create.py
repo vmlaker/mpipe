@@ -61,6 +61,9 @@ codes = (
     'multiwork.py',
     'clog.py',
     'drano.py',
+    'bottleneck1.py',
+    'bottleneck2.py',
+    'bottleneck3.py',
     )
 def runCopy(fname):
     cmd = 'cp %s source/'%os.path.join('..', 'test', fname)
