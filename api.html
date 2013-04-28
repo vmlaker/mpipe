@@ -113,9 +113,18 @@ in circular fashion.
 Input tasks are fetched in this order, and before publishing it&#8217;s result, 
 a worker first waits for it&#8217;s previous neighbor to do the same.</p>
 <dl class="method">
+<dt id="mpipe.OrderedWorker.doInit">
+<tt class="descname">doInit</tt><big>(</big><big>)</big><a class="headerlink" href="#mpipe.OrderedWorker.doInit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implement this method in the subclass, if there&#8217;s need
+for any additional initialization upon process startup.
+This method is called after the worker process starts,
+and before it begins processing tasks.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="mpipe.OrderedWorker.doTask">
 <tt class="descname">doTask</tt><big>(</big><em>task</em><big>)</big><a class="headerlink" href="#mpipe.OrderedWorker.doTask" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implement this function in the subclass.
+<dd><p>Implement this method in the subclass to be executed for each task.
 The implementation can publish the output result in one of two ways: 
 1) either by calling <a class="reference internal" href="#mpipe.OrderedWorker.putResult" title="mpipe.OrderedWorker.putResult"><tt class="xref py py-meth docutils literal"><span class="pre">putResult()</span></tt></a> and returning <tt class="xref docutils literal"><span class="pre">None</span></tt> or
 2) by returning the result (other than <tt class="xref docutils literal"><span class="pre">None</span></tt>.)</p>
@@ -137,9 +146,19 @@ workers in the stage, publishing it&#8217;s result without coordinating
 with others. The order of output results may not match 
 that of corresponding input tasks.</p>
 <dl class="method">
+<dt id="mpipe.UnorderedWorker.doInit">
+<tt class="descname">doInit</tt><big>(</big><big>)</big><a class="headerlink" href="#mpipe.UnorderedWorker.doInit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implement this method in the subclass, if there&#8217;s need
+for any additional initialization upon process startup.
+This method is called after the worker process starts,
+after the worker process starts,
+and before it begins processing tasks.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="mpipe.UnorderedWorker.doTask">
 <tt class="descname">doTask</tt><big>(</big><em>task</em><big>)</big><a class="headerlink" href="#mpipe.UnorderedWorker.doTask" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implement this function in the subclass.
+<dd><p>Implement this method in the subclass to be executed for each task.
 The implementation can publish the output result in one of two ways: 
 1) either by calling <a class="reference internal" href="#mpipe.UnorderedWorker.putResult" title="mpipe.UnorderedWorker.putResult"><tt class="xref py py-meth docutils literal"><span class="pre">putResult()</span></tt></a> and returning <tt class="xref docutils literal"><span class="pre">None</span></tt> or
 2) by returning the result (other than <tt class="xref docutils literal"><span class="pre">None</span></tt>.)</p>
@@ -317,7 +336,7 @@ only the task.</p>
   
     <div class="footer">
         &copy; Copyright 2013, Velimir Mlaker.
-      Last updated on Apr 24, 2013.
+      Last updated on Apr 27, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.8.
     </div>
 
