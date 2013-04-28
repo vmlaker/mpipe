@@ -149,6 +149,10 @@ class OrderedWorker(multiprocessing.Process):
         self._lock_next_output.release()
         
     def run(self):
+
+        # Run implementation's initialization.
+        self.doInit()
+
         while True:
             try:
                 # Wait on permission from the previous worker that it's 
@@ -201,11 +205,18 @@ class OrderedWorker(multiprocessing.Process):
                 self.putResult(result)
 
     def doTask(self, task):
-        """Implement this function in the subclass.
+        """Implement this method in the subclass to be executed for each task.
         The implementation can publish the output result in one of two ways: 
         1) either by calling :meth:`putResult` and returning ``None`` or
         2) by returning the result (other than ``None``.)"""
         return True
+
+    def doInit(self):
+        """Implement this method in the subclass, if there's need
+        for any additional initialization upon process startup.
+        This method is called after the worker process starts,
+        and before it begins processing tasks."""
+        return None
 
 
 class UnorderedWorker(multiprocessing.Process):
@@ -263,6 +274,10 @@ class UnorderedWorker(multiprocessing.Process):
             tube.put((result, count))
 
     def run(self):
+
+        # Run implementation's initialization.
+        self.doInit()
+
         while True:
             try:
                 (task, count) = self._tube_task_input.get()
@@ -298,11 +313,19 @@ class UnorderedWorker(multiprocessing.Process):
                 self.putResult(result)
 
     def doTask(self, task):
-        """Implement this function in the subclass.
+        """Implement this method in the subclass to be executed for each task.
         The implementation can publish the output result in one of two ways: 
         1) either by calling :meth:`putResult` and returning ``None`` or
         2) by returning the result (other than ``None``.)"""
         return True
+
+    def doInit(self):
+        """Implement this method in the subclass, if there's need
+        for any additional initialization upon process startup.
+        This method is called after the worker process starts,
+        after the worker process starts,
+        and before it begins processing tasks."""
+        return None
 
 
 class Stage(object):

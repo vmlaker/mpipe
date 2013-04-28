@@ -7,10 +7,10 @@
 .. module:: mpipe
 
 .. autoclass:: mpipe.OrderedWorker
-   :members: doTask, putResult
+   :members: doInit, doTask, putResult
 
 .. autoclass:: mpipe.UnorderedWorker
-   :members: doTask, putResult
+   :members: doInit, doTask, putResult
 
 .. autoclass:: mpipe.Stage
    :members: link, put, get
