@@ -451,7 +451,7 @@ class Pipeline(object):
 
 
 class FilterWorker(OrderedWorker):
-    """FilterWorker filters input to a pipeline."""
+    """FilterWorker filters input to pipelines."""
 
     def __init__(self, pipelines, max_tasks=1, drop_results=False):
         """Constructor takes an iterable of
@@ -476,25 +476,26 @@ class FilterWorker(OrderedWorker):
         than *max_tasks* tasks in it. Return a tuple
           (*task*, *results*)
         where *task* is the given task, and *results* is 
-        a list of latest retrieved results, cached."""
+        a list of latest retrieved results from pipelines."""
 
-        # Iterate the list of pipelines, draining each one, caching
-        # any valid last result, and feeding the given task to any
-        # pipeline whose current stream has less than *max_tasks* tasks.
+        pipe_results = list()
+
+        # Iterate the list of pipelines, draining each one,
+        # then feeding the task to all pipelines
+        # whose current stream has less than *max_tasks* tasks remaining.
         for pipe in self._pipelines:
 
-            last_result = None
             count = self._task_counts[pipe]
 
             # Let's attempt to drain all (if any) results from the pipeline.
             valid = True
-            while valid:
+            while count and valid:
                 valid, result = pipe.get(sys.float_info.min)
                 count -= int(valid)
 
-                # Update the results cache with the last retrieved result.
+                # Add to result any last retrieved result.
                 if not self._drop_results and valid:
-                    self._results[pipe] = result
+                    pipe_results.append(result)
 
             # If there is room for the task, put it on the pipeline.
             if count <= self._max_tasks-1:
@@ -508,13 +509,8 @@ class FilterWorker(OrderedWorker):
         if self._drop_results:
             return task
 
-        # We are also propagating the results.
-        # Assemble all results into a list.
-        all_results = list()
-        for result in self._results.values():
-            all_results.append(result)
-
-        return task, all_results
+        # Otherwise, we are also propagating the results.
+        return task, pipe_results
 
 
 class FilterStage(Stage):
