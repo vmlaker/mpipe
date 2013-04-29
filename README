@@ -1,9 +1,0 @@
-MPipe is a multiprocessing pipeline framework implemented in Python.
-
-Contents of this directory:
----------------------------
-doc/      -  Sphinx documentation source
-README    -  this readme file
-setup.py  -  Distutils installer
-src/      -  MPipe source code and development utilities
-test/     -  user test codes
