@@ -5,9 +5,9 @@
 Filtering
 ---------
 
-If a stage can't process incoming tasks fast enough, we may have a bottleneck situation.
-Imagine a stream of tasks feeding a pipeline at the rate of 10 tasks per second. 
-A single-worker stage that only processes 8 tasks per second inevitably bottlenecks the workflow:
+If a stage can't process incoming tasks fast enough, we have a bottleneck situation at our hands.
+Imagine a stream of tasks feeding a pipeline at the rate of 100 tasks per second. 
+A single-worker stage that takes 30% longer to process each task inevitably bottlenecks the workflow:
 
 .. container:: source-click-above
 
@@ -31,8 +31,17 @@ An easy way to fix this, of course, is to devote an additional worker to the sta
 
   [`source <bottleneck2.py>`_]
 
-But what if, for whatever reason, our design limits us to a single worker stage? 
-If adding workers is not an option, we can instead choose to filter inputs into the problematic stage by dropping excess tasks:
+But what if our design limits us to a single worker stage? 
+If adding workers is not an option, we can instead choose to filter inputs before they reach the problematic stage, by dropping tasks that exceed capacity. 
+For example, we can limit the carrying capacity of the pipeline to, say, a maximum load of 2 tasks. 
+If a task arrives while the pipeline is "full" (i.e. is currently working on two tasks) then the new task is thrown away.
+This way we are able to keep up with the input flow, granted we lose any tasks that exceed the preset bandwidth.
+Running such a filter in our scenario, we lose the 6th and 10th task:
+
+.. image:: filter.png
+   :align: center
+
+Implementing the solution is easy: wrap the original pipeline into a :mod:`~mpipe.FilterStage` of a second pipeline:
 
 .. container:: source-click-above
 
@@ -44,6 +53,17 @@ If adding workers is not an option, we can instead choose to filter inputs into 
 
   [`source <bottleneck3.py>`_]
 
-Compare run times of the three programs above. Also, note the missing (dropped) task in output of the last program.
+Running the above code shows the output below, the 6th and 10th task (index 5 and 9) conspicuously missing from the final result:
+::
+  0
+  1
+  2
+  3
+  4
+  6
+  7
+  8
+  10
+  11
 
 .. the end

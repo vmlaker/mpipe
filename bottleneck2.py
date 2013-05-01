@@ -3,12 +3,12 @@ from mpipe import OrderedStage, Pipeline
 
 def echo(value):
     print(value)
-    time.sleep(0.125)
+    time.sleep(0.013)
     return value
 
 pipe1 = Pipeline(OrderedStage(echo, 2))
-for number in range(10):
+for number in range(12):
     pipe1.put(number)
-    time.sleep(0.100)
+    time.sleep(0.010)
 
 pipe1.put(None)

@@ -104,9 +104,9 @@
             
   <div class="section" id="filtering">
 <span id="examples3"></span><span id="id1"></span><h1>Filtering<a class="headerlink" href="#filtering" title="Permalink to this headline">¶</a></h1>
-<p>If a stage can&#8217;t process incoming tasks fast enough, we may have a bottleneck situation.
-Imagine a stream of tasks feeding a pipeline at the rate of 10 tasks per second.
-A single-worker stage that only processes 8 tasks per second inevitably bottlenecks the workflow:</p>
+<p>If a stage can&#8217;t process incoming tasks fast enough, we have a bottleneck situation at our hands.
+Imagine a stream of tasks feeding a pipeline at the rate of 100 tasks per second.
+A single-worker stage that takes 30% longer to process each task inevitably bottlenecks the workflow:</p>
 <div class="source-click-above container">
 [<a class="reference external" href="bottleneck1.py">source</a>]</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">time</span>
@@ -114,13 +114,13 @@ A single-worker stage that only processes 8 tasks per second inevitably bottlene
 
 <span class="k">def</span> <span class="nf">echo</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="k">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.125</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.013</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">value</span>
 
 <span class="n">pipe1</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">OrderedStage</span><span class="p">(</span><span class="n">echo</span><span class="p">))</span>
-<span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+<span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">):</span>
     <span class="n">pipe1</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
-    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.100</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.010</span><span class="p">)</span>
 
 <span class="n">pipe1</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
 </pre></div>
@@ -135,21 +135,27 @@ A single-worker stage that only processes 8 tasks per second inevitably bottlene
 
 <span class="k">def</span> <span class="nf">echo</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="k">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.125</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.013</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">value</span>
 
 <span class="n">pipe1</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">OrderedStage</span><span class="p">(</span><span class="n">echo</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-<span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+<span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">):</span>
     <span class="n">pipe1</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
-    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.100</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.010</span><span class="p">)</span>
 
 <span class="n">pipe1</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="source-click-below container">
 [<a class="reference external" href="bottleneck2.py">source</a>]</div>
-<p>But what if, for whatever reason, our design limits us to a single worker stage?
-If adding workers is not an option, we can instead choose to filter inputs into the problematic stage by dropping excess tasks:</p>
+<p>But what if our design limits us to a single worker stage?
+If adding workers is not an option, we can instead choose to filter inputs before they reach the problematic stage, by dropping tasks that exceed capacity.
+For example, we can limit the carrying capacity of the pipeline to, say, a maximum load of 2 tasks.
+If a task arrives while the pipeline is &#8220;full&#8221; (i.e. is currently working on two tasks) then the new task is thrown away.
+This way we are able to keep up with the input flow, granted we lose any tasks that exceed the preset bandwidth.
+Running such a filter in our scenario, we lose the 6th and 10th task:</p>
+<img alt="_images/filter.png" class="align-center" src="_images/filter.png" />
+<p>Implementing the solution is easy: wrap the original pipeline into a <a class="reference internal" href="api.html#mpipe.FilterStage" title="mpipe.FilterStage"><tt class="xref py py-mod docutils literal"><span class="pre">FilterStage</span></tt></a> of a second pipeline:</p>
 <div class="source-click-above container">
 [<a class="reference external" href="bottleneck3.py">source</a>]</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">time</span>
@@ -157,14 +163,14 @@ If adding workers is not an option, we can instead choose to filter inputs into 
 
 <span class="k">def</span> <span class="nf">echo</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="k">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.125</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.013</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">value</span>
 
 <span class="n">pipe1</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">OrderedStage</span><span class="p">(</span><span class="n">echo</span><span class="p">))</span>
 <span class="n">pipe2</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">FilterStage</span><span class="p">((</span><span class="n">pipe1</span><span class="p">,),</span> <span class="n">max_tasks</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
-<span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+<span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">):</span>
     <span class="n">pipe2</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
-    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.100</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.010</span><span class="p">)</span>
 
 <span class="n">pipe1</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
 <span class="n">pipe2</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
@@ -172,7 +178,19 @@ If adding workers is not an option, we can instead choose to filter inputs into 
 </div>
 <div class="source-click-below container">
 [<a class="reference external" href="bottleneck3.py">source</a>]</div>
-<p>Compare run times of the three programs above. Also, note the missing (dropped) task in output of the last program.</p>
+<p>Running the above code shows the output below, the 6th and 10th task (index 5 and 9) conspicuously missing from the final result:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">0</span>
+<span class="mi">1</span>
+<span class="mi">2</span>
+<span class="mi">3</span>
+<span class="mi">4</span>
+<span class="mi">6</span>
+<span class="mi">7</span>
+<span class="mi">8</span>
+<span class="mi">10</span>
+<span class="mi">11</span>
+</pre></div>
+</div>
 </div>
 
 
@@ -205,7 +223,7 @@ If adding workers is not an option, we can instead choose to filter inputs into 
   
     <div class="footer">
         &copy; Copyright 2013, Velimir Mlaker.
-      Last updated on Apr 27, 2013.
+      Last updated on May 01, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.8.
     </div>
 
