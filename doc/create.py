@@ -27,6 +27,7 @@ diagrams = (
     'stage1',
     'pipeline1',
     'multiwork',
+    'filter',
     )
 
 # Export Dia diagrams.
