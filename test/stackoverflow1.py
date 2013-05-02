@@ -1,24 +1,20 @@
-# Solution for http://stackoverflow.com/questions/8277715
+"""Solution for http://stackoverflow.com/questions/8277715"""
 
-import mpipe
+from mpipe import OrderedStage, Pipeline
 
-class Doubler(mpipe.OrderedWorker):
-    def doTask(self, value):
-        return value * 2
-class Printer(mpipe.OrderedWorker):
-    def doTask(self, value):
-        # This is the last stage. Since we don't want the pipeline
-        # to have results (don't want the client to call get()), 
-        # let's not setResult() or return anything that is not None.
-        print(value)
+def f2(value):
+    return value * 2
 
-s1 = mpipe.Stage(Doubler, 2)
-s2 = mpipe.Stage(Printer, 1)
+def f3(value):
+    print(value)
+
+s1 = OrderedStage(f2, size=2)
+s2 = OrderedStage(f3)
 s1.link(s2)
-p = mpipe.Pipeline(s1, (s2,))
+p = Pipeline(s1)
 
-for ii in range(1,60000):
-    p.put(ii)
-p.put(None)
+def f1():
+    for task in [1,2,3,4,5,None]:
+        p.put(task)
 
-# The end.
+f1()
