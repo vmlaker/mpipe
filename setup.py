@@ -32,15 +32,24 @@ class Clean2(Command):
                 shutil.rmtree(entry)
 
 setup(
-    name         = 'mpipe',
+    name         = 'MPipe',
     version      = '1.0',
     description  = 'Multiprocess pipeline software framework',
     url          = 'https://github.com/vmlaker/mpipe',
     author       = 'Velimir Mlaker',
-    author_email = 'velimir dot mlaker at g mail dot com',
+    author_email = 'velimir.mlaker@gmail.com',
     license      = 'MIT',
     long_description = 'MPipe is a multiprocessing pipeline software framework in Python.',
     package_dir  = {'' : 'src'},
     py_modules   = ['mpipe'],
     cmdclass     = { 'clean2' : Clean2 },
+    classifiers  = [
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Developers',
+        'License :: Freeware',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python',
+        'Topic :: Software Development :: Libraries :: Application Frameworks',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+        ],
     )
