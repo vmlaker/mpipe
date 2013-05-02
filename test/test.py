@@ -27,7 +27,7 @@ for entry in os.listdir(sys.argv[1]):
     # Run the test.
     test_fname = gold_fname[:-len(suffix):] + '.py'
     command = '%s %s'%(sys.executable, test_fname)
-    #print(command)
+    print(command)
     p = Popen(command, shell=True, stdout=PIPE, stderr=STDOUT)
     test_lines = p.stdout.readlines()
 
