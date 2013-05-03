@@ -28,13 +28,18 @@ The above code runs a total of seven processes: one for the main program and six
 Installation
 ************
 
-Start using |NAME| now! Get the source code and install the module in the usual way:
+Start using |NAME| now! Easiest way is using pip:
 ::
 
-  git clone http://github.com/vmlaker/mpipe
-  cd mpipe
-  python setup.py install --user
+  pip install --user mpipe
 
-Next, check out :doc:`docs` and get ready to start piping in Python!
+For other ways of getting |NAME| installed on your system, check out :doc:`download`.
+
+Ok, now what?
+*************
+
+Start piping right away by running the :doc:`examples`.
+Read the :doc:`cookbook` for a step-by-step guide to creating pipelines.
+For theory and design, take a look at :doc:`concepts`.
 
 .. The end.
