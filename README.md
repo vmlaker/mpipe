@@ -1,9 +1,7 @@
-[MPipe](http://vmlaker.github.io/mpipe) is a mulitprocess pipeline software framework in Python.
+MPipe is a multiprocess pipeline software framework in Python. 
+It's a tiny module, written purely in Python, that lets you 
+easily write multi-stage, multiprocess pipeline algorithms. 
+For the full description, including user guide and examples, 
+visit the documentation page:
 
-* [Docs](http://vmlaker.github.io/mpipe/docs.html)
-  * [Installation](http://vmlaker.github.io/mpipe/download.html)
-  * [Concepts](http://vmlaker.github.io/mpipe/concepts.html)
-  * [Cookbook](http://vmlaker.github.io/mpipe/cookbook.html)
-  * [Examples](http://vmlaker.github.io/mpipe/examples.html)
-* [API](http://vmlaker.github.io/mpipe/api.html)
-* [About](http://vmlaker.github.io/mpipe/about.html)
+  http://vmlaker.github.io/mpipe

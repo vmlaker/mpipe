@@ -34,11 +34,12 @@ class Clean2(Command):
 setup(
     name         = 'mpipe',
     version      = '1.0',
-    description  = 'Multiprocess pipeline software framework',
+    description  = 'A multiprocess pipeline software framework.',
     url          = 'http://vmlaker.github.io/mpipe',
     author       = 'Velimir Mlaker',
     author_email = 'velimir.mlaker@gmail.com',
     license      = 'MIT',
+    long_description = open('README.md').read(),
     package_dir  = {'' : 'src'},
     py_modules   = ['mpipe'],
     cmdclass     = { 'clean2' : Clean2 },
@@ -52,7 +53,4 @@ setup(
         'Topic :: Software Development :: Libraries :: Application Frameworks',
         'Topic :: Software Development :: Libraries :: Python Modules',
         ],
-    long_description = """
-MPipe is a tiny module that lets you easily write multi-stage, multiprocess pipeline algorithms.
-""",
     )
