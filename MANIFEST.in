@@ -1,1 +1,2 @@
+include README.md
 recursive-include test *.py *.go *.gor
