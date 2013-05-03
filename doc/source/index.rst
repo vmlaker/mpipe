@@ -28,15 +28,15 @@ The above code runs a total of seven processes: one for the main program and six
 Installation
 ************
 
-Start using |NAME| now! Easiest way is using pip:
+Get |NAME| now! Easiest way is using ``pip``:
 ::
 
   pip install --user mpipe
 
 For other ways of getting |NAME| installed on your system, check out :doc:`download`.
 
-Ok, now what?
-*************
+Got it, now what?
+*****************
 
 Start piping right away by running the :doc:`examples`.
 Read the :doc:`cookbook` for a step-by-step guide to creating pipelines.
