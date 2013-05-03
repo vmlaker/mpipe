@@ -33,7 +33,7 @@ class Clean2(Command):
 
 setup(
     name         = 'mpipe',
-    version      = '1.0',
+    version      = '1.0.1',
     description  = 'A multiprocess pipeline software framework.',
     url          = 'http://vmlaker.github.io/mpipe',
     author       = 'Velimir Mlaker',
