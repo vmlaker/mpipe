@@ -70,6 +70,7 @@ class OrderedWorker(multiprocessing.Process):
         input_tube,    # Read task from the input tube.
         output_tubes,  # Send result on all the output tubes.
         num_workers,   # Total number of workers in the stage.
+        do_stop_task,  # Whether to call doTask() on "stop" request.
         ):
         """Create a worker with *input_tube* and an iterable of *output_tubes*.
         The worker reads a task from *input_tube* and writes the result to *output_tubes*."""
@@ -86,17 +87,21 @@ class OrderedWorker(multiprocessing.Process):
         self._lock_prev_output = None
         self._lock_next_output = None
 
+        self._do_stop_task = do_stop_task
+
     @staticmethod
     def getTubeClass():
         """Return the tube class implementation."""
         return TubeP
 
     @classmethod
-    def assemble(cls, args, input_tube, output_tubes, size):
+    def assemble(cls, args, input_tube, output_tubes, size, do_stop_task=False):
         """Create, assemble and start workers.
         Workers are created of class *cls*, initialized with *args*, and given
         task/result communication channels *input_tube* and *output_tubes*.
-        The number of workers created is according to *size* parameter."""
+        The number of workers created is according to *size* parameter.
+        *do_stop_task* indicates whether doTask() will be called for "stop" request.
+        """
 
         # Create the workers.
         workers = []
@@ -106,6 +111,7 @@ class OrderedWorker(multiprocessing.Process):
                 input_tube,
                 output_tubes,
                 size,
+                do_stop_task,
                 )
             workers.append(worker)
 
@@ -191,6 +197,10 @@ class OrderedWorker(multiprocessing.Process):
                 else:
                     self._tube_task_input.put((None, count))
 
+                # In case we're calling doTask() on a "stop" request, do so now.
+                if self._do_stop_task:
+                    self.doTask(None)
+
                 # Honor the "stop" request by exiting the process.
                 break  
 
@@ -233,6 +243,7 @@ class UnorderedWorker(multiprocessing.Process):
         input_tube,    # Read task from the input tube.
         output_tubes,  # Send result on all the output tubes.
         num_workers,   # Total number of workers in the stage.
+        do_stop_task,  # Whether to call doTask() on "stop" request.
         ):
         """Create a worker with *input_tube* and an iterable of *output_tubes*.
         The worker reads a task from *input_tube* and writes the result to *output_tubes*."""
@@ -240,6 +251,7 @@ class UnorderedWorker(multiprocessing.Process):
         self._tube_task_input = input_tube
         self._tubes_result_output = output_tubes
         self._num_workers = num_workers
+        self._do_stop_task = do_stop_task
 
     @staticmethod
     def getTubeClass():
@@ -247,11 +259,13 @@ class UnorderedWorker(multiprocessing.Process):
         return TubeQ
     
     @classmethod
-    def assemble(cls, args, input_tube, output_tubes, size):
+    def assemble(cls, args, input_tube, output_tubes, size, do_stop_task):
         """Create, assemble and start workers.
         Workers are created of class *cls*, initialized with *args*, and given
         task/result communication channels *input_tube* and *output_tubes*.
-        The number of workers created is according to *size* parameter."""
+        The number of workers created is according to *size* parameter.
+        *do_stop_task* indicates whether doTask() will be called for "stop" request.
+        """
 
         # Create the workers.
         workers = []
@@ -261,6 +275,7 @@ class UnorderedWorker(multiprocessing.Process):
                 input_tube,
                 output_tubes,
                 size,
+                do_stop_task,
                 )
             workers.append(worker)
 
@@ -299,6 +314,10 @@ class UnorderedWorker(multiprocessing.Process):
                 else:
                     self._tube_task_input.put((None, count))
 
+                # In case we're calling doTask() on a "stop" request, do so now.
+                if self._do_stop_task:
+                    self.doTask(None)
+
                 # Honor the "stop" request by exiting the process.
                 break  
 
@@ -331,13 +350,16 @@ class UnorderedWorker(multiprocessing.Process):
 class Stage(object):
     """The Stage is an assembly of workers of identical functionality."""
 
-    def __init__(self, worker_class, size=1, **worker_args):
+    def __init__(self, worker_class, size=1, do_stop_task=False, **worker_args):
         """Create a stage of workers of given *worker_class* implementation, 
         with *size* indicating the number of workers within the stage.
+        *do_stop_task* indicates whether the worker's doTask() method will be
+        called on a "stop" (i.e. None) task.
         Any worker initialization arguments are given in *worker_args*."""
         self._worker_class = worker_class
         self._worker_args = worker_args
         self._size = size
+        self._do_stop_task = do_stop_task
         self._input_tube = self._worker_class.getTubeClass()()
         self._output_tubes = list()
         self._next_stages = list()
@@ -392,6 +414,7 @@ class Stage(object):
             self._input_tube,
             self._output_tubes,
             self._size,
+            self._do_stop_task,
             )
 
         # Build all downstream stages.
@@ -497,8 +520,9 @@ class FilterWorker(OrderedWorker):
                 if not self._drop_results and valid:
                     pipe_results.append(result)
 
-            # If there is room for the task, put it on the pipeline.
-            if count <= self._max_tasks-1:
+            # If there is room for the task, or if it's a "stop" request,
+            # put it on the pipeline.
+            if count <= self._max_tasks-1 or task is None:
                 pipe.put(task)
                 count += 1
 
@@ -516,10 +540,17 @@ class FilterWorker(OrderedWorker):
 class FilterStage(Stage):
     """Single worker stage running 
     :class:`~mpipe.FilterWorker`."""
-    def __init__(self, pipelines, max_tasks=1, drop_results=False):
+    def __init__(
+        self, 
+        pipelines, 
+        max_tasks=1, 
+        drop_results=False, 
+        do_stop_task=False,
+        ):
         super(FilterStage, self).__init__(
             FilterWorker, 
-            1, 
+            size=1, 
+            do_stop_task=do_stop_task,
             pipelines=pipelines, 
             max_tasks=max_tasks,
             drop_results=drop_results,
