@@ -6,7 +6,7 @@ import sys
 import os
 from subprocess import Popen, STDOUT, PIPE
 
-for entry in os.listdir(sys.argv[1]):
+for entry in sorted(os.listdir(sys.argv[1])):
 
     # Indentify the file -- whether it is gold.
     # Gold files are *.go for exact gold content, or 
