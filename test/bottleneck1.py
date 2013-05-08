@@ -6,9 +6,9 @@ def echo(value):
     time.sleep(0.013)
     return value
 
-pipe1 = Pipeline(OrderedStage(echo))
+pipe = Pipeline(OrderedStage(echo))
 for number in range(12):
-    pipe1.put(number)
+    pipe.put(number)
     time.sleep(0.010)
 
-pipe1.put(None)
+pipe.put(None)
