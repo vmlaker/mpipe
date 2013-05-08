@@ -476,25 +476,36 @@ class Pipeline(object):
 
 
 class FilterWorker(OrderedWorker):
-    """FilterWorker filters input to pipelines."""
+    """FilterWorker filters input to sub-pipelines."""
 
-    def __init__(self, pipelines, max_tasks=1, drop_results=False):
+    def __init__(self, stages, max_tasks=1, drop_results=False):
         """Constructor takes an iterable of
-        :class:`~mpipe.Pipeline` 
-        objects to be filtered and a maximum number of tasks
-        allowed in the stream of each pipeline. 
-        By default, the filter stage propagates a tuple (task, results) 
+        :class:`~mpipe.Stage` 
+        objects and creates one pipeline for each stage.
+        The filter then propagates its input task as input into each pipeline,
+        filtered by limiting the number of tasks allowed in the stream of a pipeline,
+        given as *max_tasks* parameter. Any task in excess is not added to
+        a topped-out pipeline.
+
+        For every input task (even tasks not propagated to sub-pipelines)
+        the filter stage produces a result.
+        By default, as its result, the filter stage produces a tuple (task, results) 
         where results is a list of results from all pipelines, 
         unless *drop_results* is True, in which case it propagates
-        only the task.
+        only the input task.
         """
-        self._pipelines = pipelines
+
+        # Create a pipeline out of each stage.
+        self._pipelines = list()
+        self._task_counts = dict()  # Maintain counts of tasks in pipes.
+        for stage in stages:
+            pipe = Pipeline(stage)
+            self._pipelines.append(pipe)
+            self._task_counts[pipe] = 0  # Initilize the task count.
+
         self._max_tasks = max_tasks  
         self._drop_results = drop_results
-        self._task_counts = dict()  # Counts of tasks in pipes.
-        self._results = dict()      # Latest results from pipes.
-        for pipe in pipelines:
-            self._task_counts[pipe] = 0
+        self._results = dict()  # Maintain a table of latest results from pipes.
 
     def doTask(self, task):
         """Filter input *task* to pipelines -- make sure each one has no more
@@ -544,16 +555,16 @@ class FilterStage(Stage):
     :class:`~mpipe.FilterWorker`."""
     def __init__(
         self, 
-        pipelines, 
+        stages, 
         max_tasks=1, 
         drop_results=False, 
-        do_stop_task=False,
+        do_stop_task=True,
         ):
         super(FilterStage, self).__init__(
             FilterWorker, 
             size=1, 
             do_stop_task=do_stop_task,
-            pipelines=pipelines, 
+            stages=stages,
             max_tasks=max_tasks,
             drop_results=drop_results,
             )

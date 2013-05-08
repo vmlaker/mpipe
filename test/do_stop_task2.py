@@ -5,16 +5,13 @@ class Echo(OrderedWorker):
         print(value)
 
 s1 = Stage(Echo, do_stop_task=True)
-p1 = Pipeline(s1)
-
 s2 = FilterStage(
-    (p1,),
+    (s1,), 
     max_tasks=999,
     do_stop_task=True,
     )
-p2 = Pipeline(s2)
-
+pipe = Pipeline(s2)
 for number in range(10):
-    p2.put(number)
+    pipe.put(number)
 
-p2.put(None)
+pipe.put(None)

@@ -6,11 +6,10 @@ def echo(value):
     time.sleep(0.013)
     return value
 
-pipe1 = Pipeline(OrderedStage(echo))
-pipe2 = Pipeline(FilterStage((pipe1,), max_tasks=2))
+stage = FilterStage((OrderedStage(echo),), max_tasks=2)
+pipe = Pipeline(stage)
 for number in range(12):
-    pipe2.put(number)
+    pipe.put(number)
     time.sleep(0.010)
 
-pipe1.put(None)
-pipe2.put(None)
+pipe.put(None)

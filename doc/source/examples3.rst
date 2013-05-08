@@ -41,7 +41,7 @@ Running such a filter in our scenario, we lose the 6th and 10th task:
 .. image:: filter.png
    :align: center
 
-Implementing the solution is easy: wrap the original pipeline into a :mod:`~mpipe.FilterStage` of a second pipeline:
+Implementing the solution is easy. Simply wrap the original stage into a :mod:`~mpipe.FilterStage`:
 
 .. container:: source-click-above
 
