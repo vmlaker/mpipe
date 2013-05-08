@@ -31,9 +31,11 @@ class Clean2(Command):
             elif os.path.isdir(entry):
                 shutil.rmtree(entry)
 
+from src.mpipe import __version__ as version
+
 setup(
     name         = 'mpipe',
-    version      = '1.0.2',
+    version      = version,
     description  = 'A multiprocess pipeline software framework.',
     url          = 'http://vmlaker.github.io/mpipe',
     author       = 'Velimir Mlaker',

@@ -3,6 +3,8 @@
 import sys
 import multiprocessing
 
+__version__ = '1.0.2'
+
 class TubeP:
     """A unidirectional communication channel 
     using :class:`multiprocessing.Connection` for underlying implementation."""

@@ -1,2 +1,3 @@
 include README.md
+recursive-include src __init__.py mpipe.py
 recursive-include test *.py *.go *.gor
