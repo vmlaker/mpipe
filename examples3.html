@@ -117,12 +117,12 @@ A single-worker stage that takes 30% longer to process each task inevitably bott
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.013</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">value</span>
 
-<span class="n">pipe1</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">OrderedStage</span><span class="p">(</span><span class="n">echo</span><span class="p">))</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">OrderedStage</span><span class="p">(</span><span class="n">echo</span><span class="p">))</span>
 <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">):</span>
-    <span class="n">pipe1</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+    <span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.010</span><span class="p">)</span>
 
-<span class="n">pipe1</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="source-click-below container">
@@ -138,12 +138,12 @@ A single-worker stage that takes 30% longer to process each task inevitably bott
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.013</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">value</span>
 
-<span class="n">pipe1</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">OrderedStage</span><span class="p">(</span><span class="n">echo</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">OrderedStage</span><span class="p">(</span><span class="n">echo</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">):</span>
-    <span class="n">pipe1</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+    <span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.010</span><span class="p">)</span>
 
-<span class="n">pipe1</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="source-click-below container">
@@ -155,7 +155,7 @@ If a task arrives while the pipeline is &#8220;full&#8221; (i.e. is currently wo
 This way we are able to keep up with the input flow, granted we lose any tasks that exceed the preset bandwidth.
 Running such a filter in our scenario, we lose the 6th and 10th task:</p>
 <img alt="_images/filter.png" class="align-center" src="_images/filter.png" />
-<p>Implementing the solution is easy: wrap the original pipeline into a <a class="reference internal" href="api.html#mpipe.FilterStage" title="mpipe.FilterStage"><tt class="xref py py-mod docutils literal"><span class="pre">FilterStage</span></tt></a> of a second pipeline:</p>
+<p>Implementing the solution is easy. Simply wrap the original stage into a <a class="reference internal" href="api.html#mpipe.FilterStage" title="mpipe.FilterStage"><tt class="xref py py-mod docutils literal"><span class="pre">FilterStage</span></tt></a>:</p>
 <div class="source-click-above container">
 [<a class="reference external" href="bottleneck3.py">source</a>]</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">time</span>
@@ -166,14 +166,13 @@ Running such a filter in our scenario, we lose the 6th and 10th task:</p>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.013</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">value</span>
 
-<span class="n">pipe1</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">OrderedStage</span><span class="p">(</span><span class="n">echo</span><span class="p">))</span>
-<span class="n">pipe2</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">FilterStage</span><span class="p">((</span><span class="n">pipe1</span><span class="p">,),</span> <span class="n">max_tasks</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">stage</span> <span class="o">=</span> <span class="n">FilterStage</span><span class="p">((</span><span class="n">OrderedStage</span><span class="p">(</span><span class="n">echo</span><span class="p">),),</span> <span class="n">max_tasks</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">):</span>
-    <span class="n">pipe2</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+    <span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.010</span><span class="p">)</span>
 
-<span class="n">pipe1</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
-<span class="n">pipe2</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="source-click-below container">
@@ -223,7 +222,7 @@ Running such a filter in our scenario, we lose the 6th and 10th task:</p>
   
     <div class="footer">
         &copy; Copyright 2013, Velimir Mlaker.
-      Last updated on May 03, 2013.
+      Last updated on May 08, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.8.
     </div>
 

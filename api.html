@@ -174,10 +174,12 @@ The implementation can publish the output result in one of two ways:
 
 <dl class="class">
 <dt id="mpipe.Stage">
-<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">Stage</tt><big>(</big><em>worker_class</em>, <em>size=1</em>, <em>**worker_args</em><big>)</big><a class="headerlink" href="#mpipe.Stage" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">Stage</tt><big>(</big><em>worker_class</em>, <em>size=1</em>, <em>do_stop_task=False</em>, <em>**worker_args</em><big>)</big><a class="headerlink" href="#mpipe.Stage" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Stage is an assembly of workers of identical functionality.</p>
 <p>Create a stage of workers of given <em>worker_class</em> implementation, 
 with <em>size</em> indicating the number of workers within the stage.
+<em>do_stop_task</em> indicates whether the worker&#8217;s doTask() method will be
+called on a &#8220;stop&#8221; (i.e. None) task.
 Any worker initialization arguments are given in <em>worker_args</em>.</p>
 <dl class="method">
 <dt id="mpipe.Stage.link">
@@ -286,21 +288,26 @@ using <a class="reference external" href="http://docs.python.org/library/multipr
 <hr class="docutils" />
 <dl class="class">
 <dt id="mpipe.FilterWorker">
-<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">FilterWorker</tt><big>(</big><em>pipelines</em>, <em>max_tasks=1</em>, <em>drop_results=False</em><big>)</big><a class="headerlink" href="#mpipe.FilterWorker" title="Permalink to this definition">¶</a></dt>
-<dd><p>FilterWorker filters input to pipelines.</p>
+<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">FilterWorker</tt><big>(</big><em>stages</em>, <em>max_tasks=1</em>, <em>drop_results=False</em><big>)</big><a class="headerlink" href="#mpipe.FilterWorker" title="Permalink to this definition">¶</a></dt>
+<dd><p>FilterWorker filters input to sub-pipelines.</p>
 <p>Constructor takes an iterable of
-<a class="reference internal" href="#mpipe.Pipeline" title="mpipe.Pipeline"><tt class="xref py py-class docutils literal"><span class="pre">Pipeline</span></tt></a> 
-objects to be filtered and a maximum number of tasks
-allowed in the stream of each pipeline. 
-By default, the filter stage propagates a tuple (task, results) 
+<a class="reference internal" href="#mpipe.Stage" title="mpipe.Stage"><tt class="xref py py-class docutils literal"><span class="pre">Stage</span></tt></a> 
+objects and creates one pipeline for each stage.
+The filter then propagates its input task as input into each pipeline,
+filtered by limiting the number of tasks allowed in the stream of a pipeline,
+given as <em>max_tasks</em> parameter. Any task in excess is not added to
+a topped-out pipeline.</p>
+<p>For every input task (even tasks not propagated to sub-pipelines)
+the filter stage produces a result.
+By default, as its result, the filter stage produces a tuple (task, results) 
 where results is a list of results from all pipelines, 
 unless <em>drop_results</em> is True, in which case it propagates
-only the task.</p>
+only the input task.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="mpipe.FilterStage">
-<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">FilterStage</tt><big>(</big><em>pipelines</em>, <em>max_tasks=1</em>, <em>drop_results=False</em><big>)</big><a class="headerlink" href="#mpipe.FilterStage" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">FilterStage</tt><big>(</big><em>stages</em>, <em>max_tasks=1</em>, <em>drop_results=False</em>, <em>do_stop_task=True</em><big>)</big><a class="headerlink" href="#mpipe.FilterStage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Single worker stage running 
 <a class="reference internal" href="#mpipe.FilterWorker" title="mpipe.FilterWorker"><tt class="xref py py-class docutils literal"><span class="pre">FilterWorker</span></tt></a>.</p>
 </dd></dl>
@@ -336,7 +343,7 @@ only the task.</p>
   
     <div class="footer">
         &copy; Copyright 2013, Velimir Mlaker.
-      Last updated on May 03, 2013.
+      Last updated on May 08, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.8.
     </div>
 
