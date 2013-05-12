@@ -478,7 +478,7 @@ class Pipeline(object):
 class FilterWorker(OrderedWorker):
     """FilterWorker filters input to sub-pipelines."""
 
-    def __init__(self, stages, max_tasks=1, drop_results=False):
+    def __init__(self, stages, max_tasks=1, drop_results=False, cache_results=False):
         """Constructor takes an iterable of
         :class:`~mpipe.Stage` 
         objects and creates one pipeline for each stage.
@@ -491,8 +491,13 @@ class FilterWorker(OrderedWorker):
         the filter stage produces a result.
         By default, as its result, the filter stage produces a tuple (task, results) 
         where results is a list of results from all pipelines, 
-        unless *drop_results* is True, in which case it propagates
-        only the input task.
+        unless *drop_results* is True, in which case it ignores any 
+        sub-pipeline result, and propagates only the input task.
+
+        If *drop_results* is False, then *cache_results* flag may be used
+        to save (i.e. cache) last results from pipelines. These are then 
+        used as repeated pipeline results when a pipeline does not produce
+        a result upon the current input task.        
         """
 
         # Create a pipeline out of each stage.
@@ -505,7 +510,10 @@ class FilterWorker(OrderedWorker):
 
         self._max_tasks = max_tasks  
         self._drop_results = drop_results
-        self._results = dict()  # Maintain a table of latest results from pipes.
+        self._cache_results = cache_results
+
+        # Maintain a table of last results from each pipeline.
+        self._last_results = dict()  
 
     def doTask(self, task):
         """Filter input *task* to pipelines -- make sure each one has no more
@@ -514,24 +522,30 @@ class FilterWorker(OrderedWorker):
         where *task* is the given task, and *results* is 
         a list of latest retrieved results from pipelines."""
 
-        pipe_results = list()
+        # If we're not caching, then clear the table of last results.
+        if not self._cache_results:
+            self._last_results = dict()
 
-        # Iterate the list of pipelines, draining each one,
-        # then feeding the task to all pipelines
-        # whose current stream has less than *max_tasks* tasks remaining.
+        # Iterate the list of pipelines, draining each one of any results.
+        # For pipelines whose current stream has less than *max_tasks* tasks 
+        # remaining, feed them the current task.
         for pipe in self._pipelines:
 
             count = self._task_counts[pipe]
 
             # Let's attempt to drain all (if any) results from the pipeline.
             valid = True
+            last_result = None
             while count and valid:
                 valid, result = pipe.get(sys.float_info.min)
-                count -= int(valid)
+                if valid:
+                    last_result = result
+                    count -= 1
 
-                # Add to result any last retrieved result.
-                if not self._drop_results and valid:
-                    pipe_results.append(result)
+            # Unless we're dropping results, save the last result (if any.)
+            if not self._drop_results:
+                if last_result is not None:
+                    self._last_results[pipe] = last_result
 
             # If there is room for the task, or if it's a "stop" request,
             # put it on the pipeline.
@@ -546,8 +560,9 @@ class FilterWorker(OrderedWorker):
         if self._drop_results:
             return task
 
-        # Otherwise, we are also propagating the results.
-        return task, pipe_results
+        # Otherwise, also propagate the assembly of pipeline results.
+        all_results = [res for res in self._last_results.values()]
+        return task, all_results
 
 
 class FilterStage(Stage):
@@ -558,6 +573,7 @@ class FilterStage(Stage):
         stages, 
         max_tasks=1, 
         drop_results=False, 
+        cache_results=False,
         do_stop_task=True,
         ):
         super(FilterStage, self).__init__(
@@ -567,6 +583,7 @@ class FilterStage(Stage):
             stages=stages,
             max_tasks=max_tasks,
             drop_results=drop_results,
+            cache_results=cache_results,
             )
 
 # The end.
