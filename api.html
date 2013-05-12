@@ -288,7 +288,7 @@ using <a class="reference external" href="http://docs.python.org/library/multipr
 <hr class="docutils" />
 <dl class="class">
 <dt id="mpipe.FilterWorker">
-<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">FilterWorker</tt><big>(</big><em>stages</em>, <em>max_tasks=1</em>, <em>drop_results=False</em><big>)</big><a class="headerlink" href="#mpipe.FilterWorker" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">FilterWorker</tt><big>(</big><em>stages</em>, <em>max_tasks=1</em>, <em>drop_results=False</em>, <em>cache_results=False</em><big>)</big><a class="headerlink" href="#mpipe.FilterWorker" title="Permalink to this definition">¶</a></dt>
 <dd><p>FilterWorker filters input to sub-pipelines.</p>
 <p>Constructor takes an iterable of
 <a class="reference internal" href="#mpipe.Stage" title="mpipe.Stage"><tt class="xref py py-class docutils literal"><span class="pre">Stage</span></tt></a> 
@@ -301,13 +301,17 @@ a topped-out pipeline.</p>
 the filter stage produces a result.
 By default, as its result, the filter stage produces a tuple (task, results) 
 where results is a list of results from all pipelines, 
-unless <em>drop_results</em> is True, in which case it propagates
-only the input task.</p>
+unless <em>drop_results</em> is True, in which case it ignores any 
+sub-pipeline result, and propagates only the input task.</p>
+<p>If <em>drop_results</em> is False, then <em>cache_results</em> flag may be used
+to save (i.e. cache) last results from pipelines. These are then 
+used as repeated pipeline results when a pipeline does not produce
+a result upon the current input task.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="mpipe.FilterStage">
-<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">FilterStage</tt><big>(</big><em>stages</em>, <em>max_tasks=1</em>, <em>drop_results=False</em>, <em>do_stop_task=True</em><big>)</big><a class="headerlink" href="#mpipe.FilterStage" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">FilterStage</tt><big>(</big><em>stages</em>, <em>max_tasks=1</em>, <em>drop_results=False</em>, <em>cache_results=False</em>, <em>do_stop_task=True</em><big>)</big><a class="headerlink" href="#mpipe.FilterStage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Single worker stage running 
 <a class="reference internal" href="#mpipe.FilterWorker" title="mpipe.FilterWorker"><tt class="xref py py-class docutils literal"><span class="pre">FilterWorker</span></tt></a>.</p>
 </dd></dl>
@@ -343,7 +347,7 @@ only the input task.</p>
   
     <div class="footer">
         &copy; Copyright 2013, Velimir Mlaker.
-      Last updated on May 08, 2013.
+      Last updated on May 12, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.8.
     </div>
 
