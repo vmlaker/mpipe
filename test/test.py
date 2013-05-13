@@ -4,14 +4,21 @@ comparison."""
 
 import sys
 import os
+import inspect
 from subprocess import Popen, STDOUT, PIPE
 
-for entry in sorted(os.listdir(sys.argv[1])):
+# Compute the absolute path to directory of this file.
+this_dir = os.path.dirname(
+    os.path.abspath(
+        inspect.getfile(
+            inspect.currentframe())))
 
-    # Indentify the file -- whether it is gold.
+for entry in sorted(os.listdir(this_dir)):
+
+    # Identify the file -- whether it is gold.
     # Gold files are *.go for exact gold content, or 
     # *.gor if "random" (to be sorted before comparing.
-    gold_fname = os.path.join(sys.argv[1], entry)
+    gold_fname = os.path.join(this_dir, entry)
     suffix = None
     for choice in ('.go', '.gor'):
         if gold_fname[-len(choice):] == choice:
