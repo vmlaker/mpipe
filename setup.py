@@ -51,7 +51,7 @@ setup(
     author       = 'Velimir Mlaker',
     author_email = 'velimir.mlaker@gmail.com',
     license      = 'MIT',
-    long_description = open('README.md').read(),
+    long_description = open('README.rst').read(),
     package_dir  = {'' : 'src'},
     py_modules   = ['mpipe'],
     cmdclass     = { 'clean2' : Clean2, 'test' : Test, },
