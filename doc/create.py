@@ -11,7 +11,7 @@ import os
 try:
     DEST = sys.argv[1]
 except:
-    print('Usage:  %s destination'%sys.argv[0])
+    print('Usage:  {0} destination'.format(sys.argv[0]))
     sys.exit(1)
 
 # Diagram filename prefixes.
@@ -35,10 +35,10 @@ saved = os.getcwd()
 os.chdir('source')
 def runDia(diagram):
     """Generate the diagrams using Dia."""
-    ifname = '%s.dia'%diagram
-    ofname = '%s.png'%diagram
-    cmd = 'dia -e %s %s'%(ofname, ifname)
-    print('  %s'%cmd)
+    ifname = '{0}.dia'.format(diagram)
+    ofname = '{0}.png'.format(diagram)
+    cmd = 'dia -e {0} {1}'.format(ofname, ifname)
+    print('  {0}'.format(cmd))
     subprocess.call(cmd, shell=True)
     return True
 pipe = mpipe.Pipeline(mpipe.UnorderedStage(runDia, len(diagrams)))
@@ -67,8 +67,8 @@ codes = (
     'bottleneck3.py',
     )
 def runCopy(fname):
-    cmd = 'cp %s source/'%os.path.join('..', 'test', fname)
-    print('  %s'%cmd)
+    cmd = 'cp {0} source/'.format(os.path.join('..', 'test', fname))
+    print('  {0}'.format(cmd))
     subprocess.call(cmd, shell=True)
     return True
 pipe = mpipe.Pipeline(mpipe.UnorderedStage(runCopy, len(codes)))
@@ -79,15 +79,15 @@ for result in pipe.results():
     pass
     
 # Build the Sphinx documentation pages.
-cmd = 'make BUILDDIR=%s clean html'%DEST
-print('  %s'%cmd)
+cmd = 'make BUILDDIR={0} clean html'.format(DEST)
+print('  {0}'.format(cmd))
 subprocess.call(cmd, shell=True)
 
 # Move the .py examples to the build/ destination directory
 # so that documentation links to source code will work.
 def runMove(fname):
-    cmd = 'mv %s build/html/'%os.path.join('source', fname)
-    print('  %s'%cmd)
+    cmd = 'mv {0} build/html/'.format(os.path.join('source', fname))
+    print('  {0}'.format(cmd))
     subprocess.call(cmd, shell=True)
     return True
 pipe = mpipe.Pipeline(mpipe.UnorderedStage(runMove, len(codes)))
@@ -99,10 +99,10 @@ pipe.put(None)
 saved = os.getcwd()
 os.chdir('source')
 def runDia(diagram):
-    fname1 = '%s.dia~'%diagram
-    fname2 = '%s.png'%diagram
-    cmd = 'rm -f %s %s'%(fname1, fname2)
-    print('  %s'%cmd)
+    fname1 = '{0}.dia~'.format(diagram)
+    fname2 = '{0}.png'.format(diagram)
+    cmd = 'rm -f {0} {1}'.format(fname1, fname2)
+    print('  {0}'.format(cmd))
     subprocess.call(cmd, shell=True)
     return True
 pipe = mpipe.Pipeline(mpipe.UnorderedStage(runDia, len(diagrams)))
@@ -112,5 +112,3 @@ pipe.put(None)
 for result in pipe.results():
     pass
 os.chdir(saved)
-
-# The end.

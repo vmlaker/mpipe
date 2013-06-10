@@ -16,7 +16,7 @@ class Accumulator(OrderedWorker):
             last10.popleft()
 
 def echo(value):
-    print('value = %s'%value)
+    print('value = {0}'.format(value))
 
 stage1 = Stage(Accumulator)
 stage2 = OrderedStage(echo, 50)

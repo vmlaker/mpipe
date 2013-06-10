@@ -14,7 +14,7 @@ p1 = Pipeline(s1)
 def pull(task):
     for task, result in p1.results():
         if result:
-            print('%d %d'%(task, result[0]))
+            print('{0} {1}'.format(task, result[0]))
 
 p2 = Pipeline(OrderedStage(pull))
 p2.put(True)

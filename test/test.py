@@ -33,7 +33,7 @@ for entry in sorted(os.listdir(this_dir)):
 
     # Run the test.
     test_fname = gold_fname[:-len(suffix):] + '.py'
-    command = '%s %s'%(sys.executable, test_fname)
+    command = '{0} {1}'.format(sys.executable, test_fname)
     print(command)
     p = Popen(command, shell=True, stdout=PIPE, stderr=STDOUT)
     test_lines = p.stdout.readlines()
@@ -49,7 +49,7 @@ for entry in sorted(os.listdir(this_dir)):
         gline = gline.strip()
         tline = tline.strip().decode()
         if gline != tline:
-            print('Error running: %s'%command)
+            print('Error running: {0}'.format(command))
             failed = True            
             break
 
@@ -60,5 +60,3 @@ for entry in sorted(os.listdir(this_dir)):
         for line in test_lines:
             f.write(line.decode())
         f.close
-        
-# The end.

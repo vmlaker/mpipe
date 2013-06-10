@@ -21,7 +21,7 @@ class Clean2(Command):
             if entry not in to_remove:
                 continue
             entry = os.path.join(this_dir, entry)
-            print('erasing %s'%entry)
+            print('erasing {0}'.format(entry))
             if os.path.isfile(entry):
                 os.remove(entry)
             elif os.path.isdir(entry):
@@ -37,7 +37,7 @@ class Test(Command):
         this_dir = os.path.dirname(inspect.getfile(inspect.currentframe()))
         this_dir = os.path.normpath(this_dir)
         args = os.path.join(this_dir, 'test', 'test.py')
-        command = '%s %s'%(sys.executable, args)
+        command = '{0} {1}'.format(sys.executable, args)
         print(command)
         subprocess.call(command, shell=True)
 
