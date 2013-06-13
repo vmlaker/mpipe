@@ -2,13 +2,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome! &mdash; Documentation</title>
+    <title>Welcome! &mdash; MPipe Documentation</title>
+    
     <link rel="stylesheet" href="_static/style.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
@@ -22,7 +25,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="Documentation" href="#" />
+    <link rel="top" title="MPipe Documentation" href="#" />
     <link rel="next" title="MPipe documentation contents" href="docs.html" />
  
     <style type="text/css">
@@ -102,9 +105,9 @@
 </div>
 <div class="section" id="welcome">
 <h1>Welcome!<a class="headerlink" href="#welcome" title="Permalink to this headline">¶</a></h1>
-<p>MPipe is a Python library that lets you easily write multi-stage, multiprocess pipeline algorithms. Consider a two-stage pipeline that increments and doubles numbers, each stage concurrently running three workers. Something like this:</p>
+<p>MPipe is a tiny Python module that lets you write multi-stage, multiprocess pipeline algorithms with remarkable ease. Consider the following workflow:</p>
 <img alt="_images/tiny.png" class="align-center" src="_images/tiny.png" />
-<p>Using the MPipe module, you would write it like this:</p>
+<p>It&#8217;s a two-stage pipeline that increments and doubles numbers, each stage concurrently running three workers. With MPipe, here&#8217;s one way to put it in code:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">mpipe</span> <span class="kn">import</span> <span class="n">OrderedStage</span><span class="p">,</span> <span class="n">Pipeline</span>
 
 <span class="k">def</span> <span class="nf">increment</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
@@ -126,20 +129,25 @@
     <span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The above code runs a total of seven processes: one for the main program and six for the two stages (each stage running three workers.)</p>
+<p>The above snippet runs a total of seven processes: one for the main program and six for the two stages (each stage running three workers.)</p>
 </div>
 <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<p>Get MPipe now! Easiest way is using <tt class="docutils literal"><span class="pre">pip</span></tt>:</p>
+<p>Get MPipe now! Easiest way is using <em>pip</em>:</p>
 <div class="highlight-python"><pre>pip install --user mpipe</pre>
 </div>
-<p>For other ways of getting MPipe installed on your system, check out <a class="reference internal" href="download.html"><em>Installation instructions</em></a>.</p>
+<p>Check out <a class="reference internal" href="download.html"><em>Installation instructions</em></a> for other ways of getting MPipe up and running on your system.</p>
 </div>
 <div class="section" id="got-it-now-what">
 <h1>Got it, now what?<a class="headerlink" href="#got-it-now-what" title="Permalink to this headline">¶</a></h1>
-<p>Start piping right away by running the <a class="reference internal" href="examples.html"><em>Examples</em></a>.
-Read the <a class="reference internal" href="cookbook.html"><em>MPipe cookbook</em></a> for a step-by-step guide to creating pipelines.
+<p>Start piping right away by running thrugh the <a class="reference internal" href="examples.html"><em>Examples</em></a>.
+If you want a step-by-step guide to creating pipelines, read the <a class="reference internal" href="cookbook.html"><em>MPipe cookbook</em></a>.
 For theory and design, take a look at <a class="reference internal" href="concepts.html"><em>Pipeline concepts</em></a>.</p>
+<hr class="docutils" />
+<div class="figure align-center">
+<a class="reference external image-reference" href="http://github.com/vmlaker/mpipe"><img alt="_images/GitHub-Mark-64px.png" src="_images/GitHub-Mark-64px.png" /></a>
+<p class="caption">MPipe is a <a class="reference external" href="http://github.com/vmlaker/mpipe">project on GitHub</a>.</p>
+</div>
 </div>
 
 
@@ -168,8 +176,8 @@ For theory and design, take a look at <a class="reference internal" href="concep
   
     <div class="footer">
         &copy; Copyright 2013, Velimir Mlaker.
-      Last updated on May 24, 2013.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.8.
+      Last updated on Jun 13, 2013.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
 
   </body>

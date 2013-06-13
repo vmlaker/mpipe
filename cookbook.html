@@ -2,13 +2,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>MPipe cookbook &mdash; Documentation</title>
+    <title>MPipe cookbook &mdash; MPipe Documentation</title>
+    
     <link rel="stylesheet" href="_static/style.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
@@ -22,7 +25,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="Documentation" href="index.html" />
+    <link rel="top" title="MPipe Documentation" href="index.html" />
     <link rel="next" title="Examples" href="examples.html" />
     <link rel="prev" title="Pipeline concepts" href="concepts.html" />
  
@@ -110,25 +113,25 @@
 <col width="64%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Framework element</th>
+<tr class="row-odd"><th class="head">Framework element</th>
 <th class="head">Python construct</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td><em>task</em>, <em>result</em></td>
+<tr class="row-even"><td><em>task</em>, <em>result</em></td>
 <td>any Python picklable object</td>
 </tr>
-<tr><td><em>worker</em></td>
+<tr class="row-odd"><td><em>worker</em></td>
 <td>single-argument function,
 <a class="reference internal" href="api.html#mpipe.OrderedWorker" title="mpipe.OrderedWorker"><tt class="xref py py-mod docutils literal"><span class="pre">OrderedWorker</span></tt></a> or
 <a class="reference internal" href="api.html#mpipe.UnorderedWorker" title="mpipe.UnorderedWorker"><tt class="xref py py-mod docutils literal"><span class="pre">UnorderedWorker</span></tt></a></td>
 </tr>
-<tr><td><em>stage</em></td>
+<tr class="row-even"><td><em>stage</em></td>
 <td><a class="reference internal" href="api.html#mpipe.Stage" title="mpipe.Stage"><tt class="xref py py-mod docutils literal"><span class="pre">Stage</span></tt></a>,
 <a class="reference internal" href="api.html#mpipe.OrderedStage" title="mpipe.OrderedStage"><tt class="xref py py-mod docutils literal"><span class="pre">OrderedStage</span></tt></a> or
 <a class="reference internal" href="api.html#mpipe.UnorderedStage" title="mpipe.UnorderedStage"><tt class="xref py py-mod docutils literal"><span class="pre">UnorderedStage</span></tt></a></td>
 </tr>
-<tr><td><em>pipeline</em></td>
+<tr class="row-odd"><td><em>pipeline</em></td>
 <td><a class="reference internal" href="api.html#mpipe.Pipeline" title="mpipe.Pipeline"><tt class="xref py py-mod docutils literal"><span class="pre">Pipeline</span></tt></a></td>
 </tr>
 </tbody>
@@ -153,7 +156,7 @@
    <span class="k">return</span> <span class="n">result</span>
 </pre></div>
 </div>
-<p>The function&#8217;s return value becomes result of the stage. If it doesn&#8217;t return anything (or <tt class="xref docutils literal"><span class="pre">None</span></tt>), then the stage is considered a dead-end stage, not producing any output.</p>
+<p>The function&#8217;s return value becomes result of the stage. If it doesn&#8217;t return anything (or <tt class="docutils literal"><span class="pre">None</span></tt>), then the stage is considered a dead-end stage, not producing any output.</p>
 <p>The other way is to subclass from <a class="reference internal" href="api.html#mpipe.OrderedWorker" title="mpipe.OrderedWorker"><tt class="xref py py-mod docutils literal"><span class="pre">OrderedWorker</span></tt></a> or <a class="reference internal" href="api.html#mpipe.UnorderedWorker" title="mpipe.UnorderedWorker"><tt class="xref py py-mod docutils literal"><span class="pre">UnorderedWorker</span></tt></a> and put the actual work inside the <tt class="xref py py-meth docutils literal"><span class="pre">doTask()</span></tt> method:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">MyWorker</span><span class="p">(</span><span class="n">mpipe</span><span class="o">.</span><span class="n">OrderedWorker</span><span class="p">):</span>
    <span class="k">def</span> <span class="nf">doTask</span><span class="p">(</span><span class="n">task</span><span class="p">):</span>
@@ -218,13 +221,13 @@
    <span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>At some point in manipulating the pipeline, the special task <tt class="xref docutils literal"><span class="pre">None</span></tt> should be put on it.</p>
+<p>At some point in manipulating the pipeline, the special task <tt class="docutils literal"><span class="pre">None</span></tt> should be put on it.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This signals the end of input stream and eventually terminates all worker processes, effectively &#8220;closing&#8221; the pipeline to further input.</p>
-<p>The <tt class="xref docutils literal"><span class="pre">None</span></tt> task can be thought of as a &#8220;stop&#8221; request. It becomes part of the sequence of input tasks streaming into the pipeline and, like other tasks, it propagates through all stages. However, it is processed in a special way: when it arrives at a stage, it signals all worker processes within to complete any current task they may be running, and to terminate execution. Before the last worker terminates, it propagates the &#8220;stop&#8221; request to the next downstram stage (or stages, if forked.)</p>
-<p>The <tt class="xref docutils literal"><span class="pre">None</span></tt> task should be the last input to the pipeline. After it is added to the stream of tasks, the pipeline continues to process any previous tasks still in the system. After worker processes terminate, results can still be accesses in the usual way (using <a class="reference internal" href="api.html#mpipe.Pipeline.get" title="mpipe.Pipeline.get"><tt class="xref py py-meth docutils literal"><span class="pre">get()</span></tt></a> or <a class="reference internal" href="api.html#mpipe.Pipeline.results" title="mpipe.Pipeline.results"><tt class="xref py py-meth docutils literal"><span class="pre">results()</span></tt></a>) until the pipeline is emptied. However, any &#8220;real&#8221; task (i.e. not <tt class="xref docutils literal"><span class="pre">None</span></tt>) put on the pipeline following the &#8220;stop&#8221; request will not be processed.</p>
+<p>The <tt class="docutils literal"><span class="pre">None</span></tt> task can be thought of as a &#8220;stop&#8221; request. It becomes part of the sequence of input tasks streaming into the pipeline and, like other tasks, it propagates through all stages. However, it is processed in a special way: when it arrives at a stage, it signals all worker processes within to complete any current task they may be running, and to terminate execution. Before the last worker terminates, it propagates the &#8220;stop&#8221; request to the next downstram stage (or stages, if forked.)</p>
+<p>The <tt class="docutils literal"><span class="pre">None</span></tt> task should be the last input to the pipeline. After it is added to the stream of tasks, the pipeline continues to process any previous tasks still in the system. After worker processes terminate, results can still be accesses in the usual way (using <a class="reference internal" href="api.html#mpipe.Pipeline.get" title="mpipe.Pipeline.get"><tt class="xref py py-meth docutils literal"><span class="pre">get()</span></tt></a> or <a class="reference internal" href="api.html#mpipe.Pipeline.results" title="mpipe.Pipeline.results"><tt class="xref py py-meth docutils literal"><span class="pre">results()</span></tt></a>) until the pipeline is emptied. However, any &#8220;real&#8221; task (i.e. not <tt class="docutils literal"><span class="pre">None</span></tt>) put on the pipeline following the &#8220;stop&#8221; request will not be processed.</p>
 </div>
 </div>
 
@@ -257,8 +260,8 @@
   
     <div class="footer">
         &copy; Copyright 2013, Velimir Mlaker.
-      Last updated on May 24, 2013.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.8.
+      Last updated on Jun 13, 2013.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
 
   </body>
