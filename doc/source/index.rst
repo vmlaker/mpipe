@@ -38,7 +38,7 @@ Check out :doc:`download` for other ways of getting |NAME| up and running on you
 Got it, now what?
 *****************
 
-Start piping right away by running thrugh the :doc:`examples`.
+Start piping right away by running through the :doc:`examples`.
 If you want a step-by-step guide to creating pipelines, read the :doc:`cookbook`.
 For theory and design, take a look at :doc:`concepts`.
 
