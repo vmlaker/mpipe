@@ -24,5 +24,3 @@
 
 .. toctree::
    examples
-
-.. the end.
