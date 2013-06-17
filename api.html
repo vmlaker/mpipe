@@ -187,8 +187,9 @@ Any worker initialization arguments are given in <em>worker_args</em>.</p>
 <dl class="method">
 <dt id="mpipe.Stage.link">
 <tt class="descname">link</tt><big>(</big><em>next_stage</em><big>)</big><a class="headerlink" href="#mpipe.Stage.link" title="Permalink to this definition">¶</a></dt>
-<dd><p>Link to the given downstream stage object
-by adding it&#8217;s input tube to the list of this stage&#8217;s output tubes.</p>
+<dd><p>Link to the given downstream stage <em>next_stage</em>
+by adding it&#8217;s input tube to the list of this stage&#8217;s output tubes.
+Return this stage.</p>
 </dd></dl>
 
 <dl class="method">
@@ -350,7 +351,7 @@ a result upon the current input task.</p>
   
     <div class="footer">
         &copy; Copyright 2013, Velimir Mlaker.
-      Last updated on Jun 13, 2013.
+      Last updated on Jun 17, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
 

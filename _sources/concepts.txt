@@ -91,5 +91,3 @@ The gist of structuring your program as a pipeline is to maximize algorithm spee
 3. Pipeline can fork into parallel stages.
 
   If the program workflow can be split into multiple independent execution paths, then parallel paths can be processed simultaneously.
-  
-.. the end
