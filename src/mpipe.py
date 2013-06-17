@@ -3,7 +3,7 @@
 import sys
 import multiprocessing
 
-__version__ = '1.0.4'
+__version__ = '1.0.5'
 
 class TubeP:
     """A unidirectional communication channel 
@@ -386,10 +386,12 @@ class Stage(object):
         return result
 
     def link(self, next_stage):
-        """Link to the given downstream stage object
-        by adding it's input tube to the list of this stage's output tubes."""
+        """Link to the given downstream stage *next_stage*
+        by adding it's input tube to the list of this stage's output tubes.
+        Return this stage."""
         self._output_tubes.append(next_stage._input_tube)
         self._next_stages.append(next_stage)
+        return self
 
     def getLeaves(self):
         """Return the downstream leaf stages of this stage."""
