@@ -69,43 +69,15 @@
  
       </ul>
     </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
-  <h3>API Search</h3>
-  
-  <form class="search" action="search.html" method="get">
-<!--
-    <div class="search-input">
-      <input type="text" name="q" />
-    </div>
-    <div class="search-go">
-      <input type="submit" value="Go" />
-    </div>
--->
-      <input class="search-input" type="text" name="q" />
-      <input class="search-go" type="submit" value="Go" />
-
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-  
-  <p class="searchtip">
-    Search the MPipe module for classes and functions.
-  </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
 
     <div class="document">
       <div class="documentwrapper">
-        <div class="bodywrapper">
           <div class="body">
             
   <div class="section" id="name-cookbook">
 <span id="operation"></span><h1>MPipe cookbook<a class="headerlink" href="#name-cookbook" title="Permalink to this headline">¶</a></h1>
-<p>A pipeline algorithm is implemented using classes from the <a class="reference internal" href="api.html#module-mpipe" title="mpipe"><tt class="xref py py-mod docutils literal"><span class="pre">mpipe</span></tt></a> module. Elements of the pipeline framework map to specific Python objects:</p>
+<p>A pipeline algorithm is implemented using classes from the <a class="reference internal" href="api.html#module-mpipe" title="mpipe"><tt class="xref py py-mod docutils literal"><span class="pre">mpipe</span></tt></a> module.
+The building blocks of pipelines map to specific Python objects:</p>
 <blockquote>
 <div><table border="1" class="docutils">
 <colgroup>
@@ -137,7 +109,7 @@
 </tbody>
 </table>
 </div></blockquote>
-<p>It may be useful to keep in mind that MPipe is built using classes from Python&#8217;s standard <a class="reference external" href="http://docs.python.org/library/multiprocessing.html#multiprocessing" title="(in Python v2.7)"><tt class="xref py py-mod docutils literal"><span class="pre">multiprocessing</span></tt></a> module. One may think of it as a layer on top, encapsulating classes like <a class="reference external" href="http://docs.python.org/library/multiprocessing.html#multiprocessing.Process" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">Process</span></tt></a>, <a class="reference external" href="http://docs.python.org/library/multiprocessing.html#multiprocessing.Queue" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">Queue</span></tt></a> and <a class="reference external" href="http://docs.python.org/library/multiprocessing.html#multiprocessing.Connection" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">Connection</span></tt></a> with behavior specific to the pipeline framework.</p>
+<p>It may be useful to keep in mind that MPipe is built using classes from Python&#8217;s standard <a class="reference external" href="http://docs.python.org/library/multiprocessing.html#multiprocessing" title="(in Python v2.7)"><tt class="xref py py-mod docutils literal"><span class="pre">multiprocessing</span></tt></a> module. It is a layer on top, encapsulating classes like <a class="reference external" href="http://docs.python.org/library/multiprocessing.html#multiprocessing.Process" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">Process</span></tt></a>, <a class="reference external" href="http://docs.python.org/library/multiprocessing.html#multiprocessing.Queue" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">Queue</span></tt></a> and <a class="reference external" href="http://docs.python.org/library/multiprocessing.html#multiprocessing.Connection" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">Connection</span></tt></a> with behavior specific to the pipeline workflow.</p>
 <p>The procedure of building and running a pipeline is a sequence of five steps:</p>
 <blockquote>
 <div><ol class="arabic simple">
@@ -164,7 +136,7 @@
       <span class="k">return</span> <span class="n">result</span>
 </pre></div>
 </div>
-<p>Just like when using a standalone function, stage result can be the return value. Another way is to call <tt class="xref py py-meth docutils literal"><span class="pre">putResult()</span></tt>. This can be useful if you want your worker to continue processing after registering the stage result:</p>
+<p>Just like when using a standalone function, stage result is the return value of <tt class="xref py py-meth docutils literal"><span class="pre">doTask()</span></tt>. Another option is to call <tt class="xref py py-meth docutils literal"><span class="pre">putResult()</span></tt>. This can be useful if you want your worker to continue processing after registering the stage result:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">MyWorker</span><span class="p">(</span><span class="n">mpipe</span><span class="o">.</span><span class="n">OrderedWorker</span><span class="p">):</span>
    <span class="k">def</span> <span class="nf">doTask</span><span class="p">(</span><span class="n">task</span><span class="p">):</span>
       <span class="n">result</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
@@ -187,11 +159,16 @@
 </div>
 <div class="section" id="link-the-stages">
 <span id="id3"></span><h2>3. Link the stages<a class="headerlink" href="#link-the-stages" title="Permalink to this headline">¶</a></h2>
-<p>If there are multiple stages in the workflow, they can be linked together:</p>
+<p>If there are multiple stages in the workflow, they can be linked together in series:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">stage1</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">stage2</span><span class="p">)</span>
+<span class="n">stage2</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">stage3</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Output of one stage may be forked into multiple downstream stages, splitting the workflow into parallel streams of execution:</p>
+<p>The <a class="reference internal" href="api.html#mpipe.Stage.link" title="mpipe.Stage.link"><tt class="xref py py-meth docutils literal"><span class="pre">link()</span></tt></a> method returns the stage object it is called on, allowing you to serially link many stages in a single statement. Here&#8217;s the equivalent of above:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">stage1</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">stage2</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">stage3</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Output of one stage may also be forked into multiple downstream stages, splitting the workflow into parallel streams of execution:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">stage1</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">stage2</span><span class="p">)</span>
 <span class="n">stage1</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">stage3</span><span class="p">)</span>
 <span class="n">stage1</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">stage4</span><span class="p">)</span>
@@ -216,7 +193,7 @@
 <div class="highlight-python"><div class="highlight"><pre><span class="n">result</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Alternatively, one can iterate the output stream with <a class="reference internal" href="api.html#mpipe.Pipeline.results" title="mpipe.Pipeline.results"><tt class="xref py py-meth docutils literal"><span class="pre">results()</span></tt></a>:</p>
+<p>Alternatively, one can iterate the output stream with <a class="reference internal" href="api.html#mpipe.Pipeline.results" title="mpipe.Pipeline.results"><tt class="xref py py-meth docutils literal"><span class="pre">results()</span></tt></a> method:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">pipe</span><span class="o">.</span><span class="n">results</span><span class="p">():</span>
    <span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </pre></div>
@@ -233,7 +210,6 @@
 
 
           </div>
-        </div>
       </div>
       <div class="clearer"></div>
     </div>
@@ -260,7 +236,7 @@
   
     <div class="footer">
         &copy; Copyright 2013, Velimir Mlaker.
-      Last updated on Jun 17, 2013.
+      Last updated on Jul 20, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
 

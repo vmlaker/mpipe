@@ -69,38 +69,9 @@
  
       </ul>
     </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
-  <h3>API Search</h3>
-  
-  <form class="search" action="search.html" method="get">
-<!--
-    <div class="search-input">
-      <input type="text" name="q" />
-    </div>
-    <div class="search-go">
-      <input type="submit" value="Go" />
-    </div>
--->
-      <input class="search-input" type="text" name="q" />
-      <input class="search-go" type="submit" value="Go" />
-
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-  
-  <p class="searchtip">
-    Search the MPipe module for classes and functions.
-  </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
 
     <div class="document">
       <div class="documentwrapper">
-        <div class="bodywrapper">
           <div class="body">
             
   <div class="section" id="module-mpipe">
@@ -111,26 +82,29 @@
 <dd><p>An OrderedWorker object operates in a stage where the order 
 of output results always matches that of corresponding input tasks.</p>
 <p>A worker is linked to its two nearest neighbors &#8211; the previous 
-worker and the next &#8211; all workers in the stage thusly linked 
+worker and the next &#8211; all workers in the stage thusly connected
 in circular fashion. 
-Input tasks are fetched in this order, and before publishing it&#8217;s result, 
-a worker first waits for it&#8217;s previous neighbor to do the same.</p>
-<dl class="method">
-<dt id="mpipe.OrderedWorker.doInit">
-<tt class="descname">doInit</tt><big>(</big><big>)</big><a class="headerlink" href="#mpipe.OrderedWorker.doInit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implement this method in the subclass, if there&#8217;s need
-for any additional initialization upon process startup.
-This method is called after the worker process starts,
-and before it begins processing tasks.</p>
-</dd></dl>
-
+Input tasks are fetched in this order. Before publishing its result, 
+a worker first waits for its previous neighbor to do the same.</p>
 <dl class="method">
 <dt id="mpipe.OrderedWorker.doTask">
 <tt class="descname">doTask</tt><big>(</big><em>task</em><big>)</big><a class="headerlink" href="#mpipe.OrderedWorker.doTask" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implement this method in the subclass to be executed for each task.
-The implementation can publish the output result in one of two ways: 
-1) either by calling <a class="reference internal" href="#mpipe.OrderedWorker.putResult" title="mpipe.OrderedWorker.putResult"><tt class="xref py py-meth docutils literal"><span class="pre">putResult()</span></tt></a> and returning <tt class="docutils literal"><span class="pre">None</span></tt> or
-2) by returning the result (other than <tt class="docutils literal"><span class="pre">None</span></tt>.)</p>
+<dd><p>Implement this method in the subclass with work functionality
+to be executed on each <em>task</em> object.
+The implementation can publish the output result in one of two ways,
+either by 1) calling <a class="reference internal" href="#mpipe.OrderedWorker.putResult" title="mpipe.OrderedWorker.putResult"><tt class="xref py py-meth docutils literal"><span class="pre">putResult()</span></tt></a> and returning <tt class="docutils literal"><span class="pre">None</span></tt>, or
+2) returning the result (other than <tt class="docutils literal"><span class="pre">None</span></tt>.)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mpipe.OrderedWorker.doInit">
+<tt class="descname">doInit</tt><big>(</big><big>)</big><a class="headerlink" href="#mpipe.OrderedWorker.doInit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implement this method in the subclass in case there&#8217;s need
+for additional initialization after process startup.
+Since this class inherits from <a class="reference external" href="http://docs.python.org/library/multiprocessing.html#multiprocessing.Process" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">multiprocessing.Process</span></tt></a>,
+its constructor executes in the spawning process.
+This method allows additional code to be run in the forked process,
+before the worker begins processing input tasks.</p>
 </dd></dl>
 
 <dl class="method">
@@ -145,26 +119,30 @@ The implementation can publish the output result in one of two ways:
 <dt id="mpipe.UnorderedWorker">
 <em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">UnorderedWorker</tt><a class="headerlink" href="#mpipe.UnorderedWorker" title="Permalink to this definition">¶</a></dt>
 <dd><p>An UnorderedWorker object operates independently of other
-workers in the stage, publishing it&#8217;s result without coordinating
-with others. The order of output results may not match 
+workers in the stage, fetching the first available task, and
+publishing its result whenever it is done
+(without coordinating with neighboring workers.)
+Consequently, the order of output results may not match 
 that of corresponding input tasks.</p>
-<dl class="method">
-<dt id="mpipe.UnorderedWorker.doInit">
-<tt class="descname">doInit</tt><big>(</big><big>)</big><a class="headerlink" href="#mpipe.UnorderedWorker.doInit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implement this method in the subclass, if there&#8217;s need
-for any additional initialization upon process startup.
-This method is called after the worker process starts,
-after the worker process starts,
-and before it begins processing tasks.</p>
-</dd></dl>
-
 <dl class="method">
 <dt id="mpipe.UnorderedWorker.doTask">
 <tt class="descname">doTask</tt><big>(</big><em>task</em><big>)</big><a class="headerlink" href="#mpipe.UnorderedWorker.doTask" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implement this method in the subclass to be executed for each task.
-The implementation can publish the output result in one of two ways: 
-1) either by calling <a class="reference internal" href="#mpipe.UnorderedWorker.putResult" title="mpipe.UnorderedWorker.putResult"><tt class="xref py py-meth docutils literal"><span class="pre">putResult()</span></tt></a> and returning <tt class="docutils literal"><span class="pre">None</span></tt> or
-2) by returning the result (other than <tt class="docutils literal"><span class="pre">None</span></tt>.)</p>
+<dd><p>Implement this method in the subclass with work
+to be executed on each <em>task</em> object.
+The implementation can publish the output result in one of two ways,
+either by 1) calling <a class="reference internal" href="#mpipe.UnorderedWorker.putResult" title="mpipe.UnorderedWorker.putResult"><tt class="xref py py-meth docutils literal"><span class="pre">putResult()</span></tt></a> and returning <tt class="docutils literal"><span class="pre">None</span></tt>, or
+2) returning the result (other than <tt class="docutils literal"><span class="pre">None</span></tt>.)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mpipe.UnorderedWorker.doInit">
+<tt class="descname">doInit</tt><big>(</big><big>)</big><a class="headerlink" href="#mpipe.UnorderedWorker.doInit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implement this method in the subclass in case there&#8217;s need
+for additional initialization after process startup.
+Since this class inherits from <a class="reference external" href="http://docs.python.org/library/multiprocessing.html#multiprocessing.Process" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">multiprocessing.Process</span></tt></a>,
+its constructor executes in the spawning process.
+This method allows additional code to be run in the forked process,
+before the worker begins processing input tasks.</p>
 </dd></dl>
 
 <dl class="method">
@@ -175,20 +153,27 @@ The implementation can publish the output result in one of two ways:
 
 </dd></dl>
 
+<hr class="docutils" />
 <dl class="class">
 <dt id="mpipe.Stage">
-<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">Stage</tt><big>(</big><em>worker_class</em>, <em>size=1</em>, <em>do_stop_task=False</em>, <em>**worker_args</em><big>)</big><a class="headerlink" href="#mpipe.Stage" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">Stage</tt><big>(</big><em>worker_class</em>, <em>size=1</em>, <em>disable_result=False</em>, <em>do_stop_task=False</em>, <em>**worker_args</em><big>)</big><a class="headerlink" href="#mpipe.Stage" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Stage is an assembly of workers of identical functionality.</p>
 <p>Create a stage of workers of given <em>worker_class</em> implementation, 
 with <em>size</em> indicating the number of workers within the stage.
-<em>do_stop_task</em> indicates whether the worker&#8217;s doTask() method will be
-called on a &#8220;stop&#8221; (i.e. None) task.
-Any worker initialization arguments are given in <em>worker_args</em>.</p>
+<em>disable_result</em> overrides any result defined in worker implementation,
+and does not propagate it downstream (equivalent to the worker
+producing <tt class="docutils literal"><span class="pre">None</span></tt> result.)</p>
+<p><em>do_stop_task</em> indicates whether the incoming &#8220;stop&#8221; signal (<tt class="docutils literal"><span class="pre">None</span></tt> value)
+will actually be passed to the worker as a task. When using this option,
+implement your worker so that, in addition to regular incoming tasks,
+it handles the <tt class="docutils literal"><span class="pre">None</span></tt> value as well. This will be
+the worker&#8217;s final task before the process exits.</p>
+<p>Any worker initialization arguments are given in <em>worker_args</em>.</p>
 <dl class="method">
 <dt id="mpipe.Stage.link">
 <tt class="descname">link</tt><big>(</big><em>next_stage</em><big>)</big><a class="headerlink" href="#mpipe.Stage.link" title="Permalink to this definition">¶</a></dt>
 <dd><p>Link to the given downstream stage <em>next_stage</em>
-by adding it&#8217;s input tube to the list of this stage&#8217;s output tubes.
+by adding its input tube to the list of this stage&#8217;s output tubes.
 Return this stage.</p>
 </dd></dl>
 
@@ -208,7 +193,7 @@ Return this stage.</p>
 
 <dl class="class">
 <dt id="mpipe.OrderedStage">
-<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">OrderedStage</tt><big>(</big><em>target</em>, <em>size=1</em><big>)</big><a class="headerlink" href="#mpipe.OrderedStage" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">OrderedStage</tt><big>(</big><em>target</em>, <em>size=1</em>, <em>disable_result=False</em><big>)</big><a class="headerlink" href="#mpipe.OrderedStage" title="Permalink to this definition">¶</a></dt>
 <dd><p>A specialized <a class="reference internal" href="#mpipe.Stage" title="mpipe.Stage"><tt class="xref py py-class docutils literal"><span class="pre">Stage</span></tt></a>, 
 internally creating <a class="reference internal" href="#mpipe.OrderedWorker" title="mpipe.OrderedWorker"><tt class="xref py py-class docutils literal"><span class="pre">OrderedWorker</span></tt></a> objects.</p>
 <p>Constructor takes a function implementing 
@@ -217,13 +202,14 @@ internally creating <a class="reference internal" href="#mpipe.OrderedWorker" ti
 
 <dl class="class">
 <dt id="mpipe.UnorderedStage">
-<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">UnorderedStage</tt><big>(</big><em>target</em>, <em>size=1</em><big>)</big><a class="headerlink" href="#mpipe.UnorderedStage" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">UnorderedStage</tt><big>(</big><em>target</em>, <em>size=1</em>, <em>disable_result=False</em><big>)</big><a class="headerlink" href="#mpipe.UnorderedStage" title="Permalink to this definition">¶</a></dt>
 <dd><p>A specialized <a class="reference internal" href="#mpipe.Stage" title="mpipe.Stage"><tt class="xref py py-class docutils literal"><span class="pre">Stage</span></tt></a>, 
 internally creating <a class="reference internal" href="#mpipe.UnorderedWorker" title="mpipe.UnorderedWorker"><tt class="xref py py-class docutils literal"><span class="pre">UnorderedWorker</span></tt></a> objects.</p>
 <p>Constructor takes a function implementing
 <a class="reference internal" href="#mpipe.UnorderedWorker.doTask" title="mpipe.UnorderedWorker.doTask"><tt class="xref py py-meth docutils literal"><span class="pre">UnorderedWorker.doTask()</span></tt></a>.</p>
 </dd></dl>
 
+<hr class="docutils" />
 <dl class="class">
 <dt id="mpipe.Pipeline">
 <em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">Pipeline</tt><big>(</big><em>input_stage</em><big>)</big><a class="headerlink" href="#mpipe.Pipeline" title="Permalink to this definition">¶</a></dt>
@@ -245,46 +231,6 @@ internally creating <a class="reference internal" href="#mpipe.UnorderedWorker" 
 <dt id="mpipe.Pipeline.results">
 <tt class="descname">results</tt><big>(</big><big>)</big><a class="headerlink" href="#mpipe.Pipeline.results" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a generator to iterate over results from the pipeline.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="mpipe.TubeP">
-<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">TubeP</tt><a class="headerlink" href="#mpipe.TubeP" title="Permalink to this definition">¶</a></dt>
-<dd><p>A unidirectional communication channel 
-using <a class="reference external" href="http://docs.python.org/library/multiprocessing.html#multiprocessing.Connection" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">multiprocessing.Connection</span></tt></a> for underlying implementation.</p>
-<dl class="method">
-<dt id="mpipe.TubeP.put">
-<tt class="descname">put</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#mpipe.TubeP.put" title="Permalink to this definition">¶</a></dt>
-<dd><p>Put an item on the tube.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="mpipe.TubeP.get">
-<tt class="descname">get</tt><big>(</big><em>timeout=None</em><big>)</big><a class="headerlink" href="#mpipe.TubeP.get" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the next available item from the tube.</p>
-<p>Blocks if tube is empty, until a producer for the tube puts an item on it.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="mpipe.TubeQ">
-<em class="property">class </em><tt class="descclassname">mpipe.</tt><tt class="descname">TubeQ</tt><a class="headerlink" href="#mpipe.TubeQ" title="Permalink to this definition">¶</a></dt>
-<dd><p>A unidirectional communication channel 
-using <a class="reference external" href="http://docs.python.org/library/multiprocessing.html#multiprocessing.Queue" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">multiprocessing.Queue</span></tt></a> for underlying implementation.</p>
-<dl class="method">
-<dt id="mpipe.TubeQ.put">
-<tt class="descname">put</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#mpipe.TubeQ.put" title="Permalink to this definition">¶</a></dt>
-<dd><p>Put an item on the tube.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="mpipe.TubeQ.get">
-<tt class="descname">get</tt><big>(</big><em>timeout=None</em><big>)</big><a class="headerlink" href="#mpipe.TubeQ.get" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the next available item from the tube.</p>
-<p>Blocks if tube is empty, until a producer for the tube puts an item on it.</p>
 </dd></dl>
 
 </dd></dl>
@@ -324,7 +270,6 @@ a result upon the current input task.</p>
 
 
           </div>
-        </div>
       </div>
       <div class="clearer"></div>
     </div>
@@ -351,7 +296,7 @@ a result upon the current input task.</p>
   
     <div class="footer">
         &copy; Copyright 2013, Velimir Mlaker.
-      Last updated on Jun 17, 2013.
+      Last updated on Jul 20, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
 

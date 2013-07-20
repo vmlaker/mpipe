@@ -28,12 +28,9 @@ body {
     color: black;
     padding: 0;
     border: 1px solid #422;
-    /*
-    margin: 0px 20px 0px 20px;
-    */
     margin: 0 auto;
-    min-width: 680px;
-    max-width: 1000px;
+    min-width: 640px;
+    max-width: 900px;
 }
 
 .pageheader {
@@ -43,10 +40,10 @@ body {
 }
 
 .pageheader ul {
+    padding: 0;
     float: right;
     color: white;
     list-style-type: none;
-    padding-left: 0;
     margin-top: 40px;
     margin-right: 10px;
     font-size: 15px;
@@ -54,8 +51,6 @@ body {
 
 .pageheader li {
     float: left;
-    margin: 0 0 0 10px;
-    margin: 0;
 }
 
 .pageheader li a {

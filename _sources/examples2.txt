@@ -115,4 +115,23 @@ One solution is to feed the pipeline with tasks while, concurrently in another p
 
 Note that we start doing the retrieval in the second pipeline by adding a single arbitrary task -- in this case the value ``True`` -- before putting any tasks on the first pipeline. In this way we are ready to release resources as soon as the first pipeline starts producing results.
 
-.. the end
+Disabling results
+-----------------
+
+Even if your worker implementation produces a result, you may choose to disable it:
+
+.. container:: source-click-above
+
+  [`source <disable_result0.py>`_]
+
+.. literalinclude:: disable_result0.py
+
+.. container:: source-click-below
+
+  [`source <disable_result0.py>`_]
+
+This pipeline does not produce output -- the final for-loop is useless.
+
+Results of a pipeline use system resources for storage until they're eventually retrieved using :meth:`~mpipe.Pipeline.get` or :meth:`~mpipe.Pipeline.results`. But sometimes you may not want this effect, especially if the workflow produces a lot of output, none of which you care about. By disabling results, you're able to reuse an existing worker/stage implementation, while forcing all output to be thrown away.
+
+.. End of file.

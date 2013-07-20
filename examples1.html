@@ -71,38 +71,9 @@
           <li><a href="examples.html" accesskey="U">Examples</a> &raquo;</li> 
       </ul>
     </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
-  <h3>API Search</h3>
-  
-  <form class="search" action="search.html" method="get">
-<!--
-    <div class="search-input">
-      <input type="text" name="q" />
-    </div>
-    <div class="search-go">
-      <input type="submit" value="Go" />
-    </div>
--->
-      <input class="search-input" type="text" name="q" />
-      <input class="search-go" type="submit" value="Go" />
-
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-  
-  <p class="searchtip">
-    Search the MPipe module for classes and functions.
-  </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
 
     <div class="document">
       <div class="documentwrapper">
-        <div class="bodywrapper">
           <div class="body">
             
   <div class="section" id="hello-world">
@@ -137,9 +108,9 @@
 </div>
 <p>It&#8217;s a silly pipeline that doesn&#8217;t do much other than illustrate a few basic ideas. Note the last line that puts <tt class="docutils literal"><span class="pre">None</span></tt> on the pipeline &#8211; this sends the &#8220;stop&#8221; task, effectively signaling all processes within the pipeline to terminate.</p>
 </div>
-<div class="section" id="chaining-stages">
-<span id="id3"></span><h1>Chaining stages<a class="headerlink" href="#chaining-stages" title="Permalink to this headline">¶</a></h1>
-<p>Stages can be linked to form a chain:</p>
+<div class="section" id="serializing-stages">
+<span id="id3"></span><h1>Serializing stages<a class="headerlink" href="#serializing-stages" title="Permalink to this headline">¶</a></h1>
+<p>Multiple stages can be serially linked to create a sequential workflow:</p>
 <img alt="_images/chain.png" class="align-center" src="_images/chain.png" />
 <div class="source-click-above container">
 [<a class="reference external" href="chain.py">source</a>]</div>
@@ -255,7 +226,6 @@
 
 
           </div>
-        </div>
       </div>
       <div class="clearer"></div>
     </div>
@@ -283,7 +253,7 @@
   
     <div class="footer">
         &copy; Copyright 2013, Velimir Mlaker.
-      Last updated on Jun 17, 2013.
+      Last updated on Jul 20, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
 
