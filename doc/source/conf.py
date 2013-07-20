@@ -142,11 +142,11 @@ html_last_updated_fmt = '%b %d, %Y'
 
 # Custom sidebar templates, maps document names to template names.
 html_sidebars = { 
-#    '**'        : [],
+    '**'        : [],
 #    '**'        : ['localtoc.html'],
 #    '**'        : ['globaltoc.html'],
 #    '**'        : ['searchbox.html', 'search.html'],
-    '**'        : ['searchbox.html'],
+#    '**'        : ['searchbox.html'],
     }
 
 # Additional templates that should be rendered to pages, maps page names to
@@ -233,7 +233,6 @@ man_pages = [
 
 rst_prolog = '''
 .. |NAME| replace:: MPipe
-.. |DESCR| replace:: multiprocessing pipeline framework in Python
 '''
 
-# The end.
+# End of file.

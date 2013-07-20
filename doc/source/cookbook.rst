@@ -3,7 +3,8 @@
 |NAME| cookbook
 ===============
 
-A pipeline algorithm is implemented using classes from the :mod:`mpipe` module. Elements of the pipeline framework map to specific Python objects:
+A pipeline algorithm is implemented using classes from the :mod:`mpipe` module.
+The building blocks of pipelines map to specific Python objects:
 
  +---------------------+-------------------------------------+
  |  Framework element  |  Python construct                   |
@@ -21,7 +22,7 @@ A pipeline algorithm is implemented using classes from the :mod:`mpipe` module. 
  |  *pipeline*         |  :mod:`~mpipe.Pipeline`             |
  +---------------------+-------------------------------------+
 
-It may be useful to keep in mind that |NAME| is built using classes from Python's standard :mod:`multiprocessing` module. One may think of it as a layer on top, encapsulating classes like :class:`~multiprocessing.Process`, :class:`~multiprocessing.Queue` and :class:`~multiprocessing.Connection` with behavior specific to the pipeline framework.
+It may be useful to keep in mind that |NAME| is built using classes from Python's standard :mod:`multiprocessing` module. It is a layer on top, encapsulating classes like :class:`~multiprocessing.Process`, :class:`~multiprocessing.Queue` and :class:`~multiprocessing.Connection` with behavior specific to the pipeline workflow.
 
 The procedure of building and running a pipeline is a sequence of five steps:
 
@@ -53,7 +54,7 @@ The other way is to subclass from :mod:`~mpipe.OrderedWorker` or :mod:`~mpipe.Un
         result = f(task)
         return result
 
-Just like when using a standalone function, stage result can be the return value. Another way is to call :meth:`putResult()`. This can be useful if you want your worker to continue processing after registering the stage result:
+Just like when using a standalone function, stage result is the return value of :meth:`doTask()`. Another option is to call :meth:`putResult()`. This can be useful if you want your worker to continue processing after registering the stage result:
 ::
 
   class MyWorker(mpipe.OrderedWorker):
@@ -84,12 +85,18 @@ In both cases the second argument is the number of processes devoted to the part
 3. Link the stages
 ------------------
 
-If there are multiple stages in the workflow, they can be linked together:
+If there are multiple stages in the workflow, they can be linked together in series:
 ::
 
   stage1.link(stage2)
+  stage2.link(stage3)
 
-Output of one stage may be forked into multiple downstream stages, splitting the workflow into parallel streams of execution:
+The :meth:`~mpipe.Stage.link` method returns the stage object it is called on, allowing you to serially link many stages in a single statement. Here's the equivalent of above:
+::
+
+  stage1.link(stage2.link(stage3))
+
+Output of one stage may also be forked into multiple downstream stages, splitting the workflow into parallel streams of execution:
 ::
 
   stage1.link(stage2)
@@ -124,7 +131,7 @@ Output results, if any, are fetched using :meth:`~mpipe.Pipeline.get()`:
 
   result = pipe.get()
 
-Alternatively, one can iterate the output stream with :meth:`~mpipe.Pipeline.results()`:
+Alternatively, one can iterate the output stream with :meth:`~mpipe.Pipeline.results()` method:
 ::
 
   for result in pipe.results():

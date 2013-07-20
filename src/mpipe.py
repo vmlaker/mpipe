@@ -1,9 +1,9 @@
-"""MPipe is a multiprocessing pipeline software framework in Python."""
+"""MPipe is a multiprocessing pipeline toolkit in Python."""
 
 import sys
 import multiprocessing
 
-__version__ = '1.0.5'
+__version__ = '1.0.6'
 
 class TubeP:
     """A unidirectional communication channel 
@@ -59,23 +59,26 @@ class OrderedWorker(multiprocessing.Process):
     of output results always matches that of corresponding input tasks.
 
     A worker is linked to its two nearest neighbors -- the previous 
-    worker and the next -- all workers in the stage thusly linked 
+    worker and the next -- all workers in the stage thusly connected
     in circular fashion. 
-    Input tasks are fetched in this order, and before publishing it's result, 
-    a worker first waits for it's previous neighbor to do the same."""
+    Input tasks are fetched in this order. Before publishing its result, 
+    a worker first waits for its previous neighbor to do the same."""
 
     def __init__(self):
         pass
 
     def init2(
         self, 
-        input_tube,    # Read task from the input tube.
-        output_tubes,  # Send result on all the output tubes.
-        num_workers,   # Total number of workers in the stage.
-        do_stop_task,  # Whether to call doTask() on "stop" request.
+        input_tube,      # Read task from the input tube.
+        output_tubes,    # Send result on all the output tubes.
+        num_workers,     # Total number of workers in the stage.
+        disable_result,  # Whether to override any result with None.
+        do_stop_task,    # Whether to call doTask() on "stop" request.
         ):
-        """Create a worker with *input_tube* and an iterable of *output_tubes*.
-        The worker reads a task from *input_tube* and writes the result to *output_tubes*."""
+        """Create *num_workers* worker objects with *input_tube* and 
+        an iterable of *output_tubes*. The worker reads a task from *input_tube* 
+        and writes the result to *output_tubes*."""
+
         super(OrderedWorker, self).__init__()
         self._tube_task_input = input_tube
         self._tubes_result_output = output_tubes
@@ -89,6 +92,7 @@ class OrderedWorker(multiprocessing.Process):
         self._lock_prev_output = None
         self._lock_next_output = None
 
+        self._disable_result = disable_result
         self._do_stop_task = do_stop_task
 
     @staticmethod
@@ -97,7 +101,15 @@ class OrderedWorker(multiprocessing.Process):
         return TubeP
 
     @classmethod
-    def assemble(cls, args, input_tube, output_tubes, size, do_stop_task=False):
+    def assemble(
+        cls, 
+        args, 
+        input_tube, 
+        output_tubes, 
+        size, 
+        disable_result=False,
+        do_stop_task=False,
+        ):
         """Create, assemble and start workers.
         Workers are created of class *cls*, initialized with *args*, and given
         task/result communication channels *input_tube* and *output_tubes*.
@@ -113,6 +125,7 @@ class OrderedWorker(multiprocessing.Process):
                 input_tube,
                 output_tubes,
                 size,
+                disable_result,
                 do_stop_task,
                 )
             workers.append(worker)
@@ -163,15 +176,14 @@ class OrderedWorker(multiprocessing.Process):
 
         while True:
             try:
-                # Wait on permission from the previous worker that it's 
-                # okay to retrieve the input task.
+                # Wait on permission from the previous worker that
+                # it is okay to retrieve the input task.
                 self._lock_prev_input.acquire()
 
                 # Retrieve the input task.
                 (task, count) = self._tube_task_input.get()
 
-                # Give permission to the next worker that it's 
-                # okay to retrieve the input task.
+                # Permit the next worker to retrieve the input task.
                 self._lock_next_input.release()
 
             except:
@@ -206,35 +218,42 @@ class OrderedWorker(multiprocessing.Process):
                 # Honor the "stop" request by exiting the process.
                 break  
 
-            # The task is not None, meaning that it's an actual task to
+            # The task is not None, meaning that it is an actual task to
             # be processed. Therefore let's call doTask().
             result = self.doTask(task)
 
-            # If doTask() actually returns a result (and the result is not None),
+            # Unless result is disabled,
+            # if doTask() actually returns a result (and the result is not None),
             # it indicates that it did not call putResult(), instead intending
             # it to be called now.
-            if result is not None:
+            if not self._disable_result and result is not None:
                 self.putResult(result)
 
     def doTask(self, task):
-        """Implement this method in the subclass to be executed for each task.
-        The implementation can publish the output result in one of two ways: 
-        1) either by calling :meth:`putResult` and returning ``None`` or
-        2) by returning the result (other than ``None``.)"""
+        """Implement this method in the subclass with work functionality
+        to be executed on each *task* object.
+        The implementation can publish the output result in one of two ways,
+        either by 1) calling :meth:`putResult` and returning ``None``, or
+        2) returning the result (other than ``None``.)"""
         return True
 
     def doInit(self):
-        """Implement this method in the subclass, if there's need
-        for any additional initialization upon process startup.
-        This method is called after the worker process starts,
-        and before it begins processing tasks."""
+        """Implement this method in the subclass in case there's need
+        for additional initialization after process startup.
+        Since this class inherits from :class:`multiprocessing.Process`,
+        its constructor executes in the spawning process.
+        This method allows additional code to be run in the forked process,
+        before the worker begins processing input tasks.
+        """
         return None
 
 
 class UnorderedWorker(multiprocessing.Process):
     """An UnorderedWorker object operates independently of other
-    workers in the stage, publishing it's result without coordinating
-    with others. The order of output results may not match 
+    workers in the stage, fetching the first available task, and
+    publishing its result whenever it is done
+    (without coordinating with neighboring workers.)
+    Consequently, the order of output results may not match 
     that of corresponding input tasks."""
 
     def __init__(self):
@@ -242,17 +261,21 @@ class UnorderedWorker(multiprocessing.Process):
 
     def init2(
         self, 
-        input_tube,    # Read task from the input tube.
-        output_tubes,  # Send result on all the output tubes.
-        num_workers,   # Total number of workers in the stage.
-        do_stop_task,  # Whether to call doTask() on "stop" request.
+        input_tube,      # Read task from the input tube.
+        output_tubes,    # Send result on all the output tubes.
+        num_workers,     # Total number of workers in the stage.
+        disable_result,  # Whether to override any result with None.
+        do_stop_task,    # Whether to call doTask() on "stop" request.
         ):
-        """Create a worker with *input_tube* and an iterable of *output_tubes*.
-        The worker reads a task from *input_tube* and writes the result to *output_tubes*."""
+        """Create *num_workers* worker objects with *input_tube* and 
+        an iterable of *output_tubes*. The worker reads a task from *input_tube* 
+        and writes the result to *output_tubes*."""
+
         super(UnorderedWorker, self).__init__()
         self._tube_task_input = input_tube
         self._tubes_result_output = output_tubes
         self._num_workers = num_workers
+        self._disable_result = disable_result
         self._do_stop_task = do_stop_task
 
     @staticmethod
@@ -261,7 +284,15 @@ class UnorderedWorker(multiprocessing.Process):
         return TubeQ
     
     @classmethod
-    def assemble(cls, args, input_tube, output_tubes, size, do_stop_task):
+    def assemble(
+        cls, 
+        args, 
+        input_tube, 
+        output_tubes, 
+        size, 
+        disable_result,
+        do_stop_task,
+        ):
         """Create, assemble and start workers.
         Workers are created of class *cls*, initialized with *args*, and given
         task/result communication channels *input_tube* and *output_tubes*.
@@ -277,6 +308,7 @@ class UnorderedWorker(multiprocessing.Process):
                 input_tube,
                 output_tubes,
                 size,
+                disable_result,
                 do_stop_task,
                 )
             workers.append(worker)
@@ -323,44 +355,64 @@ class UnorderedWorker(multiprocessing.Process):
                 # Honor the "stop" request by exiting the process.
                 break  
 
-            # The task is not None, meaning that it's an actual task to
+            # The task is not None, meaning that it is an actual task to
             # be processed. Therefore let's call doTask().
             result = self.doTask(task)
 
-            # If doTask() actually returns a result (and the result is not None),
+            # Unless result is disabled,
+            # if doTask() actually returns a result (and the result is not None),
             # it indicates that it did not call putResult(), instead intending
             # it to be called now.
-            if result is not None:
+            if not self._disable_result and result is not None:
                 self.putResult(result)
 
     def doTask(self, task):
-        """Implement this method in the subclass to be executed for each task.
-        The implementation can publish the output result in one of two ways: 
-        1) either by calling :meth:`putResult` and returning ``None`` or
-        2) by returning the result (other than ``None``.)"""
+        """Implement this method in the subclass with work
+        to be executed on each *task* object.
+        The implementation can publish the output result in one of two ways,
+        either by 1) calling :meth:`putResult` and returning ``None``, or
+        2) returning the result (other than ``None``.)"""
         return True
 
     def doInit(self):
-        """Implement this method in the subclass, if there's need
-        for any additional initialization upon process startup.
-        This method is called after the worker process starts,
-        after the worker process starts,
-        and before it begins processing tasks."""
+        """Implement this method in the subclass in case there's need
+        for additional initialization after process startup.
+        Since this class inherits from :class:`multiprocessing.Process`,
+        its constructor executes in the spawning process.
+        This method allows additional code to be run in the forked process,
+        before the worker begins processing input tasks.
+        """
         return None
 
 
 class Stage(object):
     """The Stage is an assembly of workers of identical functionality."""
 
-    def __init__(self, worker_class, size=1, do_stop_task=False, **worker_args):
+    def __init__(
+        self, 
+        worker_class, 
+        size=1,
+        disable_result=False,
+        do_stop_task=False, 
+        **worker_args
+        ):
         """Create a stage of workers of given *worker_class* implementation, 
         with *size* indicating the number of workers within the stage.
-        *do_stop_task* indicates whether the worker's doTask() method will be
-        called on a "stop" (i.e. None) task.
+        *disable_result* overrides any result defined in worker implementation,
+        and does not propagate it downstream (equivalent to the worker
+        producing ``None`` result.) 
+
+        *do_stop_task* indicates whether the incoming "stop" signal (``None`` value)
+        will actually be passed to the worker as a task. When using this option,
+        implement your worker so that, in addition to regular incoming tasks,
+        it handles the ``None`` value as well. This will be
+        the worker's final task before the process exits.
+
         Any worker initialization arguments are given in *worker_args*."""
         self._worker_class = worker_class
         self._worker_args = worker_args
         self._size = size
+        self._disable_result = disable_result
         self._do_stop_task = do_stop_task
         self._input_tube = self._worker_class.getTubeClass()()
         self._output_tubes = list()
@@ -387,7 +439,7 @@ class Stage(object):
 
     def link(self, next_stage):
         """Link to the given downstream stage *next_stage*
-        by adding it's input tube to the list of this stage's output tubes.
+        by adding its input tube to the list of this stage's output tubes.
         Return this stage."""
         self._output_tubes.append(next_stage._input_tube)
         self._next_stages.append(next_stage)
@@ -418,6 +470,7 @@ class Stage(object):
             self._input_tube,
             self._output_tubes,
             self._size,
+            self._disable_result,
             self._do_stop_task,
             )
 
@@ -429,25 +482,25 @@ class Stage(object):
 class OrderedStage(Stage):
     """A specialized :class:`~mpipe.Stage`, 
     internally creating :class:`~mpipe.OrderedWorker` objects."""
-    def __init__(self, target, size=1):
+    def __init__(self, target, size=1, disable_result=False):
         """Constructor takes a function implementing 
         :meth:`OrderedWorker.doTask`."""
         class wclass(OrderedWorker):
             def doTask(self, task):
                 return target(task)
-        super(OrderedStage, self).__init__(wclass, size)
+        super(OrderedStage, self).__init__(wclass, size, disable_result)
 
 
 class UnorderedStage(Stage):
     """A specialized :class:`~mpipe.Stage`, 
     internally creating :class:`~mpipe.UnorderedWorker` objects."""
-    def __init__(self, target, size=1):
+    def __init__(self, target, size=1, disable_result=False):
         """Constructor takes a function implementing
         :meth:`UnorderedWorker.doTask`."""
         class wclass(UnorderedWorker):
             def doTask(self, task):
                 return target(task)
-        super(UnorderedStage, self).__init__(wclass, size)
+        super(UnorderedStage, self).__init__(wclass, size, disable_result)
 
 
 class Pipeline(object):
@@ -549,7 +602,7 @@ class FilterWorker(OrderedWorker):
                 if last_result is not None:
                     self._last_results[pipe] = last_result
 
-            # If there is room for the task, or if it's a "stop" request,
+            # If there is room for the task, or if it is a "stop" request,
             # put it on the pipeline.
             if count <= self._max_tasks-1 or task is None:
                 pipe.put(task)
@@ -588,4 +641,4 @@ class FilterStage(Stage):
             cache_results=cache_results,
             )
 
-# The end.
+# End of file.

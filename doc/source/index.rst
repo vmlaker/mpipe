@@ -24,7 +24,7 @@ Here's how you'd code it up using the :mod:`mpipe` module:
 
 .. literalinclude:: tiny.py
 
-The above snippet runs a total of seven processes: one for the main program and six for the two stages (each stage running three workers.)
+The above snippet runs a total of seven processes: one for the main program and six for the two stages (three processes per stage.)
 
 Installation
 ************
@@ -50,3 +50,5 @@ For theory and design, take a look at :doc:`concepts`.
    :target: http://github.com/vmlaker/mpipe
 
    |NAME| is a `project on GitHub <http://github.com/vmlaker/mpipe>`_.
+
+.. End of file.

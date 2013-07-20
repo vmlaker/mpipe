@@ -65,6 +65,7 @@ codes = (
     'bottleneck1.py',
     'bottleneck2.py',
     'bottleneck3.py',
+    'disable_result0.py',
     )
 def runCopy(fname):
     cmd = 'cp {0} source/'.format(os.path.join('..', 'test', fname))

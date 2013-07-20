@@ -32,12 +32,12 @@ The program output is:
  
 It's a silly pipeline that doesn't do much other than illustrate a few basic ideas. Note the last line that puts ``None`` on the pipeline -- this sends the "stop" task, effectively signaling all processes within the pipeline to terminate.
 
-.. _chaining_stages:
+.. _serializing_stages:
 
-Chaining stages
----------------
+Serializing stages
+------------------
 
-Stages can be linked to form a chain:
+Multiple stages can be serially linked to create a sequential workflow:
 
 .. image:: chain.png
    :align: center

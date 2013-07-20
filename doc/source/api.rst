@@ -7,10 +7,12 @@
 .. module:: mpipe
 
 .. autoclass:: mpipe.OrderedWorker
-   :members: doInit, doTask, putResult
+   :members: doTask, doInit, putResult
 
 .. autoclass:: mpipe.UnorderedWorker
-   :members: doInit, doTask, putResult
+   :members: doTask, doInit, putResult
+
+----
 
 .. autoclass:: mpipe.Stage
    :members: link, put, get
@@ -21,14 +23,10 @@
 .. autoclass:: mpipe.UnorderedStage
    :members:
 
+----
+
 .. autoclass:: mpipe.Pipeline
    :members: put, get, results
-
-.. autoclass:: mpipe.TubeP
-   :members: put, get
-
-.. autoclass:: mpipe.TubeQ
-   :members: put, get
 
 ----
 
@@ -36,4 +34,4 @@
 
 .. autoclass:: mpipe.FilterStage
 
-.. The end.
+.. End of file.
