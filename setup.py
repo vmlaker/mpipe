@@ -46,7 +46,7 @@ from src.mpipe import __version__ as version
 setup(
     name         = 'mpipe',
     version      = version,
-    description  = 'A multiprocess pipeline software framework.',
+    description  = 'Multiprocess pipeline toolkit',
     url          = 'http://vmlaker.github.io/mpipe',
     author       = 'Velimir Mlaker',
     author_email = 'velimir.mlaker@gmail.com',
