@@ -16,11 +16,11 @@ this_dir = os.path.dirname(
 for entry in sorted(os.listdir(this_dir)):
 
     # Identify the file -- whether it is gold.
-    # Gold files are *.go for exact gold content, or 
-    # *.gor if "random" (to be sorted before comparing.
+    # Gold files are *.gold for exact gold content, or 
+    # *.goldr if "random" (to be sorted before comparing.
     gold_fname = os.path.join(this_dir, entry)
     suffix = None
-    for choice in ('.go', '.gor'):
+    for choice in ('.gold', '.goldr'):
         if gold_fname[-len(choice):] == choice:
             suffix = choice
     if not suffix:
@@ -39,7 +39,7 @@ for entry in sorted(os.listdir(this_dir)):
     test_lines = p.stdout.readlines()
 
     # If test "randomizes" output, sort lines before comparing.
-    if suffix == '.gor':
+    if suffix == '.goldr':
         gold_lines = sorted(gold_lines)
         test_lines = sorted(test_lines)
 
