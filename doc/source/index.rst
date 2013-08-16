@@ -11,10 +11,7 @@
    api
    about
 
-Welcome!
-********
-
-|NAME| is a tiny Python module -- a thin layer above the standard :mod:`multiprocessing` package -- that lets you write multi-stage, multi-processing pipeline algorithms with remarkable ease. Consider the following workflow:
+|NAME| is a tiny Python module -- a thin layer above the standard :mod:`multiprocessing` package -- that lets you write parallel, multi-stage pipeline algorithms with remarkable ease. Consider the following workflow:
 
 .. image:: tiny.png
    :align: center
@@ -42,13 +39,3 @@ Got it, now what?
 Start piping right away by running through the :doc:`examples`.
 If you want a step-by-step guide to creating pipelines, read the :doc:`cookbook`.
 For theory and design, take a look at :doc:`concepts`.
- 
-----
-
-.. figure:: GitHub-Mark-64px.png
-   :align: center
-   :target: http://github.com/vmlaker/mpipe
-
-   |NAME| is a `project on GitHub <http://github.com/vmlaker/mpipe>`_.
-
-.. End of file.

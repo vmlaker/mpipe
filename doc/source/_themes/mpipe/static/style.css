@@ -23,14 +23,14 @@ body {
     font-size: 14px;
 
     line-height: 130%;
-    text-align: center;
-    background-image:  url(bodybg.png);
+
     color: black;
-    padding: 0;
-    border: 1px solid #422;
+    border: 1px solid gray;
     margin: 0 auto;
-    min-width: 640px;
-    max-width: 900px;
+
+    background-image:  url(bodybg.png);
+    min-width: 600px;
+    max-width: 850px;
 }
 
 .pageheader {
@@ -55,17 +55,13 @@ body {
 
 .pageheader li a {
     border-radius: 1px;
-    padding: 1em 1em 1em 1em;
     padding: 8px 12px;
-    color: #f9f9f0;
-    color: #fff;
-    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    color: white;
     text-shadow: 0 0 5px #000; 
 }
 
 .pageheader li a:hover {
-    background-color: #f9f9f0;
-    background-color: #fff;
+    background-color: white;
     color: #0a507a;
     text-shadow: none;
 }
@@ -73,8 +69,6 @@ body {
 div.document {
     background-color: white;
     text-align: left;
-    background-image: url(contents.png);
-    background-repeat: repeat-x;
 }
 
 div.bodywrapper {
@@ -98,8 +92,6 @@ div.related ul {
 */
     color: white;
     height: 2em;
-    border-top: 1px solid #444;
-    border-bottom: 1px solid #777;
 }
 
 div.related ul li {
@@ -118,12 +110,11 @@ div.related ul li a {
     margin: 0;
     padding: 0 5px 0 5px;
     line-height: 1.75em;
-    color: #ddd;
+    color: silver;
 }
 
 div.related ul li a:hover {
-    color: #3CA8E7;
-    color: #fff;
+    color: white;
 }
 
 div.sphinxsidebarwrapper {
@@ -151,7 +142,6 @@ div.sphinxsidebar h3, div.sphinxsidebar h4 {
 /*
     border: 1px solid #000000;
 */
-    background-color: #AFC1C4;
     background-color: #c0c0c0;
     max-width: 150px;
 }
@@ -177,8 +167,8 @@ div.sphinxsidebar input {
 }
 
 div.footer {
-    background-color: #ccc;
-    color: #000;
+
+    background-color: silver;
     padding: 3px 8px 3px 0;
     clear: both;
     text-align: right;
@@ -187,17 +177,12 @@ div.footer {
 }
 
 div.footer a {
-    color: #000;
     text-decoration: underline;
 }
 
 .source-click-above {
     /* Use for link to source code file above the "literalinclude" directive. */
        
-    /*
-    border: 1px solid #422;
-    font-style: italic;
-    */
     margin-top: 0.2em;
     margin-bottom: -0.4em;
     text-align: right;
@@ -207,9 +192,7 @@ div.footer a {
 
 .source-click-below {
     /* Use for link to source code file below the "literalinclude" directive. */
-    /*
-    font-style: italic;
-    */
+
     text-align: right;
     line-height: 0;
     margin-top: -0.55em;
@@ -228,8 +211,7 @@ a {
 }
 
 a:hover {
-    color: #ff0000;
-    color: #777;
+    color: gray;
 }
 
 div.body a {
@@ -240,7 +222,6 @@ h1 {
     margin: 0;
     padding: 0.7em 0 0.3em 0;
     font-size: 1.5em;
-    color: #11557C;
 }
 
 h2 {
@@ -272,7 +253,7 @@ h5:hover a.anchor, h6:hover a.anchor {
 
 h1 a.anchor:hover, h2 a.anchor:hover, h3 a.anchor:hover, h4 a.anchor:hover,
 h5 a.anchor:hover, h6 a.anchor:hover {
-    color: #777;
+    color: gray;
     background-color: #eee;
 }
 
@@ -294,6 +275,8 @@ cite, code, tt {
                  'Bitstream Vera Sans Mono', monospace;
     font-size: 0.95em;
     letter-spacing: 0.01em;
+    padding: 0 3px;
+    border: solid 1px lightgray;
 }
 
 tt {
@@ -312,14 +295,11 @@ hr {
 }
 
 a tt {
-    border: 0;
-    color: #868686;
-    color: #000;
+    color: black;
 }
 
 a tt:hover {
-    color: #2491CF;
-    color: #777;
+    color: gray;
 }
 
 pre {
@@ -329,8 +309,8 @@ pre {
     letter-spacing: 0.015em;
     line-height: 120%;
     padding: 0.5em;
-    border: 1px solid #ccc;
-    background-color: #f5f5f5;
+    border: 1px solid silver;
+    background-color: whitesmoke;
 }
 
 pre a {
@@ -429,24 +409,10 @@ div.viewcode-block:target {
 .searchtip {
     font-size: 90%;
     line-height: 100%;
-/*
-    max-width: 20%;
-*/
 }
 .search-input {
-/*
-    background-color: blue;
-*/
     max-width: 70%;
 }
 .search-go {
-/*
-    width: 1em;
-    background-color: orange;
-*/
     max-width: 20%;
 }
-
-
-
-/* The end. */
