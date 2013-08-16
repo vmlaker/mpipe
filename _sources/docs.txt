@@ -1,7 +1,7 @@
 .. _docs:
 
-|NAME| documentation contents
-*****************************
+Documentation contents
+**********************
 
 .. Getting the code and installing it:
 

@@ -3,7 +3,7 @@
 Installation instructions
 -------------------------
 
-The easiest way to install |NAME| on your system is using *pip* command:
+Easiest way to install |NAME| on your system is using *pip*:
 ::
 
   pip install mpipe
@@ -26,4 +26,4 @@ Or, you can clone the GitHub repo and manually run the *Distutils* installer:
   python setup.py install --user
 
 Another way to get the source code is to download the tarball
-from the Package Index at http://pypi.python.org/pypi/mpipe.
+from the *Python Package Index* at http://pypi.python.org/pypi/mpipe.

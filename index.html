@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome! &mdash; MPipe Documentation</title>
+    <title>Installation &mdash; MPipe Documentation</title>
     
     <link rel="stylesheet" href="_static/style.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -26,8 +26,10 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="top" title="MPipe Documentation" href="#" />
-    <link rel="next" title="MPipe documentation contents" href="docs.html" />
+    <link rel="next" title="Documentation contents" href="docs.html" />
  
+
+<a href="https://github.com/vmlaker/mpipe"><img style="position: absolute; top: 0; left: 0; border: 0; opacity: 0.7;" src="_static/forkme.png" alt="Fork me on GitHub"></a>
     <style type="text/css">
       
       .related { display: none; }
@@ -57,10 +59,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="docs.html" title="MPipe documentation contents"
+          <a href="docs.html" title="Documentation contents"
              accesskey="N">next</a> |</li>
   <li><a href="#">MPipe home</a>&nbsp;|</li>
   <li><a href="docs.html">Documentation</a> &raquo;</li>
@@ -74,9 +73,7 @@
             
   <div class="toctree-wrapper compound" id="index">
 </div>
-<div class="section" id="welcome">
-<h1>Welcome!<a class="headerlink" href="#welcome" title="Permalink to this headline">¶</a></h1>
-<p>MPipe is a tiny Python module &#8211; a thin layer above the standard <a class="reference external" href="http://docs.python.org/library/multiprocessing.html#multiprocessing" title="(in Python v2.7)"><tt class="xref py py-mod docutils literal"><span class="pre">multiprocessing</span></tt></a> package &#8211; that lets you write multi-stage, multi-processing pipeline algorithms with remarkable ease. Consider the following workflow:</p>
+<p>MPipe is a tiny Python module &#8211; a thin layer above the standard <a class="reference external" href="http://docs.python.org/library/multiprocessing.html#multiprocessing" title="(in Python v2.7)"><tt class="xref py py-mod docutils literal"><span class="pre">multiprocessing</span></tt></a> package &#8211; that lets you write parallel, multi-stage pipeline algorithms with remarkable ease. Consider the following workflow:</p>
 <img alt="_images/tiny.png" class="align-center" src="_images/tiny.png" />
 <p>It&#8217;s a two-stage pipeline that increments and doubles numbers, each stage concurrently running three workers.
 Here&#8217;s how you&#8217;d code it up using the <a class="reference internal" href="api.html#module-mpipe" title="mpipe"><tt class="xref py py-mod docutils literal"><span class="pre">mpipe</span></tt></a> module:</p>
@@ -102,7 +99,6 @@ Here&#8217;s how you&#8217;d code it up using the <a class="reference internal" 
 </pre></div>
 </div>
 <p>The above snippet runs a total of seven processes: one for the main program and six for the two stages (three processes per stage.)</p>
-</div>
 <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <p>Get MPipe now! Easiest way is using <em>pip</em>:</p>
@@ -115,11 +111,6 @@ Here&#8217;s how you&#8217;d code it up using the <a class="reference internal" 
 <p>Start piping right away by running through the <a class="reference internal" href="examples.html"><em>Examples</em></a>.
 If you want a step-by-step guide to creating pipelines, read the <a class="reference internal" href="cookbook.html"><em>MPipe cookbook</em></a>.
 For theory and design, take a look at <a class="reference internal" href="concepts.html"><em>Pipeline concepts</em></a>.</p>
-<hr class="docutils" />
-<div class="figure align-center">
-<a class="reference external image-reference" href="http://github.com/vmlaker/mpipe"><img alt="_images/GitHub-Mark-64px.png" src="_images/GitHub-Mark-64px.png" /></a>
-<p class="caption">MPipe is a <a class="reference external" href="http://github.com/vmlaker/mpipe">project on GitHub</a>.</p>
-</div>
 </div>
 
 
@@ -134,10 +125,7 @@ For theory and design, take a look at <a class="reference internal" href="concep
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="docs.html" title="MPipe documentation contents"
+          <a href="docs.html" title="Documentation contents"
              >next</a> |</li>
   <li><a href="#">MPipe home</a>&nbsp;|</li>
   <li><a href="docs.html">Documentation</a> &raquo;</li>
@@ -147,7 +135,7 @@ For theory and design, take a look at <a class="reference internal" href="concep
   
     <div class="footer">
         &copy; Copyright 2013, Velimir Mlaker.
-      Last updated on Jul 20, 2013.
+      Last updated on Aug 16, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
 
