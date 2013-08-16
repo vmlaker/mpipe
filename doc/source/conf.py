@@ -92,7 +92,7 @@ add_module_names = True
 pygments_style = 'sphinx'
 
 # A list of ignored prefixes for module index sorting.
-modindex_common_prefix = ['wm5.', 'wm5', ]
+#modindex_common_prefix = ['wm5.', 'wm5', ]
 
 # Set this to 'both' to append the __init__(self) docstring to the class docstring.
 autoclass_content = 'both'
@@ -154,7 +154,7 @@ html_sidebars = {
 html_additional_pages = { 'search' : 'search.html' }
 
 # If false, no module index is generated.
-html_domain_indices = True
+html_domain_indices = False
 
 # If false, no index is generated.
 html_use_index = True
@@ -219,7 +219,7 @@ latex_documents = [
 #latex_appendices = []
 
 # If false, no module index is generated.
-#latex_domain_indices = True
+latex_domain_indices = False
 
 
 # -- Options for manual page output --------------------------------------------
