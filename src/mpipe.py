@@ -3,7 +3,7 @@
 import sys
 import multiprocessing
 
-__version__ = '1.0.6'
+__version__ = '1.0.7'
 
 class TubeP:
     """A unidirectional communication channel 
@@ -162,11 +162,11 @@ class OrderedWorker(multiprocessing.Process):
             self._lock_next_input.release()
             self._lock_next_output.release()
 
-    def putResult(self, result, count=0):
+    def putResult(self, result):
         """Register the *result* by putting it on all the output tubes."""
         self._lock_prev_output.acquire()
         for tube in self._tubes_result_output:
-            tube.put((result, count))
+            tube.put((result, 0))
         self._lock_next_output.release()
         
     def run(self):
@@ -317,10 +317,10 @@ class UnorderedWorker(multiprocessing.Process):
         for worker in workers:
             worker.start()
 
-    def putResult(self, result, count=0):
+    def putResult(self, result):
         """Register the *result* by putting it on all the output tubes."""
         for tube in self._tubes_result_output:
-            tube.put((result, count))
+            tube.put((result, 0))
 
     def run(self):
 
