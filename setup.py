@@ -41,11 +41,11 @@ class Test(Command):
         print(command)
         subprocess.call(command, shell=True)
 
-from src.mpipe import __version__ as version
+from src import __version__
 
 setup(
     name         = 'mpipe',
-    version      = version,
+    version      = __version__,
     description  = 'Multiprocess pipeline toolkit',
     url          = 'http://vmlaker.github.io/mpipe',
     author       = 'Velimir Mlaker',
@@ -53,7 +53,6 @@ setup(
     license      = 'MIT',
     long_description = open('README.rst').read(),
     package_dir  = {'' : 'src'},
-    py_modules   = ['mpipe'],
     cmdclass     = { 'clean2' : Clean2, 'test' : Test, },
     classifiers  = [
         'Development Status :: 5 - Production/Stable',
