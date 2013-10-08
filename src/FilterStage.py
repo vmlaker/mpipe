@@ -1,6 +1,7 @@
 """Implements FilterStage class."""
 
 from .Stage import Stage
+from .FilterWorker import FilterWorker
 
 class FilterStage(Stage):
     """Single worker stage running 

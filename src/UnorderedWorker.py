@@ -1,6 +1,7 @@
 """Implements UnorderedWorker class."""
 
 import multiprocessing
+from .TubeQ import TubeQ
 
 class UnorderedWorker(multiprocessing.Process):
     """An UnorderedWorker object operates independently of other

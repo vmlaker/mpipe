@@ -1,6 +1,7 @@
 """Implements OrderedWorker class."""
 
 import multiprocessing
+from .TubeP import TubeP
 
 class OrderedWorker(multiprocessing.Process):
     """An OrderedWorker object operates in a stage where the order 

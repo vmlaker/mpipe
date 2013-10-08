@@ -1,6 +1,7 @@
 """Implements OrderedStage class."""
 
 from .Stage import Stage
+from .OrderedWorker import OrderedWorker
 
 class OrderedStage(Stage):
     """A specialized :class:`~mpipe.Stage`, 

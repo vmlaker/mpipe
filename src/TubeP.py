@@ -1,5 +1,7 @@
 """Implements TubeP class."""
 
+import multiprocessing
+
 class TubeP:
     """A unidirectional communication channel 
     using :class:`multiprocessing.Connection` for underlying implementation."""

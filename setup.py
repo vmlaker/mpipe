@@ -52,7 +52,8 @@ setup(
     author_email = 'velimir.mlaker@gmail.com',
     license      = 'MIT',
     long_description = open('README.rst').read(),
-    package_dir  = {'' : 'src'},
+    package_dir  = {'mpipe' : 'src'},
+    packages     = ['mpipe'],
     cmdclass     = { 'clean2' : Clean2, 'test' : Test, },
     classifiers  = [
         'Development Status :: 5 - Production/Stable',

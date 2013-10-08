@@ -1,6 +1,7 @@
 """Implements UnorderedStage class."""
 
 from .Stage import Stage
+from .UnorderedWorker import UnorderedWorker
 
 class UnorderedStage(Stage):
     """A specialized :class:`~mpipe.Stage`, 

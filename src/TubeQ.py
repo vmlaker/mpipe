@@ -1,5 +1,7 @@
 """Implements TubeQ class."""
 
+import multiprocessing
+
 class TubeQ:
     """A unidirectional communication channel 
     using :class:`multiprocessing.Queue` for underlying implementation."""
