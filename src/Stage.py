@@ -9,6 +9,7 @@ class Stage(object):
         size=1,
         disable_result=False,
         do_stop_task=False, 
+        input_tube=None,
         **worker_args
         ):
         """Create a stage of workers of given *worker_class* implementation, 
@@ -29,7 +30,8 @@ class Stage(object):
         self._size = size
         self._disable_result = disable_result
         self._do_stop_task = do_stop_task
-        self._input_tube = self._worker_class.getTubeClass()()
+        self._input_tube = self._worker_class.getTubeClass()() \
+                           if not input_tube else input_tube
         self._output_tubes = list()
         self._next_stages = list()
 
