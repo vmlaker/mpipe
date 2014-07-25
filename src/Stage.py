@@ -54,6 +54,13 @@ class Stage(object):
             return valid, result
         return result
 
+    def results(self):
+        """Return a generator to iterate over results from the stage."""
+        while True:
+            result = self.get()
+            if result is None: break
+            yield result
+
     def link(self, next_stage):
         """Link to the given downstream stage *next_stage*
         by adding its input tube to the list of this stage's output tubes.
