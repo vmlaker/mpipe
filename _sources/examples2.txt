@@ -38,7 +38,7 @@ Take a look at :ref:`ordered_vs_unordered` for further discussion about these tw
 Multiple workers per stage
 --------------------------
 
-The previous example used two workers per stage, if only to illustrate the concept of unordered stages. A more realistic reason for dedicating additional workers to a stage is to gain processing speed (on multi-core or multi-CPU computer.)
+The previous example used two workers per stage, if only to illustrate the concept of unordered stages. A more realistic reason for dedicating additional workers to a stage is to gain processing speed (on multi-core or multi-CPU computer).
 
 Consider a stream of five tasks feeding a single-stage pipeline running two workers:
 
@@ -95,7 +95,7 @@ A pipeline can easily clog with too many inputs. If you run the code below, it a
 
   [`source <clog.py>`_]
 
-What's going on here? Note that we first put all tasks on the pipeline, and then follow up by retrieving the results. Unfortunately, we never get to the retrieval part because we're too busy adding a whole bunch of tasks to the pipeline (``sys.maxint`` is a huge number.)
+What's going on here? Note that we first put all tasks on the pipeline, and then follow up by retrieving the results. Unfortunately, we never get to the retrieval part because we're too busy adding a whole bunch of tasks to the pipeline (``sys.maxint`` is a huge number).
 
 You probably Ctl-c'd out of the program by now.
 

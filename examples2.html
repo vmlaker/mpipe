@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -14,7 +13,7 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
+        URL_ROOT:    './',
         VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -121,7 +120,7 @@
 </div>
 <div class="section" id="multiple-workers-per-stage">
 <span id="id3"></span><h1>Multiple workers per stage<a class="headerlink" href="#multiple-workers-per-stage" title="Permalink to this headline">¶</a></h1>
-<p>The previous example used two workers per stage, if only to illustrate the concept of unordered stages. A more realistic reason for dedicating additional workers to a stage is to gain processing speed (on multi-core or multi-CPU computer.)</p>
+<p>The previous example used two workers per stage, if only to illustrate the concept of unordered stages. A more realistic reason for dedicating additional workers to a stage is to gain processing speed (on multi-core or multi-CPU computer).</p>
 <p>Consider a stream of five tasks feeding a single-stage pipeline running two workers:</p>
 <img alt="_images/multiwork.png" class="align-center" src="_images/multiwork.png" />
 <p>Let&#8217;s assume the tasks arrive together in a batch, in quick succession, one right after another. If each one takes a full second of dedicated CPU time to complete, then on an SMP computer (assuming full system utilization) this workflow will take three seconds wall-clock time to complete: one second for the first two tasks done in parallel, another for the next two, and finally one more second for the last task, run by just one worker. Total CPU load will be 1.67, computed as:</p>
@@ -169,7 +168,8 @@
 <div class="source-click-below container">
 [<a class="reference external" href="multiwork.py">source</a>]</div>
 <p>We can now run our scenario by passing the output of the first program as command-line argument to the second. A simple resource usage profile of the pipeline can be captured with something like this:</p>
-<div class="highlight-python"><pre>python test/count_nullops.py|xargs time python test/multiwork.py</pre>
+<div class="highlight-python"><div class="highlight"><pre>python test/count_nullops.py|xargs time python test/multiwork.py
+</pre></div>
 </div>
 <p>If interested, modify the pipeline by changing the number of workers and/or input tasks. Also, consider running it on different computers &#8211; with different processor resources &#8211; and compare results.</p>
 </div>
@@ -198,7 +198,7 @@
 </div>
 <div class="source-click-below container">
 [<a class="reference external" href="clog.py">source</a>]</div>
-<p>What&#8217;s going on here? Note that we first put all tasks on the pipeline, and then follow up by retrieving the results. Unfortunately, we never get to the retrieval part because we&#8217;re too busy adding a whole bunch of tasks to the pipeline (<tt class="docutils literal"><span class="pre">sys.maxint</span></tt> is a huge number.)</p>
+<p>What&#8217;s going on here? Note that we first put all tasks on the pipeline, and then follow up by retrieving the results. Unfortunately, we never get to the retrieval part because we&#8217;re too busy adding a whole bunch of tasks to the pipeline (<tt class="docutils literal"><span class="pre">sys.maxint</span></tt> is a huge number).</p>
 <p>You probably Ctl-c&#8217;d out of the program by now.</p>
 <p>Here&#8217;s what happened: feeding the pipeline just kept using up a bunch of system resources (socket buffers, to be precise) and slowing down the program. The program never got past the feed loop into the fetch-results loop.</p>
 <p>One solution is to feed the pipeline with tasks while, concurrently in another process retrieve the results. This way we balance consumption of system resources, allocating them on one end, while simultaneously releasing them at the other. In the version below, we create another pipeline to do just that:</p>
@@ -283,9 +283,9 @@
     </div>
   
     <div class="footer">
-        &copy; Copyright 2013, Velimir Mlaker.
-      Last updated on Aug 16, 2013.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+        &copy; Copyright 2014, Velimir Mlaker.
+      Last updated on Dec 06, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
 
   </body>

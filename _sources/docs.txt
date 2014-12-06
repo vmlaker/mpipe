@@ -24,3 +24,8 @@ Documentation contents
 
 .. toctree::
    examples
+
+.. For developers of MPipe:
+
+.. toctree::
+   fordevelopers

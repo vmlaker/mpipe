@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>About MPipe &mdash; MPipe Documentation</title>
+    <title>For developers &mdash; MPipe Documentation</title>
     
     <link rel="stylesheet" href="_static/style.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -23,15 +23,14 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="author" title="About these documents" href="#" />
+    <link rel="author" title="About these documents" href="about.html" />
     <link rel="top" title="MPipe Documentation" href="index.html" />
-    <link rel="prev" title="MPipe API" href="api.html" />
+    <link rel="next" title="MPipe API" href="api.html" />
+    <link rel="prev" title="Filtering" href="examples3.html" />
  
 
 <a href="https://github.com/vmlaker/mpipe"><img style="position: absolute; top: 0; left: 0; border: 0; opacity: 0.7;" src="_static/forkme.png" alt="Fork me on GitHub"></a>
     <style type="text/css">
-      
-      .related { display: none; }
       
     </style>
 
@@ -42,7 +41,7 @@
     <li><a href="index.html">Home</a></li>
     <li><a href="docs.html">Docs</a></li>
     <li><a href="api.html">API</a></li>
-    <li><a href="#">About</a></li>
+    <li><a href="about.html">About</a></li>
   </ul>
   <div>
     <a href="index.html">
@@ -59,6 +58,9 @@
              accesskey="I">index</a></li>
         <li class="right" >
           <a href="api.html" title="MPipe API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="examples3.html" title="Filtering"
              accesskey="P">previous</a> |</li>
   <li><a href="index.html">MPipe home</a>&nbsp;|</li>
   <li><a href="docs.html">Documentation</a> &raquo;</li>
@@ -70,21 +72,45 @@
       <div class="documentwrapper">
           <div class="body">
             
-  <div class="section" id="about-name">
-<span id="about"></span><h1>About MPipe<a class="headerlink" href="#about-name" title="Permalink to this headline">¶</a></h1>
-<p>MPipe (pronounced &#8220;em pipe&#8221;) is written by
-<a class="reference external" href="http://github.com/vmlaker">Velimir Mlaker</a>.
-It&#8217;s a small, lightweight Python library you can use
-to create programs organized as multitasking pipelined workflows.
-MPipe is written in 100% pure <a class="reference external" href="http://python.org">Python</a>.</p>
-<p>The web pages you are reading were created with the fabulous
-<a class="reference external" href="http://sphinx.pocoo.org">Sphinx</a> documentation generator.
-Pictures in the documentation were drawn with
-<a class="reference external" href="http://live.gnome.org/Dia">Dia</a>, the powerful and easy-to-use
-diagram creation program.</p>
-<div class="section" id="credits">
-<h2>Credits<a class="headerlink" href="#credits" title="Permalink to this headline">¶</a></h2>
-<p>Frens Jan Rumph for adding ability to limit backlog in an unordered stage.</p>
+  <div class="section" id="for-developers">
+<span id="fordevelopers"></span><h1>For developers<a class="headerlink" href="#for-developers" title="Permalink to this headline">¶</a></h1>
+<p>If you want to contribute to MPipe development,
+start by forking the <a class="reference external" href="https://github.com/vmlaker/mpipe">repo</a>.
+After making changes to the code, run the build/test cycle
+as shown in the developer guide below.</p>
+<div class="section" id="build-install-test">
+<h2>Build/install/test<a class="headerlink" href="#build-install-test" title="Permalink to this headline">¶</a></h2>
+<p>It&#8217;s recommended you use Python Virtualenv for your build/test cycle.
+A good place to install Virtualenv is in the root project directory,
+simply by running:</p>
+<div class="highlight-python"><div class="highlight"><pre>virtualenv venv
+</pre></div>
+</div>
+<p>Use <em>Distutils</em> to build the code:</p>
+<div class="highlight-python"><div class="highlight"><pre>venv/bin/python setup.py build
+</pre></div>
+</div>
+<p>Install into your Virtualenv Python:</p>
+<div class="highlight-python"><div class="highlight"><pre>venv/bin/python setup.py install
+</pre></div>
+</div>
+<p>Run all tests:</p>
+<div class="highlight-python"><div class="highlight"><pre>venv/bin/python setup.py test
+</pre></div>
+</div>
+</div>
+<div class="section" id="update-pypi">
+<h2>Update Pypi<a class="headerlink" href="#update-pypi" title="Permalink to this headline">¶</a></h2>
+<p>To update the Python Package Index, run:</p>
+<div class="highlight-python"><div class="highlight"><pre>venv/bin/python setup.py clean build sdist upload
+</pre></div>
+</div>
+</div>
+<div class="section" id="build-docs">
+<h2>Build docs<a class="headerlink" href="#build-docs" title="Permalink to this headline">¶</a></h2>
+<p>To build MPipe documentation,
+go to <tt class="docutils literal"><span class="pre">doc</span></tt> directory and take a look at
+<tt class="docutils literal"><span class="pre">create-gh-pages.sh</span></tt> script.</p>
 </div>
 </div>
 
@@ -101,6 +127,9 @@ diagram creation program.</p>
              >index</a></li>
         <li class="right" >
           <a href="api.html" title="MPipe API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="examples3.html" title="Filtering"
              >previous</a> |</li>
   <li><a href="index.html">MPipe home</a>&nbsp;|</li>
   <li><a href="docs.html">Documentation</a> &raquo;</li>
