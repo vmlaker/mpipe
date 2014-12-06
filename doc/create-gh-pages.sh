@@ -3,6 +3,11 @@
 # Start at the root directory.
 cd ..
 
+# Create a Python Virtualenv in doc/ directory.
+virtualenv doc/venv
+doc/venv/bin/python setup.py install
+doc/venv/bin/pip install -r doc/requirements.txt
+
 # Switch to gh-pages branch and start afresh.
 git checkout gh-pages
 rm -rf *
@@ -13,7 +18,7 @@ git reset HEAD
 
 # Build the docs and move html/ files root directory.
 cd doc
-python ./create.py build
+venv/bin/python ./create.py build
 mv -fv build/html/* ..
 cd ..
 

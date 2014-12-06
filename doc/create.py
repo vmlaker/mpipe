@@ -1,6 +1,7 @@
-"""Create the Sphinx documentation pages.
+"""
+Create the Sphinx documentation pages.
 Run from the current directory, e.g.:
-  python ./create.py build/
+  venv/bin/python ./create.py build/
 """
 
 import subprocess
@@ -11,7 +12,7 @@ import os
 try:
     DEST = sys.argv[1]
 except:
-    print('Usage:  {0} destination'.format(sys.argv[0]))
+    print('Usage:  {} destination'.format(sys.argv[0]))
     sys.exit(1)
 
 # Diagram filename prefixes.
@@ -35,10 +36,10 @@ saved = os.getcwd()
 os.chdir('source')
 def runDia(diagram):
     """Generate the diagrams using Dia."""
-    ifname = '{0}.dia'.format(diagram)
-    ofname = '{0}.png'.format(diagram)
-    cmd = 'dia -e {0} {1}'.format(ofname, ifname)
-    print('  {0}'.format(cmd))
+    ifname = '{}.dia'.format(diagram)
+    ofname = '{}.png'.format(diagram)
+    cmd = 'dia -t png-libart -e {} {}'.format(ofname, ifname)
+    print('  {}'.format(cmd))
     subprocess.call(cmd, shell=True)
     return True
 pipe = mpipe.Pipeline(mpipe.UnorderedStage(runDia, len(diagrams)))
@@ -68,8 +69,8 @@ codes = (
     'disable_result0.py',
     )
 def runCopy(fname):
-    cmd = 'cp {0} source/'.format(os.path.join('..', 'test', fname))
-    print('  {0}'.format(cmd))
+    cmd = 'cp {} source/'.format(os.path.join('..', 'test', fname))
+    print('  {}'.format(cmd))
     subprocess.call(cmd, shell=True)
     return True
 pipe = mpipe.Pipeline(mpipe.UnorderedStage(runCopy, len(codes)))
@@ -80,15 +81,15 @@ for result in pipe.results():
     pass
     
 # Build the Sphinx documentation pages.
-cmd = 'make BUILDDIR={0} clean html'.format(DEST)
-print('  {0}'.format(cmd))
+cmd = 'make BUILDDIR={} SPHINXBUILD={} clean html'.format(DEST, 'venv/bin/sphinx-build')
+print('  {}'.format(cmd))
 subprocess.call(cmd, shell=True)
 
 # Move the .py examples to the build/ destination directory
 # so that documentation links to source code will work.
 def runMove(fname):
-    cmd = 'mv {0} build/html/'.format(os.path.join('source', fname))
-    print('  {0}'.format(cmd))
+    cmd = 'mv {} build/html/'.format(os.path.join('source', fname))
+    print('  {}'.format(cmd))
     subprocess.call(cmd, shell=True)
     return True
 pipe = mpipe.Pipeline(mpipe.UnorderedStage(runMove, len(codes)))
@@ -100,10 +101,10 @@ pipe.put(None)
 saved = os.getcwd()
 os.chdir('source')
 def runDia(diagram):
-    fname1 = '{0}.dia~'.format(diagram)
-    fname2 = '{0}.png'.format(diagram)
-    cmd = 'rm -f {0} {1}'.format(fname1, fname2)
-    print('  {0}'.format(cmd))
+    fname1 = '{}.dia~'.format(diagram)
+    fname2 = '{}.png'.format(diagram)
+    cmd = 'rm -f {} {}'.format(fname1, fname2)
+    print('  {}'.format(cmd))
     subprocess.call(cmd, shell=True)
     return True
 pipe = mpipe.Pipeline(mpipe.UnorderedStage(runDia, len(diagrams)))
