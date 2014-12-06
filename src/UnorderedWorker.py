@@ -7,7 +7,7 @@ class UnorderedWorker(multiprocessing.Process):
     """An UnorderedWorker object operates independently of other
     workers in the stage, fetching the first available task, and
     publishing its result whenever it is done
-    (without coordinating with neighboring workers.)
+    (without coordinating with neighboring workers).
     Consequently, the order of output results may not match 
     that of corresponding input tasks."""
 
@@ -126,7 +126,7 @@ class UnorderedWorker(multiprocessing.Process):
         to be executed on each *task* object.
         The implementation can publish the output result in one of two ways,
         either by 1) calling :meth:`putResult` and returning ``None``, or
-        2) returning the result (other than ``None``.)"""
+        2) returning the result (other than ``None``)."""
         return True
 
     def doInit(self):

@@ -71,7 +71,7 @@ class FilterWorker(OrderedWorker):
                     last_result = result
                     count -= 1
 
-            # Unless we're dropping results, save the last result (if any.)
+            # Unless we're dropping results, save the last result (if any).
             if not self._drop_results:
                 if last_result is not None:
                     self._last_results[pipe] = last_result

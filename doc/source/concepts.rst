@@ -34,12 +34,12 @@ A worker is a basic unit of processing -- it operates some activity on a task, a
 .. image:: worker2.png
    :align: center
 
-A worker exists in a *stage*, alone or with other functionally identical workers, depending on how much system resources you choose to devote to that stage (each worker running in a separate process.) 
+A worker exists in a *stage*, alone or with other functionally identical workers, depending on how much system resources you choose to devote to that stage (each worker running in a separate process).
 
 Stage
 -----
 
-The stage is an assembly of workers. It accepts a stream of input tasks, delegates them to its workers, and usually produces a stream of output results (products of its internal workers.) You can think of the stage as a corral of functionally identical workers, with added synchronization used to delegate tasks and organize results among the individual worker processes. The activity of the stage is therefore defined by the workers therein. 
+The stage is an assembly of workers. It accepts a stream of input tasks, delegates them to its workers, and usually produces a stream of output results (products of its internal workers). You can think of the stage as a corral of functionally identical workers, with added synchronization used to delegate tasks and organize results among the individual worker processes. The activity of the stage is therefore defined by the workers therein. 
 
 A stage can be linked to another stage to form a chain:
 

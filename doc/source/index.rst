@@ -21,7 +21,7 @@ Here's how you'd code it up using the :mod:`mpipe` module:
 
 .. literalinclude:: tiny.py
 
-The above snippet runs a total of seven processes: one for the main program and six for the two stages (three processes per stage.)
+The above snippet runs a total of seven processes: one for the main program and six for the two stages (three processes per stage).
 
 Installation
 ************

@@ -183,7 +183,7 @@ class OrderedWorker(multiprocessing.Process):
         to be executed on each *task* object.
         The implementation can publish the output result in one of two ways,
         either by 1) calling :meth:`putResult` and returning ``None``, or
-        2) returning the result (other than ``None``.)"""
+        2) returning the result (other than ``None``)."""
         return True
 
     def doInit(self):

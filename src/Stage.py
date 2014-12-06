@@ -16,7 +16,7 @@ class Stage(object):
         with *size* indicating the number of workers within the stage.
         *disable_result* overrides any result defined in worker implementation,
         and does not propagate it downstream (equivalent to the worker
-        producing ``None`` result.) 
+        producing ``None`` result).
 
         *do_stop_task* indicates whether the incoming "stop" signal (``None`` value)
         will actually be passed to the worker as a task. When using this option,
@@ -85,7 +85,7 @@ class Stage(object):
         """Create and start up the internal workers."""
 
         # If there's no output tube, it means that this stage
-        # is at the end of a fork (hasn't been linked to any stage downstream.)
+        # is at the end of a fork (hasn't been linked to any stage downstream).
         # Therefore, create one output tube.
         if not self._output_tubes:
             self._output_tubes.append(self._worker_class.getTubeClass()())
