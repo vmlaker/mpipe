@@ -8,6 +8,7 @@
    concepts
    cookbook
    examples
+   fordevelopers
    api
    about
 
