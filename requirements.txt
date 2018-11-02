@@ -1,0 +1,3 @@
+coveralls==1.5.1
+Sphinx==1.8.1
+twine==1.12.1
