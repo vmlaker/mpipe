@@ -1,3 +1,5 @@
+.PHONY: venv
+
 all: test
 
 venv: requirements.txt
