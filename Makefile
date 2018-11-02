@@ -9,6 +9,10 @@ test: venv
 	./venv/bin/python setup.py install
 	./venv/bin/python setup.py test
 
+docs: test
+	cd doc && mkdir -p build/html
+	cd doc && ../venv/bin/python create.py build
+
 clean:
 	rm -rf build dist venv
 	rm -rf doc/build

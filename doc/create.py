@@ -9,11 +9,18 @@ import mpipe
 import sys
 import os
 
+
 try:
     DEST = sys.argv[1]
 except:
     print('Usage:  {} destination'.format(sys.argv[0]))
     sys.exit(1)
+
+
+def call(command):
+    print('  {}'.format(command))
+    subprocess.call(command, shell=True)
+ 
 
 # Diagram filename prefixes.
 diagrams = (
@@ -38,9 +45,7 @@ def runDia(diagram):
     """Generate the diagrams using Dia."""
     ifname = '{}.dia'.format(diagram)
     ofname = '{}.png'.format(diagram)
-    cmd = 'dia -t png-libart -e {} {}'.format(ofname, ifname)
-    print('  {}'.format(cmd))
-    subprocess.call(cmd, shell=True)
+    call('dia -t png-libart -e {} {}'.format(ofname, ifname))
     return True
 pipe = mpipe.Pipeline(mpipe.UnorderedStage(runDia, len(diagrams)))
 for diagram in diagrams: 
@@ -69,9 +74,7 @@ codes = (
     'disable_result0.py',
     )
 def runCopy(fname):
-    cmd = 'cp {} source/'.format(os.path.join('..', 'test', fname))
-    print('  {}'.format(cmd))
-    subprocess.call(cmd, shell=True)
+    call('cp {} source/'.format(os.path.join('..', 'test', fname)))
     return True
 pipe = mpipe.Pipeline(mpipe.UnorderedStage(runCopy, len(codes)))
 for fname in codes: 
@@ -81,16 +84,12 @@ for result in pipe.results():
     pass
     
 # Build the Sphinx documentation pages.
-cmd = 'make BUILDDIR={} SPHINXBUILD={} clean html'.format(DEST, 'venv/bin/sphinx-build')
-print('  {}'.format(cmd))
-subprocess.call(cmd, shell=True)
+call('make BUILDDIR={} SPHINXBUILD={} clean html'.format(DEST, '../venv/bin/sphinx-build'))
 
 # Move the .py examples to the build/ destination directory
 # so that documentation links to source code will work.
 def runMove(fname):
-    cmd = 'mv {} build/html/'.format(os.path.join('source', fname))
-    print('  {}'.format(cmd))
-    subprocess.call(cmd, shell=True)
+    call('mv {} build/html/'.format(os.path.join('source', fname)))
     return True
 pipe = mpipe.Pipeline(mpipe.UnorderedStage(runMove, len(codes)))
 for fname in codes: 
@@ -103,9 +102,7 @@ os.chdir('source')
 def runDia(diagram):
     fname1 = '{}.dia~'.format(diagram)
     fname2 = '{}.png'.format(diagram)
-    cmd = 'rm -f {} {}'.format(fname1, fname2)
-    print('  {}'.format(cmd))
-    subprocess.call(cmd, shell=True)
+    call('rm -f {} {}'.format(fname1, fname2))
     return True
 pipe = mpipe.Pipeline(mpipe.UnorderedStage(runDia, len(diagrams)))
 for diagram in diagrams: 

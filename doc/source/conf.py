@@ -20,7 +20,6 @@ needs_sphinx = '1.0'
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
     'sphinx.ext.autodoc', 
-    'sphinx.ext.pngmath',
     'sphinx.ext.intersphinx',
 
 # Create links to Python source code for the module.
