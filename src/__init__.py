@@ -1,6 +1,6 @@
 """MPipe is a multiprocessing pipeline toolkit for Python."""
 
-__version__ = '1.0.8'
+__version__ = '1.0.9'
 
 from .OrderedWorker import OrderedWorker
 from .UnorderedWorker import UnorderedWorker
