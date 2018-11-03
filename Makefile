@@ -43,6 +43,7 @@ clean:
 	rm -rf doc/build
 	rm -rf doc/venv
 	rm -rf MANIFEST
+	rm -rf *.egg-info
 	rm -rf src/*.pyc
 	rm -rf src/__pycache__
 	rm -rf test/*.out
