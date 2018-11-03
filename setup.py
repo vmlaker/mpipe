@@ -1,11 +1,14 @@
-"""Distutils file for MPipe."""
+"""Setup file for the MPipe module."""
 
-from distutils.core import setup, Command
+from setuptools import setup, Command
 import subprocess
 import inspect
 import shutil
 import os
 import sys
+
+
+exec(open('./src/version.py').read())
 
 class Clean2(Command):
     """A more thorough clean command."""
