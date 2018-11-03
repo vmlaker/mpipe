@@ -15,6 +15,15 @@ docs: test
 	cd doc && mkdir -p build/html
 	cd doc && ../venv/bin/python create.py build
 
+dist: clean venv
+	./venv/bin/python setup.py sdist
+
+testpypi: dist
+	./venv/bin/twine upload --repository testpypi dist/*
+
+pypi: dist
+	./venv/bin/twine upload dist/*
+
 MASTER_VERSION = $(shell git log master -1 | head -1)
 
 gh-pages: docs
