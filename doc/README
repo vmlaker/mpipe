@@ -1,7 +1,0 @@
-Contents of this directory:
----------------------------
-create.py           -  build the documentation
-create-gh-pages.sh  -  build the docs and updates gh-pages  
-Makefile            -  Sphinx makefile
-README              -  this README file
-source/             -  Sphinx documentation source code
