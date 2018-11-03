@@ -15,8 +15,22 @@ docs: test
 	cd doc && mkdir -p build/html
 	cd doc && ../venv/bin/python create.py build
 
+MASTER_VERSION = $(shell git log master -1 | head -1)
+
+gh-pages: docs
+	rm -rf html
+	#git clone https://github.com/vmlaker/mpipe.git html
+	git clone git@github.com:vmlaker/mpipe.git html
+	cd html && git checkout gh-pages
+	rm -rf html/*
+	cp -r doc/build/html/* html
+	cd html && touch .nojekyll
+	cd html && git add .
+	cd html && git commit -m 'Update gh-pages for $(MASTER_VERSION).'
+	cd html && git push origin gh-pages
+
 clean:
-	rm -rf build dist venv
+	rm -rf build dist html venv
 	rm -rf doc/build
 	rm -rf doc/venv
 	rm -rf src/*.pyc
