@@ -1,30 +1,23 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Installation &mdash; MPipe Documentation</title>
-    
+    <title>Installation &#8212; MPipe Documentation</title>
     <link rel="stylesheet" href="_static/style.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="MPipe Documentation" href="#" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Documentation contents" href="docs.html" />
  
 
@@ -35,8 +28,7 @@
       
     </style>
 
-  </head>
-  <body>
+  </head><body>
 <div class="pageheader">
   <ul>
     <li><a href="#">Home</a></li>
@@ -51,7 +43,7 @@
   </div>
 </div>
 
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -68,15 +60,15 @@
 
     <div class="document">
       <div class="documentwrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="toctree-wrapper compound" id="index">
 </div>
-<p>MPipe is a tiny Python module &#8211; a thin layer above the standard <a class="reference external" href="http://docs.python.org/library/multiprocessing.html#module-multiprocessing" title="(in Python v2.7)"><tt class="xref py py-mod docutils literal"><span class="pre">multiprocessing</span></tt></a> package &#8211; that lets you write parallel, multi-stage pipeline algorithms with remarkable ease. Consider the following workflow:</p>
+<p>MPipe is a tiny Python module – a thin layer above the standard <a class="reference external" href="https://docs.python.org/3/library/multiprocessing.html#module-multiprocessing" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">multiprocessing</span></code></a> package – that lets you write parallel, multi-stage pipeline algorithms with remarkable ease. Consider the following workflow:</p>
 <img alt="_images/tiny.png" class="align-center" src="_images/tiny.png" />
-<p>It&#8217;s a two-stage pipeline that increments and doubles numbers, each stage concurrently running three workers.
-Here&#8217;s how you&#8217;d code it up using the <a class="reference internal" href="api.html#module-mpipe" title="mpipe"><tt class="xref py py-mod docutils literal"><span class="pre">mpipe</span></tt></a> module:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">mpipe</span> <span class="kn">import</span> <span class="n">OrderedStage</span><span class="p">,</span> <span class="n">Pipeline</span>
+<p>It’s a two-stage pipeline that increments and doubles numbers, each stage concurrently running three workers.
+Here’s how you’d code it up using the <a class="reference internal" href="api.html#module-mpipe" title="mpipe"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mpipe</span></code></a> module:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mpipe</span> <span class="k">import</span> <span class="n">OrderedStage</span><span class="p">,</span> <span class="n">Pipeline</span>
 
 <span class="k">def</span> <span class="nf">increment</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">value</span> <span class="o">+</span> <span class="mi">1</span>
@@ -91,26 +83,26 @@ Here&#8217;s how you&#8217;d code it up using the <a class="reference internal" 
 <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
     <span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
 
-<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">pipe</span><span class="o">.</span><span class="n">results</span><span class="p">():</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The above snippet runs a total of seven processes: one for the main program and six for the two stages (three processes per stage).</p>
 <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <p>Get MPipe now! Easiest way is using <em>pip</em>:</p>
-<div class="highlight-python"><div class="highlight"><pre>pip install mpipe
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">mpipe</span>
 </pre></div>
 </div>
-<p>Check out <a class="reference internal" href="download.html"><em>Installation instructions</em></a> for other ways of getting MPipe up and running on your system.</p>
+<p>Check out <a class="reference internal" href="download.html"><span class="doc">Installation instructions</span></a> for other ways of getting MPipe up and running on your system.</p>
 </div>
 <div class="section" id="got-it-now-what">
 <h1>Got it, now what?<a class="headerlink" href="#got-it-now-what" title="Permalink to this headline">¶</a></h1>
-<p>Start piping right away by running through the <a class="reference internal" href="examples.html"><em>Examples</em></a>.
-If you want a step-by-step guide to creating pipelines, read the <a class="reference internal" href="cookbook.html"><em>MPipe cookbook</em></a>.
-For theory and design, take a look at <a class="reference internal" href="concepts.html"><em>Pipeline concepts</em></a>.</p>
+<p>Start piping right away by running through the <a class="reference internal" href="examples.html"><span class="doc">Examples</span></a>.
+If you want a step-by-step guide to creating pipelines, read the <a class="reference internal" href="cookbook.html"><span class="doc">MPipe cookbook</span></a>.
+For theory and design, take a look at <a class="reference internal" href="concepts.html"><span class="doc">Pipeline concepts</span></a>.</p>
 </div>
 
 
@@ -118,7 +110,7 @@ For theory and design, take a look at <a class="reference internal" href="concep
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -133,10 +125,10 @@ For theory and design, take a look at <a class="reference internal" href="concep
       </ul>
     </div>
   
-    <div class="footer">
-        &copy; Copyright 2014, Velimir Mlaker.
-      Last updated on Dec 06, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Velimir Mlaker.
+      Last updated on Nov 02, 2018.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
     </div>
 
   </body>

@@ -1,30 +1,23 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Pipeline concepts &mdash; MPipe Documentation</title>
-    
+    <title>Pipeline concepts &#8212; MPipe Documentation</title>
     <link rel="stylesheet" href="_static/style.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="MPipe Documentation" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="MPipe cookbook" href="cookbook.html" />
     <link rel="prev" title="Installation instructions" href="download.html" />
  
@@ -34,8 +27,7 @@
       
     </style>
 
-  </head>
-  <body>
+  </head><body>
 <div class="pageheader">
   <ul>
     <li><a href="index.html">Home</a></li>
@@ -50,7 +42,7 @@
   </div>
 </div>
 
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -64,13 +56,14 @@
              accesskey="P">previous</a> |</li>
   <li><a href="index.html">MPipe home</a>&nbsp;|</li>
   <li><a href="docs.html">Documentation</a> &raquo;</li>
- 
+
+          <li class="nav-item nav-item-1"><a href="docs.html" accesskey="U">Documentation contents</a> &#187;</li> 
       </ul>
     </div>
 
     <div class="document">
       <div class="documentwrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pipeline-concepts">
 <span id="concepts"></span><h1>Pipeline concepts<a class="headerlink" href="#pipeline-concepts" title="Permalink to this headline">¶</a></h1>
@@ -80,17 +73,17 @@
 <li>a <em>stage</em> composed of one or more identical workers concurrently processing a stream of tasks,</li>
 <li>a <em>pipeline</em> of stages linked together, output of the upstream stage fed as input into one or more downstream stages.</li>
 </ol>
-<p>A <em>pipeline</em> is then conceptually composed of <em>stages</em>, each stage being an assembly of a number of (identical) <em>worker</em> processes. Messages that flow down the pipeline, from stage to stage, are called <em>tasks</em> or <em>results</em>, depending on whether they&#8217;re viewed as input or output to a stage.</p>
+<p>A <em>pipeline</em> is then conceptually composed of <em>stages</em>, each stage being an assembly of a number of (identical) <em>worker</em> processes. Messages that flow down the pipeline, from stage to stage, are called <em>tasks</em> or <em>results</em>, depending on whether they’re viewed as input or output to a stage.</p>
 <div class="section" id="task-result">
 <span id="id1"></span><h2>Task, result<a class="headerlink" href="#task-result" title="Permalink to this headline">¶</a></h2>
-<p>The unit of data that passes through the workflow is called a <em>task</em> when it is the input to a pipeline/stage/worker, and a <em>result</em> when it&#8217;s the output thereof.</p>
+<p>The unit of data that passes through the workflow is called a <em>task</em> when it is the input to a pipeline/stage/worker, and a <em>result</em> when it’s the output thereof.</p>
 <img alt="_images/taskresult1.png" class="align-center" src="_images/taskresult1.png" />
-<p>Most often a data object is both, depending on the context &#8211; whether it&#8217;s viewed as the output of an upstream producer, or input to the downstream consumer. It can be any pickleable Python object: a standard Python data type like string or list, or a user-defined object. The only requirement is that it is picklable.</p>
+<p>Most often a data object is both, depending on the context – whether it’s viewed as the output of an upstream producer, or input to the downstream consumer. It can be any pickleable Python object: a standard Python data type like string or list, or a user-defined object. The only requirement is that it is picklable.</p>
 </div>
 <div class="section" id="worker">
 <h2>Worker<a class="headerlink" href="#worker" title="Permalink to this headline">¶</a></h2>
 <img alt="_images/worker1.png" class="align-center" src="_images/worker1.png" />
-<p>A worker is a basic unit of processing &#8211; it operates some activity on a task, and (usually) produces a result. The worker is where you implement some elemental functionality of your overall program.</p>
+<p>A worker is a basic unit of processing – it operates some activity on a task, and (usually) produces a result. The worker is where you implement some elemental functionality of your overall program.</p>
 <img alt="_images/worker2.png" class="align-center" src="_images/worker2.png" />
 <p>A worker exists in a <em>stage</em>, alone or with other functionally identical workers, depending on how much system resources you choose to devote to that stage (each worker running in a separate process).</p>
 </div>
@@ -110,9 +103,9 @@
 <div class="section" id="ordered-vs-unordered-stages">
 <span id="ordered-vs-unordered"></span><h2>Ordered vs. unordered stages<a class="headerlink" href="#ordered-vs-unordered-stages" title="Permalink to this headline">¶</a></h2>
 <p>A worker within a stage can operate in two different ways in relation to other workers: it can be arranged in a specific <em>order</em> with respect to its siblings, or unordered, functioning independently of other workers in the stage.</p>
-<p>An <strong>ordered stage</strong> preserves a sequence among its workers, each worker having a <em>previous</em> and <em>next</em> neighbor worker, all workers thusly arranged in a circular fashion. It guarantees that inputs will be processed in this sequence, the <em>previous</em> worker operating on the previous task, and likewise the <em>next</em> one working on the task immediately after. Just as stage inputs are processed in order, stage outputs become available in the same sequence: the <em>previous</em> worker&#8217;s result showing up before the current worker&#8217;s, and the <em>next</em> one&#8217;s result after. In case a worker completes processing ahead of its previous neighbor, it waits for it, adding the result to stage output right after its predecessor. In other words, <em>order of stage output results matches that of its input tasks.</em></p>
-<p>An <strong>unordered stage</strong> adheres to no such symmetry among its worker processes. Each worker starts processing the earliest available task, and as soon as it&#8217;s done, makes the result available as stage output.</p>
-<p>Choosing between the two depends on the nature of problem. Many signal processing applications require preserved order of inputs and outputs. On the other hand, certain file system tasks &#8211; like source code compiling &#8211; may safely ignore input/output sequences. And, naturally, if your stage operates just a single worker, it doesn&#8217;t matter which type you use: the output sequence will be ordered.</p>
+<p>An <strong>ordered stage</strong> preserves a sequence among its workers, each worker having a <em>previous</em> and <em>next</em> neighbor worker, all workers thusly arranged in a circular fashion. It guarantees that inputs will be processed in this sequence, the <em>previous</em> worker operating on the previous task, and likewise the <em>next</em> one working on the task immediately after. Just as stage inputs are processed in order, stage outputs become available in the same sequence: the <em>previous</em> worker’s result showing up before the current worker’s, and the <em>next</em> one’s result after. In case a worker completes processing ahead of its previous neighbor, it waits for it, adding the result to stage output right after its predecessor. In other words, <em>order of stage output results matches that of its input tasks.</em></p>
+<p>An <strong>unordered stage</strong> adheres to no such symmetry among its worker processes. Each worker starts processing the earliest available task, and as soon as it’s done, makes the result available as stage output.</p>
+<p>Choosing between the two depends on the nature of problem. Many signal processing applications require preserved order of inputs and outputs. On the other hand, certain file system tasks – like source code compiling – may safely ignore input/output sequences. And, naturally, if your stage operates just a single worker, it doesn’t matter which type you use: the output sequence will be ordered.</p>
 </div>
 <div class="section" id="multiprocessing">
 <span id="id2"></span><h2>Multiprocessing<a class="headerlink" href="#multiprocessing" title="Permalink to this headline">¶</a></h2>
@@ -126,7 +119,7 @@
 <li>Stage can contain multiple workers.</li>
 </ol>
 <blockquote>
-<div>If the input stream is even faster, such that computing time for a stage is longer that the interval between incoming tasks, additional workers at the stage can ameliorate a bottlenecked flow. Take a look at <a class="reference internal" href="examples2.html#multiple-workers-per-stage"><em>Multiple workers per stage</em></a> for an illustration of potential speedup using this strategy.</div></blockquote>
+<div>If the input stream is even faster, such that computing time for a stage is longer that the interval between incoming tasks, additional workers at the stage can ameliorate a bottlenecked flow. Take a look at <a class="reference internal" href="examples2.html#multiple-workers-per-stage"><span class="std std-ref">Multiple workers per stage</span></a> for an illustration of potential speedup using this strategy.</div></blockquote>
 <ol class="arabic simple" start="3">
 <li>Pipeline can fork into parallel stages.</li>
 </ol>
@@ -140,7 +133,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -154,14 +147,15 @@
              >previous</a> |</li>
   <li><a href="index.html">MPipe home</a>&nbsp;|</li>
   <li><a href="docs.html">Documentation</a> &raquo;</li>
- 
+
+          <li class="nav-item nav-item-1"><a href="docs.html" >Documentation contents</a> &#187;</li> 
       </ul>
     </div>
   
-    <div class="footer">
-        &copy; Copyright 2014, Velimir Mlaker.
-      Last updated on Dec 06, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Velimir Mlaker.
+      Last updated on Nov 02, 2018.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
     </div>
 
   </body>

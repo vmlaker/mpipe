@@ -1,31 +1,23 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Filtering &mdash; MPipe Documentation</title>
-    
+    <title>Filtering &#8212; MPipe Documentation</title>
     <link rel="stylesheet" href="_static/style.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="MPipe Documentation" href="index.html" />
-    <link rel="up" title="Examples" href="examples.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="For developers" href="fordevelopers.html" />
     <link rel="prev" title="Unordered worker/stage" href="examples2.html" />
  
@@ -35,8 +27,7 @@
       
     </style>
 
-  </head>
-  <body>
+  </head><body>
 <div class="pageheader">
   <ul>
     <li><a href="index.html">Home</a></li>
@@ -51,7 +42,7 @@
   </div>
 </div>
 
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -66,26 +57,27 @@
   <li><a href="index.html">MPipe home</a>&nbsp;|</li>
   <li><a href="docs.html">Documentation</a> &raquo;</li>
 
-          <li><a href="examples.html" accesskey="U">Examples</a> &raquo;</li> 
+          <li class="nav-item nav-item-1"><a href="docs.html" >Documentation contents</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="examples.html" accesskey="U">Examples</a> &#187;</li> 
       </ul>
     </div>
 
     <div class="document">
       <div class="documentwrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="filtering">
 <span id="examples3"></span><span id="id1"></span><h1>Filtering<a class="headerlink" href="#filtering" title="Permalink to this headline">¶</a></h1>
-<p>If a stage can&#8217;t process incoming tasks fast enough, we have a bottleneck situation at our hands.
+<p>If a stage can’t process incoming tasks fast enough, we have a bottleneck situation at our hands.
 Imagine a stream of tasks feeding a pipeline at the rate of 100 tasks per second.
 A single-worker stage that takes 30% longer to process each task inevitably bottlenecks the workflow:</p>
-<div class="source-click-above container">
+<div class="source-click-above docutils container">
 [<a class="reference external" href="bottleneck1.py">source</a>]</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">mpipe</span> <span class="kn">import</span> <span class="n">OrderedStage</span><span class="p">,</span> <span class="n">Pipeline</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">mpipe</span> <span class="k">import</span> <span class="n">OrderedStage</span><span class="p">,</span> <span class="n">Pipeline</span>
 
 <span class="k">def</span> <span class="nf">echo</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.013</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">value</span>
 
@@ -94,19 +86,19 @@ A single-worker stage that takes 30% longer to process each task inevitably bott
     <span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.010</span><span class="p">)</span>
 
-<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="source-click-below container">
+<div class="source-click-below docutils container">
 [<a class="reference external" href="bottleneck1.py">source</a>]</div>
 <p>An easy way to fix this, of course, is to devote an additional worker to the stage:</p>
-<div class="source-click-above container">
+<div class="source-click-above docutils container">
 [<a class="reference external" href="bottleneck2.py">source</a>]</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">mpipe</span> <span class="kn">import</span> <span class="n">OrderedStage</span><span class="p">,</span> <span class="n">Pipeline</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">mpipe</span> <span class="k">import</span> <span class="n">OrderedStage</span><span class="p">,</span> <span class="n">Pipeline</span>
 
 <span class="k">def</span> <span class="nf">echo</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.013</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">value</span>
 
@@ -115,26 +107,26 @@ A single-worker stage that takes 30% longer to process each task inevitably bott
     <span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.010</span><span class="p">)</span>
 
-<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="source-click-below container">
+<div class="source-click-below docutils container">
 [<a class="reference external" href="bottleneck2.py">source</a>]</div>
 <p>But what if our design limits us to a single worker stage?
 If adding workers is not an option, we can instead choose to filter inputs before they reach the problematic stage, by dropping tasks that exceed capacity.
 For example, we can limit the carrying capacity of the pipeline to, say, a maximum load of 2 tasks.
-If a task arrives while the pipeline is &#8220;full&#8221; (i.e. is currently working on two tasks) then the new task is thrown away.
+If a task arrives while the pipeline is “full” (i.e. is currently working on two tasks) then the new task is thrown away.
 This way we are able to keep up with the input flow, granted we lose any tasks that exceed the preset bandwidth.
 Running such a filter in our scenario, we lose the 6th and 10th task:</p>
 <img alt="_images/filter.png" class="align-center" src="_images/filter.png" />
-<p>Implementing the solution is easy. Simply wrap the original stage into a <a class="reference internal" href="api.html#mpipe.FilterStage" title="mpipe.FilterStage"><tt class="xref py py-mod docutils literal"><span class="pre">FilterStage</span></tt></a>:</p>
-<div class="source-click-above container">
+<p>Implementing the solution is easy. Simply wrap the original stage into a <a class="reference internal" href="api.html#mpipe.FilterStage" title="mpipe.FilterStage"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FilterStage</span></code></a>:</p>
+<div class="source-click-above docutils container">
 [<a class="reference external" href="bottleneck3.py">source</a>]</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">mpipe</span> <span class="kn">import</span> <span class="n">OrderedStage</span><span class="p">,</span> <span class="n">FilterStage</span><span class="p">,</span> <span class="n">Pipeline</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">mpipe</span> <span class="k">import</span> <span class="n">OrderedStage</span><span class="p">,</span> <span class="n">FilterStage</span><span class="p">,</span> <span class="n">Pipeline</span>
 
 <span class="k">def</span> <span class="nf">echo</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.013</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">value</span>
 
@@ -144,13 +136,13 @@ Running such a filter in our scenario, we lose the 6th and 10th task:</p>
     <span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.010</span><span class="p">)</span>
 
-<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="source-click-below container">
+<div class="source-click-below docutils container">
 [<a class="reference external" href="bottleneck3.py">source</a>]</div>
 <p>Running the above code shows the output below, the 6th and 10th task (index 5 and 9) conspicuously missing from the final result:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="mi">0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span>
 <span class="mi">1</span>
 <span class="mi">2</span>
 <span class="mi">3</span>
@@ -169,7 +161,7 @@ Running such a filter in our scenario, we lose the 6th and 10th task:</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -184,14 +176,15 @@ Running such a filter in our scenario, we lose the 6th and 10th task:</p>
   <li><a href="index.html">MPipe home</a>&nbsp;|</li>
   <li><a href="docs.html">Documentation</a> &raquo;</li>
 
-          <li><a href="examples.html" >Examples</a> &raquo;</li> 
+          <li class="nav-item nav-item-1"><a href="docs.html" >Documentation contents</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="examples.html" >Examples</a> &#187;</li> 
       </ul>
     </div>
   
-    <div class="footer">
-        &copy; Copyright 2014, Velimir Mlaker.
-      Last updated on Dec 06, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Velimir Mlaker.
+      Last updated on Nov 02, 2018.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
     </div>
 
   </body>

@@ -1,31 +1,23 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Hello world &mdash; MPipe Documentation</title>
-    
+    <title>Hello world &#8212; MPipe Documentation</title>
     <link rel="stylesheet" href="_static/style.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="MPipe Documentation" href="index.html" />
-    <link rel="up" title="Examples" href="examples.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Unordered worker/stage" href="examples2.html" />
     <link rel="prev" title="Examples" href="examples.html" />
  
@@ -35,8 +27,7 @@
       
     </style>
 
-  </head>
-  <body>
+  </head><body>
 <div class="pageheader">
   <ul>
     <li><a href="index.html">Home</a></li>
@@ -51,7 +42,7 @@
   </div>
 </div>
 
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -66,25 +57,26 @@
   <li><a href="index.html">MPipe home</a>&nbsp;|</li>
   <li><a href="docs.html">Documentation</a> &raquo;</li>
 
-          <li><a href="examples.html" accesskey="U">Examples</a> &raquo;</li> 
+          <li class="nav-item nav-item-1"><a href="docs.html" >Documentation contents</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="examples.html" accesskey="U">Examples</a> &#187;</li> 
       </ul>
     </div>
 
     <div class="document">
       <div class="documentwrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="hello-world">
 <span id="examples1"></span><span id="id1"></span><h1>Hello world<a class="headerlink" href="#hello-world" title="Permalink to this headline">¶</a></h1>
-<p>Let&#8217;s start with a really simple workflow, a &#8220;hello world&#8221; of pipelines if you will.</p>
+<p>Let’s start with a really simple workflow, a “hello world” of pipelines if you will.</p>
 <img alt="_images/helloworld.png" class="align-center" src="_images/helloworld.png" />
-<p>It just prints each input element as it comes in. Feeding it a stream of numbers 0, 1, 2, 3 simply echoes the numbers to your terminal&#8217;s standard output. Here&#8217;s the code:</p>
-<div class="source-click-above container">
+<p>It just prints each input element as it comes in. Feeding it a stream of numbers 0, 1, 2, 3 simply echoes the numbers to your terminal’s standard output. Here’s the code:</p>
+<div class="source-click-above docutils container">
 [<a class="reference external" href="helloworld.py">source</a>]</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">mpipe</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mpipe</span>
 
 <span class="k">def</span> <span class="nf">echo</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
 <span class="n">stage</span> <span class="o">=</span> <span class="n">mpipe</span><span class="o">.</span><span class="n">OrderedStage</span><span class="p">(</span><span class="n">echo</span><span class="p">)</span>
 <span class="n">pipe</span> <span class="o">=</span> <span class="n">mpipe</span><span class="o">.</span><span class="n">Pipeline</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span>
@@ -92,27 +84,27 @@
 <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
     <span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
 
-<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>  <span class="c"># Stop the pipeline.</span>
+<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>  <span class="c1"># Stop the pipeline.</span>
 </pre></div>
 </div>
-<div class="source-click-below container">
+<div class="source-click-below docutils container">
 [<a class="reference external" href="helloworld.py">source</a>]</div>
 <p>The program output is:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="mi">0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span>
 <span class="mi">1</span>
 <span class="mi">2</span>
 <span class="mi">3</span>
 </pre></div>
 </div>
-<p>It&#8217;s a silly pipeline that doesn&#8217;t do much other than illustrate a few basic ideas. Note the last line that puts <tt class="docutils literal"><span class="pre">None</span></tt> on the pipeline &#8211; this sends the &#8220;stop&#8221; task, effectively signaling all processes within the pipeline to terminate.</p>
+<p>It’s a silly pipeline that doesn’t do much other than illustrate a few basic ideas. Note the last line that puts <code class="docutils literal notranslate"><span class="pre">None</span></code> on the pipeline – this sends the “stop” task, effectively signaling all processes within the pipeline to terminate.</p>
 </div>
 <div class="section" id="serializing-stages">
 <span id="id3"></span><h1>Serializing stages<a class="headerlink" href="#serializing-stages" title="Permalink to this headline">¶</a></h1>
 <p>Multiple stages can be serially linked to create a sequential workflow:</p>
 <img alt="_images/chain.png" class="align-center" src="_images/chain.png" />
-<div class="source-click-above container">
+<div class="source-click-above docutils container">
 [<a class="reference external" href="chain.py">source</a>]</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">mpipe</span> <span class="kn">import</span> <span class="n">OrderedStage</span><span class="p">,</span> <span class="n">Pipeline</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mpipe</span> <span class="k">import</span> <span class="n">OrderedStage</span><span class="p">,</span> <span class="n">Pipeline</span>
 
 <span class="k">def</span> <span class="nf">increment</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">value</span> <span class="o">+</span> <span class="mi">1</span>
@@ -121,7 +113,7 @@
     <span class="k">return</span> <span class="n">value</span> <span class="o">*</span> <span class="mi">2</span>
 
 <span class="k">def</span> <span class="nf">echo</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
 <span class="n">stage1</span> <span class="o">=</span> <span class="n">OrderedStage</span><span class="p">(</span><span class="n">increment</span><span class="p">)</span>
 <span class="n">stage2</span> <span class="o">=</span> <span class="n">OrderedStage</span><span class="p">(</span><span class="n">double</span><span class="p">)</span>
@@ -133,20 +125,20 @@
 <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
     <span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
 
-<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="source-click-below container">
+<div class="source-click-below docutils container">
 [<a class="reference external" href="chain.py">source</a>]</div>
 </div>
 <div class="section" id="pipeline-with-output">
 <span id="id6"></span><h1>Pipeline with output<a class="headerlink" href="#pipeline-with-output" title="Permalink to this headline">¶</a></h1>
-<p>Have you noticed that the pipelines so far did not actually produce results at the output end? Here&#8217;s a pipeline similar to the previous one, except that the final result is returned as <em>pipeline output</em> instead of being passed to a third stage:</p>
+<p>Have you noticed that the pipelines so far did not actually produce results at the output end? Here’s a pipeline similar to the previous one, except that the final result is returned as <em>pipeline output</em> instead of being passed to a third stage:</p>
 <img alt="_images/pipeout.png" class="align-center" src="_images/pipeout.png" />
 <p>Without a third stage doing the printing, the caller of the pipeline must print the final result:</p>
-<div class="source-click-above container">
+<div class="source-click-above docutils container">
 [<a class="reference external" href="pipeout.py">source</a>]</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">mpipe</span> <span class="kn">import</span> <span class="n">OrderedStage</span><span class="p">,</span> <span class="n">Pipeline</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mpipe</span> <span class="k">import</span> <span class="n">OrderedStage</span><span class="p">,</span> <span class="n">Pipeline</span>
 
 <span class="k">def</span> <span class="nf">increment</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">value</span> <span class="o">+</span> <span class="mi">1</span>
@@ -162,20 +154,20 @@
 <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
     <span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
 
-<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">pipe</span><span class="o">.</span><span class="n">results</span><span class="p">():</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="source-click-below container">
+<div class="source-click-below docutils container">
 [<a class="reference external" href="pipeout.py">source</a>]</div>
-<p>Note that, before fetching results, we need to put the &#8220;stop&#8221; task on the pipeline. That&#8217;s because <a class="reference internal" href="api.html#mpipe.Pipeline.results" title="mpipe.Pipeline.results"><tt class="xref py py-meth docutils literal"><span class="pre">results()</span></tt></a> returns a generator function that continues to fetch results so long as the pipeline remains alive. Without previously signaling &#8220;stop&#8221;, the fetch loop would hang on the fifth iteration.</p>
-<p>Another way to fetch results is to call <a class="reference internal" href="api.html#mpipe.Pipeline.get" title="mpipe.Pipeline.get"><tt class="xref py py-meth docutils literal"><span class="pre">get()</span></tt></a> exactly four times. Using this method it doesn&#8217;t matter whether you signal &#8220;stop&#8221; before or after the fetch loop:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">foobar</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
-   <span class="k">print</span><span class="p">(</span><span class="n">pipe</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+<p>Note that, before fetching results, we need to put the “stop” task on the pipeline. That’s because <a class="reference internal" href="api.html#mpipe.Pipeline.results" title="mpipe.Pipeline.results"><code class="xref py py-meth docutils literal notranslate"><span class="pre">results()</span></code></a> returns a generator function that continues to fetch results so long as the pipeline remains alive. Without previously signaling “stop”, the fetch loop would hang on the fifth iteration.</p>
+<p>Another way to fetch results is to call <a class="reference internal" href="api.html#mpipe.Pipeline.get" title="mpipe.Pipeline.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> exactly four times. Using this method it doesn’t matter whether you signal “stop” before or after the fetch loop:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">foobar</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+   <span class="nb">print</span><span class="p">(</span><span class="n">pipe</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
 
-<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -183,10 +175,10 @@
 <span id="id9"></span><h1>Forked pipeline<a class="headerlink" href="#forked-pipeline" title="Permalink to this headline">¶</a></h1>
 <p>Imagine a pipeline that forks into two separate flows of execution:</p>
 <img alt="_images/fork.png" class="align-center" src="_images/fork.png" />
-<p>We can fork into more than two paths, but let&#8217;s keep it simple for now.</p>
-<div class="source-click-above container">
+<p>We can fork into more than two paths, but let’s keep it simple for now.</p>
+<div class="source-click-above docutils container">
 [<a class="reference external" href="fork.py">source</a>]</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">mpipe</span> <span class="kn">import</span> <span class="n">OrderedWorker</span><span class="p">,</span> <span class="n">Stage</span><span class="p">,</span> <span class="n">Pipeline</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mpipe</span> <span class="k">import</span> <span class="n">OrderedWorker</span><span class="p">,</span> <span class="n">Stage</span><span class="p">,</span> <span class="n">Pipeline</span>
 
 <span class="k">class</span> <span class="nc">Incrementor</span><span class="p">(</span><span class="n">OrderedWorker</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">doTask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
@@ -198,7 +190,7 @@
 
 <span class="k">class</span> <span class="nc">Printer</span><span class="p">(</span><span class="n">OrderedWorker</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">doTask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
 <span class="n">stage1</span> <span class="o">=</span> <span class="n">Stage</span><span class="p">(</span><span class="n">Incrementor</span><span class="p">)</span>
 <span class="n">stage2</span> <span class="o">=</span> <span class="n">Stage</span><span class="p">(</span><span class="n">Doubler</span><span class="p">)</span>
@@ -214,12 +206,12 @@
 <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
     <span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
 
-<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="source-click-below container">
+<div class="source-click-below docutils container">
 [<a class="reference external" href="fork.py">source</a>]</div>
-<p>This time instead of using standalone functions to implement the work, we used classes. It&#8217;s really the same thing, but with classes you have greater potential for encapsulation and code organization when implementing complex stages. Note that this requires a slightly different way of creating stage objects, now using the <a class="reference internal" href="api.html#mpipe.Stage" title="mpipe.Stage"><tt class="xref py py-mod docutils literal"><span class="pre">Stage</span></tt></a> class.</p>
+<p>This time instead of using standalone functions to implement the work, we used classes. It’s really the same thing, but with classes you have greater potential for encapsulation and code organization when implementing complex stages. Note that this requires a slightly different way of creating stage objects, now using the <a class="reference internal" href="api.html#mpipe.Stage" title="mpipe.Stage"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Stage</span></code></a> class.</p>
 </div>
 
 
@@ -227,7 +219,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -242,14 +234,15 @@
   <li><a href="index.html">MPipe home</a>&nbsp;|</li>
   <li><a href="docs.html">Documentation</a> &raquo;</li>
 
-          <li><a href="examples.html" >Examples</a> &raquo;</li> 
+          <li class="nav-item nav-item-1"><a href="docs.html" >Documentation contents</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="examples.html" >Examples</a> &#187;</li> 
       </ul>
     </div>
   
-    <div class="footer">
-        &copy; Copyright 2014, Velimir Mlaker.
-      Last updated on Dec 06, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Velimir Mlaker.
+      Last updated on Nov 02, 2018.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
     </div>
 
   </body>
