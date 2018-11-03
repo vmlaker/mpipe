@@ -270,7 +270,7 @@ a.headerlink:hover {
     color: white!important;
 }
 
-cite, code, tt {
+cite, tt {
     font-family: 'Consolas', 'Deja Vu Sans Mono',
                  'Bitstream Vera Sans Mono', monospace;
     font-size: 0.95em;
