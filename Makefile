@@ -42,6 +42,7 @@ clean:
 	rm -rf build dist html venv
 	rm -rf doc/build
 	rm -rf doc/venv
+	rm -rf MANIFEST
 	rm -rf src/*.pyc
 	rm -rf src/__pycache__
 	rm -rf test/*.out
