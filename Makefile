@@ -39,11 +39,21 @@ gh-pages: docs
 	cd html && git push origin gh-pages
 
 clean:
-	rm -rf build dist html venv
-	rm -rf doc/build
+	rm -rf .coverage
+	rm -rf .eggs/
+	rm -rf .pytest_cache/
+	rm -rf build/
+	rm -rf dist/
+	rm -rf doc/build/
 	rm -rf doc/venv
 	rm -rf MANIFEST
-	rm -rf *.egg-info
+	rm -rf mpipe.egg-info/
 	rm -rf src/*.pyc
 	rm -rf src/__pycache__
-	rm -rf test/*.out
+	rm -rf test/__pycache__
+	rm -rf venv/
+	# dev_cycle.txt
+	# pytest.ini
+	# setup.cfg
+	# test/test_backlog_01.py
+	# test/test_tiny.py
