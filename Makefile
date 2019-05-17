@@ -2,9 +2,12 @@
 
 all: test
 
-venv: requirements.txt
-	virtualenv venv -p python3
-	./venv/bin/pip install -r requirements.txt
+venv/bin/activate: requirements.txt
+	test -d venv || virtualenv -p python3 venv
+	. venv/bin/activate; pip install -Ur requirements.txt
+	touch venv/bin/activate
+
+venv: venv/bin/activate
 
 test: venv
 	./venv/bin/python setup.py build
