@@ -3,26 +3,30 @@
 from setuptools import setup
 
 
-exec(open('./src/version.py').read())
+with open('./src/version.py') as f:
+    exec(f.read())
+
+with open('README.rst') as f:
+    long_description = f.read()
 
 setup(
-    name         = 'mpipe',
-    version      = __version__,
-    description  = 'Multiprocess pipeline toolkit',
-    url          = 'http://vmlaker.github.io/mpipe',
-    author       = 'Velimir Mlaker',
-    author_email = 'velimir.mlaker@gmail.com',
-    license      = 'MIT',
-    long_description = open('README.rst').read(),
-    package_dir  = {'mpipe' : 'src'},
-    packages     = ['mpipe'],
+    name='mpipe',
+    version=__version__,
+    url='http://vmlaker.github.io/mpipe',
+    author='Velimir Mlaker',
+    author_email='velimir.mlaker@gmail.com',
+    license='MIT',
+    description='Multiprocess pipeline toolkit',
+    long_description=long_description,
+    package_dir={'mpipe' : 'src'},
+    packages=['mpipe'],
     setup_requires=[
         'pytest-runner==4.4',
     ],
     tests_require=[
         'pytest==4.5.0',
     ],
-    classifiers  = [
+    classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'License :: Freeware',
