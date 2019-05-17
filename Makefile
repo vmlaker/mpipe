@@ -19,10 +19,11 @@ docs: test
 	cd doc && ../venv/bin/python create.py build
 
 dist: clean venv
-	./venv/bin/python setup.py sdist
+	./venv/bin/python setup.py sdist bdist_wheel
 
-testpypi: dist
-	./venv/bin/twine upload --repository testpypi dist/*
+test_pypi: dist
+	#./venv/bin/twine upload --repository testpypi dist/*
+	./venv/bin/twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
 pypi: dist
 	./venv/bin/twine upload dist/*
@@ -55,8 +56,3 @@ clean:
 	rm -rf src/__pycache__
 	rm -rf test/__pycache__
 	rm -rf venv/
-	# dev_cycle.txt
-	# pytest.ini
-	# setup.cfg
-	# test/test_backlog_01.py
-	# test/test_tiny.py
