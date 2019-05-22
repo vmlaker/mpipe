@@ -21,10 +21,11 @@ setup(
     package_dir={'mpipe' : 'src'},
     packages=['mpipe'],
     setup_requires=[
-        'pytest-runner==4.4',
+        'pytest-runner>=4.4',
     ],
     tests_require=[
-        'pytest==4.5.0',
+        'py>=1.5.0',
+        'pytest>=4.5.0',
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
@@ -35,6 +36,8 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Topic :: Software Development :: Libraries :: Application Frameworks',
         'Topic :: Software Development :: Libraries :: Python Modules',
         ],
