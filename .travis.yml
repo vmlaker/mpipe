@@ -1,3 +1,4 @@
+dist: xenial  # Required for Python >= 3.7.
 language: python
 python:
   - "2.7"
@@ -6,7 +7,7 @@ python:
   - "3.6"
   - "3.7"
   - "3.8"
-
 script:
-  - python setup.py install 
+  - python setup.py install
+  - pip install py>=1.5  # Required for Python 3.4 test on Travis.
   - python setup.py test
