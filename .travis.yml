@@ -6,7 +6,7 @@ python:
   - "3.5"
   - "3.6"
   - "3.7"
-  - "3.8"
+  - "3.8-dev"
 script:
   - python setup.py install
   - pip install py>=1.5  # Required for Python 3.4 test on Travis.
