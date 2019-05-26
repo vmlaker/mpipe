@@ -42,17 +42,23 @@ gh-pages: docs
 	cd html && git commit -m 'Update gh-pages for $(MASTER_VERSION).'
 	cd html && git push origin gh-pages
 
-clean:
+# The "basic" (safe) level of cleanliness. Remove files of little consequence
+# in a typical development flow.
+clean1:
 	rm -rf .coverage
 	rm -rf .eggs/
 	rm -rf .pytest_cache/
+	rm -rf mpipe.egg-info/
+	rm -rf src/__pycache__
+	rm -rf src/*.pyc
+	rm -rf test/__pycache__
+	rm -rf test/*.out
+
+clean: clean1
+	rm -rf .python-version
 	rm -rf build/
 	rm -rf dist/
 	rm -rf doc/build/
 	rm -rf doc/venv
 	rm -rf MANIFEST
-	rm -rf mpipe.egg-info/
-	rm -rf src/*.pyc
-	rm -rf src/__pycache__
-	rm -rf test/__pycache__
 	rm -rf venv/
