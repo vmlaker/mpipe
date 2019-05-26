@@ -55,24 +55,19 @@ for entry in sorted(os.listdir(this_dir)):
     test_lines = p.stdout.readlines()
     logging.debug('Test output has %d lines.', len(test_lines))
     
-    # In case of "randomized" test output, sort lines before comparing.
+    # In case of "randomized" gold file, sort lines before comparing.
     if suffix == '.goldr':
-        gold_lines = sorted(gold_lines)
-        test_lines = sorted(test_lines)
+        gold_lines, test_lines = sorted(gold_lines), sorted(test_lines)
 
-    # Compare line by line.
-    failed = False
+    # Compare gold output with test output, line-by-line.
     for gold_line, test_line in zip(gold_lines, test_lines):
         gold_line, test_line = gold_line.strip(), test_line.strip().decode()
-        if gold_line != test_line:
-            print('Error running: {}'.format(command))
-            failed = True            
-            break
-
-    # On failure, save test output.
-    if failed:
+        if gold_line == test_line:
+            continue
+        print('Error running: {}'.format(command))
         out_fname = gold_fname[:-len(suffix):] + '.out'
-        f = open(out_fname, 'w')
-        for line in test_lines:
-            f.write(line.decode())
-        f.close
+        with open(out_fname, 'w') as f:
+            for line in test_lines:
+                f.write(line.decode())
+        print('To see diff run: diff {} {}'.format(gold_fname, out_fname))
+        break
