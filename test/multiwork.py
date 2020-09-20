@@ -1,13 +1,22 @@
 import sys
 import mpipe
+from builtins import range
 
-def forloop(amount):
-    for ii in xrange(amount): pass
 
-stage = mpipe.UnorderedStage(forloop, 2)
-pipe = mpipe.Pipeline(stage)
+def for_loop(amount):
+    for ii in range(amount):
+        pass
 
-for foobar in range(5): 
-    pipe.put(int(sys.argv[1]))
 
-pipe.put(None)
+def main():
+    stage = mpipe.UnorderedStage(for_loop, 2)
+    pipe = mpipe.Pipeline(stage)
+
+    for foobar in range(5):
+        pipe.put(int(sys.argv[1]) if len(sys.argv) >= 2 else 10)
+
+    pipe.put(None)
+
+
+if __name__ == '__main__':
+    main()

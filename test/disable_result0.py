@@ -1,14 +1,20 @@
-from mpipe import OrderedStage, Pipeline
+from mpipe import (OrderedStage, Pipeline)
+
 
 def yes(value):
     return value
 
-pipe = Pipeline(OrderedStage(yes, disable_result=True))
 
-for number in range(10):
-    pipe.put(number)
+def main():
+    pipe = Pipeline(OrderedStage(yes, disable_result=True))
 
-pipe.put(None)
+    for number in range(10):
+        pipe.put(number)
+    pipe.put(None)
 
-for result in pipe.results():
-    print(result)
+    for result in pipe.results():
+        print(result)
+
+
+if __name__ == '__main__':
+    main()
