@@ -1,21 +1,33 @@
-import sys
-from mpipe import UnorderedStage, Pipeline
+# import sys
+from builtins import range
+from mpipe import (UnorderedStage, Pipeline)
+
 
 def increment(value):
     return value + 1
 
-stage = UnorderedStage(increment)
-pipe = Pipeline(stage)
 
-def pull(value):
-    for result in pipe.results():
-        print(result)
+class Pull:
+    def __init__(self, pipe):
+        self.pipe = pipe
 
-pipe2 = Pipeline(UnorderedStage(pull))
-pipe2.put(True)
+    def __call__(self, value):
+        for result in self.pipe.results():
+            print(result)
 
-for task in xrange(sys.maxint):
-    pipe.put(task)
 
-pipe.put(None)
-pipe2.put(None)
+def main():
+    pipe = Pipeline(UnorderedStage(increment))
+    pipe2 = Pipeline(UnorderedStage(Pull(pipe)))
+    pipe2.put(True)
+
+    # for task in range(sys.maxint):
+    for task in range(10000):
+        pipe.put(task)
+    pipe.put(None)
+
+    pipe2.put(None)
+
+
+if __name__ == '__main__':
+    main()
