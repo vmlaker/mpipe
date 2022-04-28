@@ -8,5 +8,6 @@ from .Stage import Stage
 from .OrderedStage import OrderedStage
 from .UnorderedStage import UnorderedStage
 from .Pipeline import Pipeline
+from .AsyncPipeline import AsyncPipeline
 from .FilterWorker import FilterWorker
 from .FilterStage import FilterStage
